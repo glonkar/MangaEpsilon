@@ -1,0 +1,103 @@
+﻿<metro:MetroWindow x:Class="MangaEpsilon.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:vm="clr-namespace:MangaEpsilon.ViewModel"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
+        xmlns:crystal="clr-namespace:Crystal.Core;assembly=Amrykid.Crystal"
+        xmlns:utils="clr-namespace:Crystal.Utilities;assembly=Amrykid.Crystal"
+        Title="MangaEpsilon" Height="669" Width="756" ShowTitleBar="False" x:Name="thisWindow" SaveWindowPosition="True" ResizeMode="CanResize"
+                   utils:MainWindowSetterHelper.IsMainWindow="True" GlowBrush="{DynamicResource AccentColorBrush}" BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="2" WindowState="Maximized">
+    <Window.DataContext>
+        <vm:MainPageViewModel/>
+    </Window.DataContext>
+    <i:Interaction.Behaviors>
+        <Behaviours:BorderlessWindowBehavior ResizeWithGrip="True" />
+    </i:Interaction.Behaviors>
+    <metro:MetroWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+                <ResourceDictionary Source="/Resources/Icons.xaml" />
+                <ResourceDictionary Source="/Resources/StandardStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </metro:MetroWindow.Resources>
+    <Grid>
+        <Label Panel.ZIndex="100" HorizontalAlignment="Center" VerticalAlignment="Top" 
+               Content="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type metro:MetroWindow}}}" FontSize="14"/>
+
+        <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="40" Height="40" x:Name="MainProgressIndictator" IsActive="True" Visibility="Hidden"></metro:ProgressRing>
+        <metro:MetroAnimatedSingleRowTabControl Margin="0 25 0 0" SelectedIndex="0">
+            <metro:MetroTabItem Header="Home" FontSize="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="60*"/>
+                        <RowDefinition Height="40*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <!--FlipView goes here-->
+                        <metro:FlipView ItemsSource="{Binding RandomSelectedMangas, UpdateSourceTrigger=PropertyChanged}" 
+                                        SelectedItem="{Binding RandomSelectedMangaItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                        IsBannerEnabled="True" BannerText="{Binding RandomSelectedMangaBannerText, UpdateSourceTrigger=PropertyChanged, BindsDirectlyToSource=True}"
+                                        SelectedIndex="0">
+                            <metro:FlipView.ItemTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding .}" Stretch="UniformToFill"/>
+                                </DataTemplate>
+                            </metro:FlipView.ItemTemplate>
+                        </metro:FlipView>
+                    </Grid>
+
+                    <Grid Grid.Row="1">
+                        <StackPanel>
+                            <Label FontSize="18" Content="Today's Releases"/>
+                            <ListBox x:Name="itemListView"
+                                Background="Transparent"
+                                AutomationProperties.AutomationId="ItemListView"
+                                AutomationProperties.Name="Grouped Items"
+                                Grid.RowSpan="2"
+                                Padding="116,137,40,46"
+                                ItemTemplate="{StaticResource Standard250x250ItemTemplate}"
+                                ItemsSource="{Binding NewReleasesToday, UpdateSourceTrigger=PropertyChanged}"
+                                MouseUp="itemListView_MouseUp">
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel IsItemsHost="True">
+                                        </WrapPanel>
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                            </ListBox>
+                        </StackPanel>
+
+                    </Grid>
+
+                </Grid>
+            </metro:MetroTabItem>
+            <metro:MetroTabItem Header="Amrykid's Favorites">
+                <ListBox x:Name="amrykidsFavoritesListView"
+                                Background="Transparent"
+                                AutomationProperties.AutomationId="ItemListView"
+                                AutomationProperties.Name="Grouped Items"
+                                Grid.RowSpan="2"
+                                Padding="116,137,40,46"
+                                ItemTemplate="{StaticResource Standard250x250ItemTemplate}"
+                                ItemsSource="{Binding AmrykidsFavorites, UpdateSourceTrigger=PropertyChanged}"
+                                MouseUp="amrykidsFavoritesListView_MouseUp">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel IsItemsHost="True">
+                            </WrapPanel>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                </ListBox>
+            </metro:MetroTabItem>
+        </metro:MetroAnimatedSingleRowTabControl>
+    </Grid>
+</metro:MetroWindow>

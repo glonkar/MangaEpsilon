@@ -1,0 +1,41 @@
+﻿<metro:MetroWindow x:Class="MangaEpsilon.View.MangaChapterViewPage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:vm="clr-namespace:MangaEpsilon.ViewModel"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
+        xmlns:crystal="clr-namespace:Crystal.Core;assembly=Amrykid.Crystal"
+        xmlns:utils="clr-namespace:Crystal.Utilities;assembly=Amrykid.Crystal"
+        Title="{Binding ChapterName, StringFormat='{}{0} - MangaEpsilon'}" ShowTitleBar="False" x:Name="thisWindow" SaveWindowPosition="True" Height="458" Width="1284" ShowActivated="True">
+    <i:Interaction.Behaviors>
+        <Behaviours:BorderlessWindowBehavior ResizeWithGrip="True" />
+    </i:Interaction.Behaviors>
+    <metro:MetroWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+                <ResourceDictionary Source="/Resources/Icons.xaml" />
+                <ResourceDictionary Source="/Resources/StandardStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </metro:MetroWindow.Resources>
+    <Window.DataContext>
+        <vm:MangaChapterViewPageViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="40" Height="40" x:Name="MainProgressIndictator" IsActive="{Binding IsBusy, UpdateSourceTrigger=PropertyChanged}" Visibility="Visible"></metro:ProgressRing>
+        <metro:FlipView ItemsSource="{Binding Pages, UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding CurrentPageIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="FlipViewer" SelectionChanged="FlipViewer_SelectionChanged" IsBannerEnabled="False">
+            <metro:FlipView.ItemTemplate>
+                <DataTemplate>
+                    <Image Source="{Binding Image}">
+                    </Image>
+                </DataTemplate>
+            </metro:FlipView.ItemTemplate>
+        </metro:FlipView>
+    </Grid>
+</metro:MetroWindow>
