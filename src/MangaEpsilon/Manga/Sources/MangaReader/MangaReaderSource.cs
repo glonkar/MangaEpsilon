@@ -53,7 +53,7 @@ namespace MangaEpsilon.Manga.Sources.MangaReader
             b.PagesUrls.Add(url);
 
             int maxpages = 0;
-            Match pgcount = Regex.Match(firstpagehtml, "<div id=\"selectpage\">.+?</div>", RegexOptions.Singleline);
+            Match pgcount = Regex.Match(firstpagehtml, "<div id=\"selectpage\">.+?</div>", RegexOptions.Singleline | RegexOptions.Compiled);
             string pgcountstr = Regex.Replace(pgcount.Value, "<option.+?>.+?</option>", "");
             pgcountstr = Regex.Replace(pgcountstr, "<.+?>", "");
             pgcountstr = pgcountstr.Replace("of", "").Replace(" ", "").Replace("\n", "");
@@ -103,15 +103,15 @@ namespace MangaEpsilon.Manga.Sources.MangaReader
 
 
             int maxpages = 0;
-            Match pgcount = Regex.Match(firstpagehtml, "<div id=\"selectpage\">.+?</div>", RegexOptions.Singleline);
+            Match pgcount = Regex.Match(firstpagehtml, "<div id=\"selectpage\">.+?</div>", RegexOptions.Singleline | RegexOptions.Compiled);
             string pgcountstr = Regex.Replace(pgcount.Value, "<option.+?>.+?</option>", "");
             pgcountstr = Regex.Replace(pgcountstr, "<.+?>", "");
             pgcountstr = pgcountstr.Replace("of", "").Replace(" ", "").Replace("\n", "");
             maxpages = int.Parse(pgcountstr);
 
 
-            Match firstimg = Regex.Match(firstpagehtml, "<img id=\"img\".+?>", RegexOptions.Singleline);
-            string firstimgurl = Regex.Match(firstimg.Value, "src=\".+?\"", RegexOptions.Singleline).Value;
+            Match firstimg = Regex.Match(firstpagehtml, "<img id=\"img\".+?>", RegexOptions.Singleline | RegexOptions.Compiled);
+            string firstimgurl = Regex.Match(firstimg.Value, "src=\".+?\"", RegexOptions.Singleline | RegexOptions.Compiled).Value;
             firstimgurl = Regex.Replace(firstimgurl, "(src=\"|\")", "");
             await Dispatcher.CurrentDispatcher.InvokeAsync(() =>
             {
@@ -132,10 +132,11 @@ namespace MangaEpsilon.Manga.Sources.MangaReader
                 url_1 = url + "/";
                 url_2 = "";
             }
+
             for (int i = 2; i < maxpages + 1; i++)
             {
-                if (progressHandler != null)
-                    progressHandler(i, maxpages);
+                //if (progressHandler != null)
+                //    progressHandler(i, maxpages);
 
                 string purl = url_1 + i + url_2;
                 string imgurl = await _GetMangaImageFromUrl(purl);
@@ -145,7 +146,7 @@ namespace MangaEpsilon.Manga.Sources.MangaReader
                     b.PageOnlineUrls.Add(uri);
                 });
 
-                await Task.Delay(50); //Decreased from 100 to 50, better download time,   // //Prevent simulating a DDOS.
+                //await Task.Delay(50); //Decreased from 100 to 50, better download time,   // //Prevent simulating a DDOS.
             }
 
             return b;
@@ -155,8 +156,8 @@ namespace MangaEpsilon.Manga.Sources.MangaReader
         {
             string html = await GetHtml(purl);
 
-            Match img = Regex.Match(html, "<img id=\"img\".+?>", RegexOptions.Singleline);
-            string imgurl = Regex.Match(img.Value, "src=\".+?\"", RegexOptions.Singleline).Value;
+            Match img = Regex.Match(html, "<img id=\"img\".+?>", RegexOptions.Singleline | RegexOptions.Compiled);
+            string imgurl = Regex.Match(img.Value, "src=\".+?\"", RegexOptions.Singleline | RegexOptions.Compiled).Value;
             imgurl = Regex.Replace(imgurl, "(src=\"|\")", "");
             return imgurl;
         }
@@ -182,9 +183,9 @@ namespace MangaEpsilon.Manga.Sources.MangaReader
 
             string html = await GetHtml("http://www.mangareader.net/alphabetical");
             string important = "";
-            important = html.Substring(Regex.Match(html, "<div class=\"content_bloc2\">", RegexOptions.Singleline).Index);
-            important = important.Substring(Regex.Match(important, "<div class=\"series_col\">", RegexOptions.Singleline).Index);
-            important = important.Substring(0, Regex.Match(important, "<div id=\"adfooter\">", RegexOptions.Singleline).Index);
+            important = html.Substring(Regex.Match(html, "<div class=\"content_bloc2\">", RegexOptions.Singleline | RegexOptions.Compiled).Index);
+            important = important.Substring(Regex.Match(important, "<div class=\"series_col\">", RegexOptions.Singleline | RegexOptions.Compiled).Index);
+            important = important.Substring(0, Regex.Match(important, "<div id=\"adfooter\">", RegexOptions.Singleline | RegexOptions.Compiled).Index);
 
             foreach (Match m in Regex.Matches(important, "<li>.+?</li>"))
             {
@@ -194,12 +195,15 @@ namespace MangaEpsilon.Manga.Sources.MangaReader
                 string urlbit = Regex.Match(tagrm[0].Value, "\".+?\"").Value;
                 urlbit = urlbit.Replace("\"", "");
                 url += urlbit;
-                try
+
+
+                if (!dict.ContainsKey(name))
                 {
                     dict.Add(name, url);
+
                     manganames.Add(name);
                 }
-                catch (Exception) { }
+ 
             }
 
             return dict;
@@ -208,38 +212,37 @@ namespace MangaEpsilon.Manga.Sources.MangaReader
         public async Task<MangaEpsilon.Manga.Base.Manga> GetMangaInfoByUrl(string url)
         {
             MangaEpsilon.Manga.Base.Manga m = new MangaEpsilon.Manga.Base.Manga();
-            HttpWebRequest hwr = (HttpWebRequest)HttpWebRequest.Create(url);
             string html = await GetHtml(url);
-            string summuaryarea = Regex.Match(html, "<div id=\"readmangasum\">.+?</div>", RegexOptions.Singleline).Value;
-            summuaryarea = Regex.Match(summuaryarea, "<p>.+?</p>", RegexOptions.Singleline).Value;
+            string summuaryarea = Regex.Match(html, "<div id=\"readmangasum\">.+?</div>", RegexOptions.Singleline | RegexOptions.Compiled | RegexOptions.Compiled).Value;
+            summuaryarea = Regex.Match(summuaryarea, "<p>.+?</p>", RegexOptions.Singleline | RegexOptions.Compiled).Value;
             string sum = Regex.Replace(summuaryarea, "<(/p|p)>", "");
 
             m.Description = sum;
 
 
-            string imagearea = Regex.Match(html, "<div id=\"mangaimg\">.+?</div>", RegexOptions.Singleline).Value;
-            imagearea = Regex.Match(imagearea, "src=\".+?\"", RegexOptions.Singleline).Value;
+            string imagearea = Regex.Match(html, "<div id=\"mangaimg\">.+?</div>", RegexOptions.Singleline | RegexOptions.Compiled).Value;
+            imagearea = Regex.Match(imagearea, "src=\".+?\"", RegexOptions.Singleline | RegexOptions.Compiled).Value;
             string img = Regex.Replace(imagearea, "(src=\"|\")", "");
 
             m.IsBookImageCached = false;
             m.BookImageUrl = img;
 
-            var name = Regex.Match(html, "<h2 class=\"aname\">.+?</h2>", RegexOptions.Singleline).Value;
+            var name = Regex.Match(html, "<h2 class=\"aname\">.+?</h2>", RegexOptions.Singleline | RegexOptions.Compiled).Value;
             name = Regex.Replace(name, "<.+?>", "");
             m.MangaName = name;
 
 
-            string chaptersarea = Regex.Match(html, "<div id=\"chapterlist\">.+?</div>.+?</table>", RegexOptions.Singleline).Value;
+            string chaptersarea = Regex.Match(html, "<div id=\"chapterlist\">.+?</div>.+?</table>", RegexOptions.Singleline | RegexOptions.Compiled).Value;
 
-            foreach (Match chp in Regex.Matches(chaptersarea, "<tr>.+?</tr>", RegexOptions.Singleline))
+            foreach (Match chp in Regex.Matches(chaptersarea, "<tr>.+?</tr>", RegexOptions.Singleline | RegexOptions.Compiled))
             {
-                MatchCollection split = Regex.Matches(chp.Value, "<td>.+?</td>", RegexOptions.Singleline);
+                MatchCollection split = Regex.Matches(chp.Value, "<td>.+?</td>", RegexOptions.Singleline | RegexOptions.Compiled);
                 ChapterEntry be = new ChapterEntry(m);
                 string datestr = split[1].Value.Replace("</td>", "").Replace("<td>", "");
                 DateTime tmp;
                 be.ReleaseDate = (DateTime.TryParse(datestr, out tmp)) ? DateTime.Parse(datestr) : DateTime.Now;
                 string chpurl = "";
-                chpurl = Regex.Match(split[0].Value, "href=\".+?\"", RegexOptions.Singleline).Value;
+                chpurl = Regex.Match(split[0].Value, "href=\".+?\"", RegexOptions.Singleline | RegexOptions.Compiled).Value;
                 chpurl = Regex.Replace(chpurl, "(href=\"|\")", "");
                 chpurl = "http://www.mangareader.net" + chpurl;
                 be.Url = chpurl;
@@ -251,15 +254,15 @@ namespace MangaEpsilon.Manga.Sources.MangaReader
                 m.Chapters.Add(be);
             }
 
-            string authorarea = Regex.Match(html, "<td class=\"propertytitle\">Author:.+?</tr>", RegexOptions.Singleline).Value;
-            MatchCollection authorsplt = Regex.Matches(authorarea, "<td>.+?</td>", RegexOptions.Singleline);
+            string authorarea = Regex.Match(html, "<td class=\"propertytitle\">Author:.+?</tr>", RegexOptions.Singleline | RegexOptions.Compiled).Value;
+            MatchCollection authorsplt = Regex.Matches(authorarea, "<td>.+?</td>", RegexOptions.Singleline | RegexOptions.Compiled);
             try
             {
                 m.Author = Regex.Replace(authorsplt[0].Value, "<.+?>", "");
             }
             catch (Exception) { m.Author = "Unknown"; }
 
-            m.FetchImage();
+            await m.FetchImage();
 
             return m;
         }
@@ -280,8 +283,8 @@ namespace MangaEpsilon.Manga.Sources.MangaReader
         {
             var html = await GetHtml("http://mangareader.net/");
 
-            var manga_updates_area = Regex.Match(html, "<div id=\"latestchapters\">.+?<h3>Yesterday's Manga</h3>", RegexOptions.Singleline);
-            var matchedmangas = Regex.Matches(manga_updates_area.Value, "<td>.+?</td>", RegexOptions.Singleline);
+            var manga_updates_area = Regex.Match(html, "<div id=\"latestchapters\">.+?<h3>Yesterday's Manga</h3>", RegexOptions.Singleline | RegexOptions.Compiled);
+            var matchedmangas = Regex.Matches(manga_updates_area.Value, "<td>.+?</td>", RegexOptions.Singleline | RegexOptions.Compiled);
 
             List<ChapterEntry> entries = new List<ChapterEntry>();
 
@@ -295,8 +298,8 @@ namespace MangaEpsilon.Manga.Sources.MangaReader
 
                 var manganame = Regex.Match(match.Value,
                     "<a class=\"chapter\".+?>.+?</a>",
-                    RegexOptions.Singleline);
-                manganame = Regex.Matches(manganame.Value, "\".+?\"", RegexOptions.Singleline)[1];
+                    RegexOptions.Singleline | RegexOptions.Compiled);
+                manganame = Regex.Matches(manganame.Value, "\".+?\"", RegexOptions.Singleline | RegexOptions.Compiled)[1];
 
                 var manganamestr = manganame.Value;
                 manganamestr = (manganamestr.StartsWith("\"") ? manganamestr.Substring(1) : manganamestr);
@@ -309,17 +312,17 @@ namespace MangaEpsilon.Manga.Sources.MangaReader
 
                 var chapter = Regex.Match(match.Value,
                     "<a class=\"chaptersrec\".+?>.+?</a>",
-                    RegexOptions.Singleline);
+                    RegexOptions.Singleline | RegexOptions.Compiled);
 
                 var chpname = Regex.Replace(
-                    Regex.Match(chapter.Value, ">.+?<", RegexOptions.Singleline).Value,
+                    Regex.Match(chapter.Value, ">.+?<", RegexOptions.Singleline | RegexOptions.Compiled).Value,
                     "(>|<)",
                 "");
                 be.Name = chpname;
 
                 if (Regex.IsMatch(match.Value, "\"chaptersrec\""))
                 {
-                    var submatches = Regex.Matches(match.Value, "\".+?\"", RegexOptions.Singleline);
+                    var submatches = Regex.Matches(match.Value, "\".+?\"", RegexOptions.Singleline | RegexOptions.Compiled);
                     var chpurl = submatches[submatches.Count - 1].Value;
                     chpurl = (chpurl.StartsWith("\"") ? chpurl.Substring(1) : chpurl);
                     chpurl = (chpurl.EndsWith("\"") ? chpurl.Remove(chpurl.Length - 1) : chpurl);

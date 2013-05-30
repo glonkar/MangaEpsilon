@@ -7,8 +7,8 @@
         xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
         xmlns:crystal="clr-namespace:Crystal.Core;assembly=Amrykid.Crystal"
         xmlns:utils="clr-namespace:Crystal.Utilities;assembly=Amrykid.Crystal"
-        Title="MangaEpsilon" Height="669" Width="756" ShowTitleBar="False" x:Name="thisWindow" SaveWindowPosition="True" ResizeMode="CanResize"
-                   utils:MainWindowSetterHelper.IsMainWindow="True" GlowBrush="{DynamicResource AccentColorBrush}" BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="2" WindowState="Maximized">
+        Title="MangaEpsilon" Height="669" Width="756" ShowTitleBar="False" x:Name="thisWindow" SaveWindowPosition="True"
+                   utils:MainWindowSetterHelper.IsMainWindow="True" WindowState="Maximized">
     <Window.DataContext>
         <vm:MainPageViewModel/>
     </Window.DataContext>
@@ -43,13 +43,12 @@
 
                     <Grid Grid.Row="0">
                         <!--FlipView goes here-->
-                        <metro:FlipView ItemsSource="{Binding RandomSelectedMangas, UpdateSourceTrigger=PropertyChanged}" 
-                                        SelectedItem="{Binding RandomSelectedMangaItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                        IsBannerEnabled="True" BannerText="{Binding RandomSelectedMangaBannerText, UpdateSourceTrigger=PropertyChanged, BindsDirectlyToSource=True}"
-                                        SelectedIndex="0">
+                        <metro:FlipView DataContext="{Binding ., BindsDirectlyToSource=True}" ItemsSource="{Binding RandomSelectedMangas, UpdateSourceTrigger=PropertyChanged}" 
+                                        SelectedItem="{Binding RandomSelectedMangaItem, UpdateSourceTrigger=PropertyChanged}" 
+                                        IsBannerEnabled="True" BannerText="{Binding RandomSelectedMangaBannerText, UpdateSourceTrigger=PropertyChanged}" x:Name="FlipView">
                             <metro:FlipView.ItemTemplate>
                                 <DataTemplate>
-                                    <Image Source="{Binding .}" Stretch="UniformToFill"/>
+                                    <Image Source="{Binding .}" Stretch="Uniform"/>
                                 </DataTemplate>
                             </metro:FlipView.ItemTemplate>
                         </metro:FlipView>

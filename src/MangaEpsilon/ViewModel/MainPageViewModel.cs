@@ -32,11 +32,7 @@ namespace MangaEpsilon.ViewModel
 
             await InitializeMangaSourceIfNecessary();
 
-            var newreleases = GetNewlyReleasedManga();
-
-            var amrykids = GetAmrykidsFavorites();
-
-            IsLatestReleasesView = true;
+            App.ProgressIndicator.Visibility = System.Windows.Visibility.Collapsed;
 
             MangaClickCommand = CommandManager.CreateCommand((o) =>
             {
@@ -53,11 +49,7 @@ namespace MangaEpsilon.ViewModel
                 }
             });
 
-            IsLatestReleasesView = true;
-
             RandomSelectedMangas = new ObservableCollection<ImageSource>();
-
-            await Task.WhenAll(newreleases, amrykids);
 
             for (int i = 0; i < 3; i++)
             {
@@ -73,121 +65,81 @@ namespace MangaEpsilon.ViewModel
 
             RandomSelectedMangaItem = RandomSelectedMangas[0];
 
-            App.ProgressIndicator.Visibility = System.Windows.Visibility.Collapsed;
         }
 
 
-        public override async void OnNavigatedTo(KeyValuePair<string, object>[] argument = null)
+        //public override async void OnNavigatedTo(KeyValuePair<string, object>[] argument = null)
+        //{
+        //    if (IsDesignMode) return;
+
+        //    Initialize();
+        //}
+
+        private async Task InitializeMangaSourceIfNecessary()
         {
-            if (IsDesignMode) return;
+            await UpdateMangaCache();
 
-            Initialize();
-        }
 
-        private static async Task InitializeMangaSourceIfNecessary()
-        {
-            if (App.MangaSource == null)
-            {
-                Dictionary<string, string> preloaded = null;
-                Stream dicts = null;
-                try
-                {
-                    dicts = new FileStream("Manga.json", FileMode.Open);
+            AmrykidsFavorites = new object[] { await App.MangaSource.GetMangaInfo("Naruto"), await App.MangaSource.GetMangaInfo("Sekirei"), await App.MangaSource.GetMangaInfo("Fairy Tail") }.Select(x => new MangaWrapper((Manga.Base.Manga)x));
 
-                    using (StreamReader sr = new StreamReader(dicts))
-                    {
-                        preloaded = MangaEpsilon.JSON.JsonSerializer.Deserialize<Dictionary<string, string>>(await sr.ReadToEndAsync());
-                    }
-
-                    dicts.Dispose();
-                }
-                catch (Exception)
-                {
-                }
-
-                if (preloaded != null)
-                {
-                    if (App.MangaSource == null)
-                        App.MangaSource = new MangaEpsilon.Manga.Sources.MangaReader.MangaReaderSource(preloaded);
-                }
-                else
-                {
-                    App.MangaSource = new MangaEpsilon.Manga.Sources.MangaReader.MangaReaderSource(false);
-
-                    preloaded = await App.MangaSource.GetAvailableManga();
-
-                    App.MangaSource = new MangaEpsilon.Manga.Sources.MangaReader.MangaReaderSource(preloaded);
-
-                    using (dicts = new FileStream("Manga.json", FileMode.OpenOrCreate))
-                    {
-                        var json = MangaEpsilon.JSON.JsonSerializer.Serialize(preloaded);
-
-                        using (var sw = new StreamWriter(dicts))
-                        {
-                            await sw.WriteAsync(json);
-                            await sw.FlushAsync();
-                        }
-                    }
-                }
-            }
-        }
-
-        private volatile bool _loading_latestmanga = false;
-        private volatile bool _loading_amrykid_manga = false;
-
-        private async Task GetNewlyReleasedManga()
-        {
-            if (IsDesignMode) return;
-
-            if (App.ProgressIndicator == null)
-                await Task.Delay(1000);
-
-            _loading_latestmanga = true;
-
-            await InitializeMangaSourceIfNecessary();
 
             var latestMangas = await App.MangaSource.GetNewReleasesOfToday(4);
 
             NewReleasesToday = Enumerable.Select(latestMangas,
                 x =>
                     new ChapterEntryWrapper(x));
-
-            if (IsLatestReleasesView)
-                RaisePropertyChanged(x => this.CurrentViewDataSource);
-
-            _loading_latestmanga = false;
-
         }
 
-        private async Task GetAmrykidsFavorites()
+        private static async Task UpdateMangaCache()
         {
-            if (IsDesignMode) return;
+            Dictionary<string, string> preloaded = null;
+            Stream dicts = null;
+            try
+            {
+                dicts = new FileStream("Manga.json", FileMode.Open);
 
-            if (App.ProgressIndicator == null)
-                await Task.Delay(1000);
+                using (StreamReader sr = new StreamReader(dicts))
+                {
+                    preloaded = MangaEpsilon.JSON.JsonSerializer.Deserialize<Dictionary<string, string>>(await sr.ReadToEndAsync());
+                }
 
-            _loading_amrykid_manga = true;
+                dicts.Dispose();
+            }
+            catch (Exception)
+            {
+            }
 
-            await InitializeMangaSourceIfNecessary();
+            if (preloaded != null)
+            {
+                if (App.MangaSource == null)
+                    App.MangaSource = new MangaEpsilon.Manga.Sources.MangaReader.MangaReaderSource(preloaded);
+            }
+            else
+            {
+                App.MangaSource = new MangaEpsilon.Manga.Sources.MangaReader.MangaReaderSource(false);
 
-            AmrykidsFavorites = new object[] { await App.MangaSource.GetMangaInfo("Naruto"), await App.MangaSource.GetMangaInfo("Sekirei"), await App.MangaSource.GetMangaInfo("Fairy Tail") }.Select(x => new MangaWrapper((Manga.Base.Manga)x));
+                preloaded = await App.MangaSource.GetAvailableManga();
 
-            if (!IsLatestReleasesView)
-                RaisePropertyChanged(x => this.CurrentViewDataSource);
+                App.MangaSource = new MangaEpsilon.Manga.Sources.MangaReader.MangaReaderSource(preloaded);
 
-            _loading_amrykid_manga = false;
+                using (dicts = new FileStream("Manga.json", FileMode.OpenOrCreate))
+                {
+                    var json = MangaEpsilon.JSON.JsonSerializer.Serialize(preloaded);
+
+                    using (var sw = new StreamWriter(dicts))
+                    {
+                        await sw.WriteAsync(json);
+                        await sw.FlushAsync();
+                    }
+                }
+            }
         }
 
         public IEnumerable<ChapterEntryWrapper> NewReleasesToday
         {
             get
             {
-                var val = GetPropertyOrDefaultType<object>(x => this.NewReleasesToday);
-
-                if (val == null && _loading_latestmanga == false)
-                    GetNewlyReleasedManga();
-
-                return (IEnumerable<ChapterEntryWrapper>)val;
+                return GetPropertyOrDefaultType<IEnumerable<ChapterEntryWrapper>>(x => this.NewReleasesToday);
             }
             set { SetProperty<object>(x => this.NewReleasesToday, value); }
         }
@@ -196,30 +148,10 @@ namespace MangaEpsilon.ViewModel
         {
             get
             {
-                var val = GetPropertyOrDefaultType<object>(x => this.AmrykidsFavorites);
-
-                if (val == null && _loading_amrykid_manga == false)
-                    GetAmrykidsFavorites();
-
-                return val;
+                return GetPropertyOrDefaultType<object>(x => this.AmrykidsFavorites);
             }
             set { SetProperty<object>(x => this.AmrykidsFavorites, value); }
         }
-
-        public bool IsLatestReleasesView
-        {
-            get { return GetPropertyOrDefaultType<bool>(x => this.IsLatestReleasesView); }
-            set { SetProperty<bool>(x => this.IsLatestReleasesView, value); RaisePropertyChanged(x => this.CurrentViewDataSource); }
-        }
-
-        public object CurrentViewDataSource
-        {
-            get
-            {
-                return (IsLatestReleasesView) ? NewReleasesToday : AmrykidsFavorites;
-            }
-        }
-
         public CrystalCommand MangaClickCommand { get; set; }
 
         public ObservableCollection<ImageSource> RandomSelectedMangas
@@ -233,9 +165,15 @@ namespace MangaEpsilon.ViewModel
             get { return GetPropertyOrDefaultType<ImageSource>(x => this.RandomSelectedMangaItem); }
             set
             {
+                if (value == GetPropertyOrDefaultType<ImageSource>(x => this.RandomSelectedMangaItem)) return;
+
                 SetProperty<ImageSource>(x => this.RandomSelectedMangaItem, value);
 
-                RandomSelectedMangaBannerText = NewReleasesToday.First(z => z.WrappedObject.ParentManga.BookImageUrl == ((BitmapImage)value).UriSource.ToString()).Title;
+                Dispatcher.InvokeAsync(() =>
+                    {
+                        RandomSelectedMangaBannerText = NewReleasesToday.First(z =>
+                            z.WrappedObject.ParentManga.BookImageUrl == ((BitmapImage)value).UriSource.ToString()).Title;
+                    });
             }
         }
 

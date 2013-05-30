@@ -31,5 +31,10 @@ namespace MangaEpsilon.View
         {
 
         }
+
+        private void thisWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            FlipViewer.Focus();
+        }
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Controls;
 using System.Net;
 
-namespace MangaEplision.Extensions
+namespace MangaEpsilon.Extensions
 {
     public static class ImageExt
     {

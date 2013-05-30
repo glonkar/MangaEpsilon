@@ -1,6 +1,7 @@
 ﻿using Crystal.Core;
 using MangaEpsilon.Manga.Base;
 using MangaEpsilon.Model;
+using MangaEpsilon.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -44,9 +45,14 @@ namespace MangaEpsilon.ViewModel
             Pages.Add(new MangaChapterPage(chapter)
             {
                 Index = 0,
-                ImageUrl = await App.MangaSource.GetChapterPageImageUrl(chapter, CurrentPageIndex),
             });
-            Pages[0].Image = LoadImgUrl(Pages[0].ImageUrl);
+            Pages[0].ImageUrl = await App.MangaSource.GetChapterPageImageUrl(chapter, CurrentPageIndex);
+
+            await Task.Yield();
+
+            Pages[0].Image = await LoadImgUrl(Pages[0].ImageUrl, true);
+
+            CurrentPageIndex = 0;
 
             IsBusy = false;
 
@@ -63,7 +69,7 @@ namespace MangaEpsilon.ViewModel
                 page.ImageUrl = await App.MangaSource.GetChapterPageImageUrl(chapter, i);
 
                 if (shouldBeLoaded)
-                    page.Image = LoadImgUrl(page.ImageUrl);
+                    page.Image = await LoadImgUrl(page.ImageUrl, true);
             }
 
             RaisePropertyChanged(x => this.Pages);
@@ -77,7 +83,10 @@ namespace MangaEpsilon.ViewModel
 
             for (int i = CurrentPageIndex; i < Math.Min(chapter.TotalPages, CurrentPageIndex + 3); i++)
             {
-                Pages[i].Image = LoadImgUrl(Pages[i].ImageUrl);
+                if (Pages[i].ImageUrl == null)
+                    Pages[i].ImageUrl = await App.MangaSource.GetChapterPageImageUrl(chapter, i);
+
+                Pages[i].Image = await LoadImgUrl(Pages[i].ImageUrl, true);
             }
 
             await Task.Delay(1000);
@@ -97,9 +106,12 @@ namespace MangaEpsilon.ViewModel
             set
             {
                 SetProperty(x => this.CurrentPageIndex, value);
-                if (Pages.Count > 0)
-                    if (Pages[value].Image == null && IsBusy == false)
-                        GetNextBatchOfPages();
+
+                if (Pages != null)
+                    if (Pages.Count > 0)
+                        if (Pages.Count > value + 1)
+                            if (Pages[value + 1].Image == null && IsBusy == false)
+                                GetNextBatchOfPages();
             }
         }
 
@@ -115,12 +127,15 @@ namespace MangaEpsilon.ViewModel
             set { SetProperty<bool>(x => this.IsBusy, value); }
         }
 
-        private BitmapImage LoadImgUrl(string url)
+        private async Task<BitmapImage> LoadImgUrl(string url, bool block = false)
         {
             BitmapImage bi = new BitmapImage();
             bi.BeginInit();
             bi.UriSource = new Uri(url);
             bi.EndInit();
+
+            if (block)
+                await bi.WaitForDownloadCompletion();
 
             return bi;
         }
