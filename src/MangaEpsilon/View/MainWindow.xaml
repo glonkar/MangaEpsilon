@@ -7,6 +7,7 @@
         xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
         xmlns:crystal="clr-namespace:Crystal.Core;assembly=Amrykid.Crystal"
         xmlns:utils="clr-namespace:Crystal.Utilities;assembly=Amrykid.Crystal"
+        xmlns:conv="clr-namespace:MangaEpsilon.Converters"
         Title="MangaEpsilon" Height="669" Width="756" ShowTitleBar="False" x:Name="thisWindow" SaveWindowPosition="True"
                    utils:MainWindowSetterHelper.IsMainWindow="True" WindowState="Maximized" ShowActivated="True">
     <Window.DataContext>
@@ -26,6 +27,7 @@
                 <ResourceDictionary Source="/Resources/Icons.xaml" />
                 <ResourceDictionary Source="/Resources/StandardStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <conv:ImageCachingConverter x:Key="ImgCache"/>
         </ResourceDictionary>
     </metro:MetroWindow.Resources>
     <Grid>
@@ -109,7 +111,7 @@
                                                     <DataTemplate>
                                                         <Grid HorizontalAlignment="Left" Width="250" Height="250">
                                                             <Border>
-                                                                <Image Source="{Binding ParentManga.BookImageUrl}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
+                                                                <Image Source="{Binding ParentManga.BookImageUrl, Converter={StaticResource ImgCache}}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
                                                             </Border>
                                                             <StackPanel VerticalAlignment="Bottom" Background="Gray">
                                                                 <TextBlock Text="{Binding Name}" Foreground="Black" FontSize="18" Height="60" Margin="15,0,15,0"/>
@@ -173,7 +175,7 @@
                                     <DataTemplate>
                                         <Grid HorizontalAlignment="Left" Width="250" Height="250">
                                             <Border>
-                                                <Image Source="{Binding BookImageUrl}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
+                                                <Image Source="{Binding BookImageUrl, Converter={StaticResource ImgCache}}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
                                             </Border>
                                             <StackPanel VerticalAlignment="Bottom" Background="Gray">
                                                 <TextBlock Text="{Binding MangaName}" Foreground="Black" FontSize="18" Height="60" Margin="15,0,15,0"/>
