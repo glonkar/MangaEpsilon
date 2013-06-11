@@ -13,7 +13,7 @@
         <vm:MainPageViewModel/>
     </Window.DataContext>
     <i:Interaction.Behaviors>
-        <Behaviours:BorderlessWindowBehavior ResizeWithGrip="True" />
+        <Behaviours:BorderlessWindowBehavior ResizeWithGrip="True" EnableDWMDropShadow="True" />
     </i:Interaction.Behaviors>
     <metro:MetroWindow.Resources>
         <ResourceDictionary>
@@ -33,54 +33,84 @@
                Content="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type metro:MetroWindow}}}" FontSize="14"/>
 
         <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="40" Height="40" x:Name="MainProgressIndictator" IsActive="True" Visibility="Hidden"></metro:ProgressRing>
-        <metro:MetroAnimatedSingleRowTabControl Margin="0 25 0 0" SelectedIndex="0">
-            <metro:MetroTabItem Header="Home" FontSize="15">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="60*"/>
-                        <RowDefinition Height="40*"/>
-                    </Grid.RowDefinitions>
+        <metro:MetroAnimatedSingleRowTabControl Margin="5 25 5 5" SelectedIndex="0">
+            <metro:MetroTabItem Header="home" HeaderFontSize="15">
+                <metro:MetroTabControl Margin="0 -17 0 0">
+                    <metro:MetroTabItem Header="today's releases">
+                        <ScrollViewer>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="60*"/>
+                                    <RowDefinition Height="40*"/>
+                                </Grid.RowDefinitions>
 
-                    <Grid Grid.Row="0">
-                        <!--FlipView goes here-->
-                        <metro:FlipView DataContext="{Binding ., BindsDirectlyToSource=True}" ItemsSource="{Binding RandomSelectedMangas, UpdateSourceTrigger=PropertyChanged}" 
+                                <!--<Grid Grid.Row="0">
+                                    <metro:FlipView DataContext="{Binding ., BindsDirectlyToSource=True}" 
+                                        ItemsSource="{Binding RandomSelectedMangas, UpdateSourceTrigger=PropertyChanged}" 
                                         SelectedItem="{Binding RandomSelectedMangaItem, UpdateSourceTrigger=PropertyChanged}" 
-                                        IsBannerEnabled="True" BannerText="{Binding RandomSelectedMangaBannerText, UpdateSourceTrigger=PropertyChanged}" x:Name="FlipView">
-                            <metro:FlipView.ItemTemplate>
-                                <DataTemplate>
-                                    <Image Source="{Binding .}" Stretch="Uniform"/>
-                                </DataTemplate>
-                            </metro:FlipView.ItemTemplate>
-                        </metro:FlipView>
-                    </Grid>
+                                        IsBannerEnabled="True" 
+                                        BannerText="{Binding RandomSelectedMangaBannerText, UpdateSourceTrigger=PropertyChanged}" 
+                                        Height="300" Width="400"
+                                        x:Name="FlipView">
+                                        <metro:FlipView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Image Source="{Binding .}" Stretch="Fill" Height="300" Width="400"/>
+                                            </DataTemplate>
+                                        </metro:FlipView.ItemTemplate>
+                                    </metro:FlipView>
+                                </Grid>-->
 
-                    <Grid Grid.Row="1">
-                        <StackPanel>
-                            <Label FontSize="18" Content="Today's Releases"/>
-                            <ListBox x:Name="itemListView"
-                                Background="Transparent"
-                                AutomationProperties.AutomationId="ItemListView"
-                                AutomationProperties.Name="Grouped Items"
-                                Grid.RowSpan="2"
-                                Padding="116,137,40,46"
-                                ItemTemplate="{StaticResource Standard250x250ItemTemplate}"
-                                ItemsSource="{Binding NewReleasesToday, UpdateSourceTrigger=PropertyChanged}"
-                                MouseUp="itemListView_MouseUp">
-                                <ListBox.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel IsItemsHost="True">
-                                        </WrapPanel>
-                                    </ItemsPanelTemplate>
-                                </ListBox.ItemsPanel>
-                            </ListBox>
-                        </StackPanel>
+                                <Grid Grid.Row="0">
+                                    <StackPanel>
+                                        <ListBox x:Name="itemListView"
+                                            Background="Transparent"
+                                            AutomationProperties.AutomationId="ItemListView"
+                                            AutomationProperties.Name="Grouped Items"
+                                            Padding="116,137,40,46"
+                                            ItemTemplate="{StaticResource Standard250x250ItemTemplate}"
+                                            ItemsSource="{Binding NewReleasesToday, UpdateSourceTrigger=PropertyChanged}"
+                                            MouseUp="itemListView_MouseUp">
+                                            <ListBox.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <WrapPanel IsItemsHost="True" Width="{Binding (FrameworkElement.ActualWidth), RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}"
+    				                                       ItemWidth="{Binding (ListView.View).ItemWidth, RelativeSource={RelativeSource AncestorType=ListView}}"
+    				                                       MinWidth="{Binding ItemWidth, RelativeSource={RelativeSource Self}}"
+    				                                       ItemHeight="{Binding (ListView.View).ItemHeight, RelativeSource={RelativeSource AncestorType=ListView}}">
+                                                    </WrapPanel>
+                                                </ItemsPanelTemplate>
+                                            </ListBox.ItemsPanel>
+                                            <ListBox.ItemContainerStyle>
+                                                <!-- http://stackoverflow.com/questions/13035766/listbox-slide-animation-on-new-item-added -->
+                                                <Style TargetType="{x:Type ListBoxItem}">
+                                                    <Setter Property="LayoutTransform">
+                                                        <Setter.Value>
+                                                            <ScaleTransform x:Name="transform" />
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Style.Triggers>
+                                                        <EventTrigger RoutedEvent="Loaded">
+                                                            <EventTrigger.Actions>
+                                                                <BeginStoryboard>
+                                                                    <Storyboard>
+                                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:2" />
+                                                                        <DoubleAnimation Storyboard.TargetProperty="LayoutTransform.ScaleY" From="0" Duration="0:0:.2"/>
+                                                                    </Storyboard>
+                                                                </BeginStoryboard>
+                                                            </EventTrigger.Actions>
+                                                        </EventTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ListBox.ItemContainerStyle>
+                                        </ListBox>
+                                    </StackPanel>
 
-                    </Grid>
+                                </Grid>
 
-                </Grid>
-            </metro:MetroTabItem>
-            <metro:MetroTabItem Header="Amrykid's Favorites">
-                <ListBox x:Name="amrykidsFavoritesListView"
+                            </Grid>
+                        </ScrollViewer>
+                    </metro:MetroTabItem>
+                    <metro:MetroTabItem Header="amrykid's favorites">
+                        <ListBox x:Name="amrykidsFavoritesListView"
                                 Background="Transparent"
                                 AutomationProperties.AutomationId="ItemListView"
                                 AutomationProperties.Name="Grouped Items"
@@ -89,13 +119,15 @@
                                 ItemTemplate="{StaticResource Standard250x250ItemTemplate}"
                                 ItemsSource="{Binding AmrykidsFavorites, UpdateSourceTrigger=PropertyChanged}"
                                 MouseUp="amrykidsFavoritesListView_MouseUp">
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel IsItemsHost="True">
-                            </WrapPanel>
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                </ListBox>
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel IsItemsHost="True">
+                                    </WrapPanel>
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                        </ListBox>
+                    </metro:MetroTabItem>
+                </metro:MetroTabControl>
             </metro:MetroTabItem>
         </metro:MetroAnimatedSingleRowTabControl>
     </Grid>

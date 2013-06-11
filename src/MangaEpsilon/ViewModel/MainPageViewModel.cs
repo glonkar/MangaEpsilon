@@ -12,6 +12,8 @@ using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using MangaEpsilon.Extensions;
+using System.Net;
 
 namespace MangaEpsilon.ViewModel
 {
@@ -49,21 +51,43 @@ namespace MangaEpsilon.ViewModel
                 }
             });
 
-            RandomSelectedMangas = new ObservableCollection<ImageSource>();
+            //RandomSelectedMangas = new ObservableCollection<ImageSource>();
 
-            for (int i = 0; i < 3; i++)
-            {
-                var count = NewReleasesToday.ToArray().Length;
-                var img = NewReleasesToday.ToArray()[new Random().Next(0, count)];
+            //for (int i = 0; i < 2; i++)
+            //{
+            //    try
+            //    {
+            //        var count = NewReleasesToday.ToArray().Length;
+            //        var img = NewReleasesToday.ToArray()[new Random().Next(0, count)];
 
-                var bi = new BitmapImage();
-                bi.BeginInit();
-                bi.UriSource = new Uri(img.WrappedObject.ParentManga.BookImageUrl);
-                bi.EndInit();
-                RandomSelectedMangas.Add(bi);
-            }
+            //        var bi = new BitmapImage();
+            //        bi.BeginInit();
 
-            RandomSelectedMangaItem = RandomSelectedMangas[0];
+            //        var bookImageUri = new Uri(img.WrappedObject.ParentManga.BookImageUrl);
+            //        if (!File.Exists(App.ImageCacheDir + bookImageUri.Segments.Last()))
+            //        {
+
+            //            bi.UriSource = new Uri(img.WrappedObject.ParentManga.BookImageUrl);
+
+            //            using (WebClient wc = new WebClient())
+            //            {
+            //                await wc.DownloadFileTaskAsync(img.WrappedObject.ParentManga.BookImageUrl, App.ImageCacheDir + bookImageUri.Segments.Last());
+            //            }
+            //        }
+            //        else
+            //        {
+            //            bi.UriSource = new Uri(App.ImageCacheDir + bookImageUri.Segments.Last());
+            //        }
+
+            //        bi.EndInit();
+            //        RandomSelectedMangas.Add(bi);
+            //    }
+            //    catch (Exception)
+            //    {
+            //    }
+            //}
+
+            //RandomSelectedMangaItem = RandomSelectedMangas[0];
 
         }
 
@@ -79,24 +103,29 @@ namespace MangaEpsilon.ViewModel
         {
             await UpdateMangaCache();
 
+            var favs = Task.WhenAll(App.MangaSource.GetMangaInfo("Naruto"), App.MangaSource.GetMangaInfo("Sekirei"), App.MangaSource.GetMangaInfo("Fairy Tail"))
+                .ContinueWith(x => AmrykidsFavorites = x.Result.Select(y => new MangaWrapper((Manga.Base.Manga)y)));
 
-            AmrykidsFavorites = new object[] { await App.MangaSource.GetMangaInfo("Naruto"), await App.MangaSource.GetMangaInfo("Sekirei"), await App.MangaSource.GetMangaInfo("Fairy Tail") }.Select(x => new MangaWrapper((Manga.Base.Manga)x));
 
+            var latestMangas = await App.MangaSource.GetNewReleasesOfToday(8);
 
-            var latestMangas = await App.MangaSource.GetNewReleasesOfToday(4);
+            NewReleasesToday = new ObservableCollection<ChapterEntryWrapper>();
 
-            NewReleasesToday = Enumerable.Select(latestMangas,
-                x =>
-                    new ChapterEntryWrapper(x));
+            foreach (var manga in latestMangas.Select(x => new ChapterEntryWrapper(x)))
+            {
+                await Task.Delay(200);
+                NewReleasesToday.Add(manga);
+            }
+
+            await Task.WhenAll(favs);
         }
-
         private static async Task UpdateMangaCache()
         {
             Dictionary<string, string> preloaded = null;
             Stream dicts = null;
             try
             {
-                dicts = new FileStream("Manga.json", FileMode.Open);
+                dicts = new FileStream(App.AppDataDir + "Manga.json", FileMode.Open);
 
                 using (StreamReader sr = new StreamReader(dicts))
                 {
@@ -122,7 +151,7 @@ namespace MangaEpsilon.ViewModel
 
                 App.MangaSource = new MangaEpsilon.Manga.Sources.MangaReader.MangaReaderSource(preloaded);
 
-                using (dicts = new FileStream("Manga.json", FileMode.OpenOrCreate))
+                using (dicts = new FileStream(App.AppDataDir + "Manga.json", FileMode.OpenOrCreate))
                 {
                     var json = MangaEpsilon.JSON.JsonSerializer.Serialize(preloaded);
 
@@ -135,11 +164,11 @@ namespace MangaEpsilon.ViewModel
             }
         }
 
-        public IEnumerable<ChapterEntryWrapper> NewReleasesToday
+        public ObservableCollection<ChapterEntryWrapper> NewReleasesToday
         {
             get
             {
-                return GetPropertyOrDefaultType<IEnumerable<ChapterEntryWrapper>>(x => this.NewReleasesToday);
+                return GetPropertyOrDefaultType<ObservableCollection<ChapterEntryWrapper>>(x => this.NewReleasesToday);
             }
             set { SetProperty<object>(x => this.NewReleasesToday, value); }
         }

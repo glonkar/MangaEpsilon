@@ -9,7 +9,7 @@
         xmlns:utils="clr-namespace:Crystal.Utilities;assembly=Amrykid.Crystal"
         Title="{Binding MangaName, StringFormat='{}{0} - Manga Details - MangaEpsilon'}" ShowTitleBar="False" x:Name="thisWindow" SaveWindowPosition="True" Height="458" Width="1284" ResizeMode="CanResize" ShowActivated="True">
     <i:Interaction.Behaviors>
-        <Behaviours:BorderlessWindowBehavior ResizeWithGrip="True" />
+        <Behaviours:BorderlessWindowBehavior ResizeWithGrip="True" EnableDWMDropShadow="True" />
     </i:Interaction.Behaviors>
     <metro:MetroWindow.Resources>
         <ResourceDictionary>
@@ -40,7 +40,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="20*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" FontSize="21" Text="Cover" Margin="50 0 0 0"/>
+                        <TextBlock Grid.Row="0" FontSize="21" Text="cover" Margin="50 0 0 0"/>
 
                         <Grid Grid.Row="1">
                             <StackPanel Orientation="Horizontal" Margin="15 20 0 0">
@@ -54,7 +54,7 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="20*"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" FontSize="21" Text="About" Margin="50 0 0 0"/>
+                            <TextBlock Grid.Row="0" FontSize="21" Text="qbout" Margin="50 0 0 0"/>
 
                             <Grid Grid.Row="1">
                                 <StackPanel Orientation="Horizontal" Margin="50 20 0 0">
@@ -68,7 +68,7 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="20*"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" FontSize="21" Text="Chapters" Margin="50 0 0 0"/>
+                            <TextBlock Grid.Row="0" FontSize="21" Text="chapters" Margin="50 0 0 0"/>
 
                             <Grid Grid.Row="1">
                                 <ListBox ItemsSource="{Binding Manga.Chapters}" Margin="50 20 0 0" Visibility="Visible" HorizontalAlignment="Left" 

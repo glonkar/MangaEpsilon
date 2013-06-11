@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,6 +24,14 @@ namespace MangaEpsilon
             this.EnableDeepReflectionCaching = true;
             this.EnableSelfAssemblyResolution = true;
 
+            if (!Directory.Exists(AppDataDir))
+                Directory.CreateDirectory(AppDataDir);
+
+            ImageCacheDir = AppDataDir + "ImageCache\\";
+
+            if (!Directory.Exists(ImageCacheDir))
+                Directory.CreateDirectory(ImageCacheDir);
+
             base.PreStartup();
         }
 
@@ -38,5 +47,7 @@ namespace MangaEpsilon
             }
         }
 
+        public static readonly string AppDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\MangaEpsilon\\";
+        public static string ImageCacheDir = null;
     }
 }

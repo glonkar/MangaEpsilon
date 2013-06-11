@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using System.Windows.Threading;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Net;
+using System.IO;
 
 namespace MangaEpsilon.Model
 {
@@ -33,12 +35,38 @@ namespace MangaEpsilon.Model
         public ChapterEntry WrappedObject { get; set; }
 
         public string Title { get; set; }
-        public string ImageUrl { get { return (string)GetProperty("ImageUrl"); } set { SetProperty("ImageUrl", value); RaisePropertyChanged("Image"); } }
+        public string ImageUrl { get { return (string)GetProperty("ImageUrl"); } set { SetProperty("ImageUrl", value); GetImage(); } }
 
         private ImageSource _image = null;
-        public ImageSource Image { get { if (ImageUrl == null) return null; else return new BitmapImage(new Uri(ImageUrl)); } }
+        public ImageSource Image
+        {
+            get
+            {
+                return _image;
+            }
+        }
         public string Subtitle { get; set; }
 
         public int Id { get; set; }
+
+        private async void GetImage()
+        {
+
+            var bookImageUri = new Uri(ImageUrl);
+            if (!File.Exists(App.ImageCacheDir + bookImageUri.Segments.Last()))
+            {
+                using (WebClient wc = new WebClient())
+                {
+                    await wc.DownloadFileTaskAsync(WrappedObject.ParentManga.BookImageUrl, App.ImageCacheDir + bookImageUri.Segments.Last()).ContinueWith(x =>
+                        {
+                            _image = new BitmapImage(new Uri(App.ImageCacheDir + bookImageUri.Segments.Last()));
+                        });
+                }
+            }
+            
+            _image = new BitmapImage(new Uri(App.ImageCacheDir + bookImageUri.Segments.Last()));
+
+            RaisePropertyChanged("Image");
+        }
     }
 }
