@@ -30,12 +30,12 @@ namespace MangaEpsilon
 
         private void itemListView_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            ((MainPageViewModel)this.DataContext).MangaClickCommand.Execute((itemListView).SelectedItem);
+            ((MainWindowTodaysReleasesViewModel)itemListView.DataContext).MangaClickCommand.Execute((itemListView).SelectedItem);
         }
 
         private void amrykidsFavoritesListView_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            ((MainPageViewModel)this.DataContext).MangaClickCommand.Execute((amrykidsFavoritesListView).SelectedItem);
+            ((MainWindowAmrykidsFavoritesViewModel)amrykidsFavoritesListView.DataContext).MangaClickCommand.Execute((amrykidsFavoritesListView).SelectedItem);
         }
     }
 }

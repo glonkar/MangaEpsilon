@@ -6,13 +6,11 @@ namespace MangaEpsilon.Manga.Base
 {
     public interface IMangaSource
     {
-        [Obsolete()]
-        Task<Chapter> GetChapter(ChapterEntry chapter, Action<int, int> progressHandler = null);
-        [Obsolete()]
-        Task<Chapter> GetChapter(Manga mag, ChapterEntry chapter, Action<int,int> progressHandler = null);
-        Task<ChapterLight> GetChapterLight(ChapterEntry chapter, Action<int, int> progressHandler = null);
+        Task<ChapterLight> GetChapterLight(ChapterEntry chapter);
         Task<string> GetChapterPageImageUrl(ChapterLight chapter, int pageIndex);
-        Task<Dictionary<string,string>> GetAvailableManga();
+        Task AcquireAvailableManga();
+        List<Manga> AvailableManga { get; }
+        void LoadAvilableMangaFromFile(string file);
         Task<Manga> GetMangaInfo(string name);
         Task<Manga> GetMangaInfoByUrl(string url);
         Task<ChapterEntry[]> GetNewReleasesOfToday(int amount = 5);

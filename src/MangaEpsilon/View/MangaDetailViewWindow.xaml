@@ -7,7 +7,7 @@
         xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
         xmlns:crystal="clr-namespace:Crystal.Core;assembly=Amrykid.Crystal"
         xmlns:utils="clr-namespace:Crystal.Utilities;assembly=Amrykid.Crystal"
-        Title="{Binding MangaName, StringFormat='{}{0} - Manga Details - MangaEpsilon'}" ShowTitleBar="False" x:Name="thisWindow" SaveWindowPosition="True" Height="458" Width="1284" ResizeMode="CanResize" ShowActivated="True">
+        Title="{Binding Manga.MangaName, StringFormat='{}{0} - Manga Details - MangaEpsilon'}" ShowTitleBar="False" x:Name="thisWindow" SaveWindowPosition="True" Height="458" Width="1284" ResizeMode="CanResize" ShowActivated="True">
     <i:Interaction.Behaviors>
         <Behaviours:BorderlessWindowBehavior ResizeWithGrip="True" EnableDWMDropShadow="True" />
     </i:Interaction.Behaviors>
@@ -44,7 +44,7 @@
 
                         <Grid Grid.Row="1">
                             <StackPanel Orientation="Horizontal" Margin="15 20 0 0">
-                                <Image Height="550" Width="450" Margin="0 0 0 0" Source="{Binding Manga.BookImage}" VerticalAlignment="Top" x:Name="CoverImage"/>
+                                <Image Height="550" Width="450" Margin="0 0 0 0" Source="{Binding Manga.BookImageUrl}" VerticalAlignment="Top" x:Name="CoverImage"/>
                             </StackPanel>
                         </Grid>
                     </Grid>
@@ -54,11 +54,11 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="20*"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" FontSize="21" Text="qbout" Margin="50 0 0 0"/>
+                            <TextBlock Grid.Row="0" FontSize="21" Text="about" Margin="50 0 0 0"/>
 
                             <Grid Grid.Row="1">
                                 <StackPanel Orientation="Horizontal" Margin="50 20 0 0">
-                                    <TextBlock FontSize="17" Text="{Binding Manga.Description}" TextAlignment="Left" TextWrapping="Wrap" Width="450" HorizontalAlignment="Center" x:Name="DescriptionTextBlock" />
+                                    <TextBlock FontSize="17" Text="{Binding Manga.Description}" TextAlignment="Left" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" Width="450" HorizontalAlignment="Center" x:Name="DescriptionTextBlock" />
                                 </StackPanel>
                             </Grid>
                         </Grid>
@@ -81,7 +81,7 @@
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <Grid Background="Gray" Width="50" Height="50" Margin="3">
-                                                <TextBlock Text="{Binding ID}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                <TextBlock Text="{Binding VolumeNumber}" VerticalAlignment="Center" HorizontalAlignment="Center">
                                                     <TextBlock.Foreground>
                                                         <SolidColorBrush Color="{StaticResource WhiteColor}" />
                                                     </TextBlock.Foreground>

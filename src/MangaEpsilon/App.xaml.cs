@@ -35,19 +35,41 @@ namespace MangaEpsilon
             base.PreStartup();
         }
 
-        public static MangaEpsilon.Manga.Base.IMangaSource MangaSource { get; set; }
-
-        public static ProgressRing ProgressIndicator
+        protected override void PostStartup()
         {
-            get
-            {
-                if (Application.Current.MainWindow.Content == null) return null;
+            MangaSourceInitializationTask = InitializeMangaComponents();
 
-                return ((MainWindow)Application.Current.MainWindow).MainProgressIndictator;
+            base.PostStartup();
+        }
+
+        private static async Task InitializeMangaComponents()
+        {
+            App.MangaSource = new MangaEpsilon.Manga.Sources.MangaEden.MangaEdenSource();
+
+            if (File.Exists(App.AppDataDir + "Manga.json"))
+                App.MangaSource.LoadAvilableMangaFromFile(App.AppDataDir + "Manga.json");
+            else
+            {
+                await App.MangaSource.AcquireAvailableManga();
+                var preloaded = App.MangaSource.AvailableManga;
+
+                using (var fs = new FileStream(App.AppDataDir + "Manga.json", FileMode.OpenOrCreate))
+                {
+                    var json = MangaEpsilon.JSON.JsonSerializer.Serialize(preloaded);
+
+                    using (var sw = new StreamWriter(fs))
+                    {
+                        await sw.WriteAsync(json);
+                        await sw.FlushAsync();
+                    }
+                }
             }
         }
 
+        public static MangaEpsilon.Manga.Base.IMangaSource MangaSource { get; set; }
+
         public static readonly string AppDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\MangaEpsilon\\";
         public static string ImageCacheDir = null;
+        internal static Task MangaSourceInitializationTask = null;
     }
 }

@@ -76,6 +76,10 @@
     </ApplicationDefinition>
     <Compile Include="Extensions\BitmapImageEx.cs" />
     <Compile Include="Extensions\System.Windows.Controls.Image.cs" />
+    <Compile Include="Manga\Sources\MangaEden\MangaEdenSource.cs" />
+    <Compile Include="UnixTimeUtil.cs" />
+    <Compile Include="ViewModel\MainWindowAmrykidsFavoritesViewModel.cs" />
+    <Compile Include="ViewModel\MainWindowTodaysReleasesViewModel.cs" />
     <Compile Include="View\MangaChapterViewPage.xaml.cs">
       <DependentUpon>MangaChapterViewPage.xaml</DependentUpon>
     </Compile>
@@ -113,9 +117,6 @@
     <Compile Include="Manga\Extensions\System.String.cs" />
     <Compile Include="Manga\Extensions\Windows.UI.Xaml.Controls.Image.cs" />
     <Compile Include="Manga\Sources\MangaReader\MangaReaderSource.cs" />
-    <Compile Include="Model\ChapterEntryWrapper.cs" />
-    <Compile Include="Model\MangaChapterPage.cs" />
-    <Compile Include="Model\MangaWrapper.cs" />
     <Compile Include="ViewModel\MainPageViewModel.cs" />
     <Compile Include="ViewModel\MangaChapterViewPageViewModel.cs" />
     <Compile Include="ViewModel\MangaDetailPageViewModel.cs" />
@@ -180,6 +181,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Converters\" />
+    <Folder Include="Model\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
