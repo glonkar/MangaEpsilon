@@ -30,12 +30,18 @@ namespace MangaEpsilon
 
         private void itemListView_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            ((MainWindowTodaysReleasesViewModel)itemListView.DataContext).MangaClickCommand.Execute((itemListView).SelectedItem);
+            if ((itemListView).SelectedItem == null) return;
+
+            if (e.ChangedButton == MouseButton.Left)
+                ((MainWindowTodaysReleasesViewModel)itemListView.DataContext).MangaClickCommand.Execute((itemListView).SelectedItem);
         }
 
         private void amrykidsFavoritesListView_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            ((MainWindowAmrykidsFavoritesViewModel)amrykidsFavoritesListView.DataContext).MangaClickCommand.Execute((amrykidsFavoritesListView).SelectedItem);
+            if ((amrykidsFavoritesListView).SelectedItem == null) return;
+
+            if (e.ChangedButton == MouseButton.Left)
+                ((MainWindowAmrykidsFavoritesViewModel)amrykidsFavoritesListView.DataContext).MangaClickCommand.Execute((amrykidsFavoritesListView).SelectedItem);
         }
     }
 }

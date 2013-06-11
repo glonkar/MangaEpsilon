@@ -34,7 +34,7 @@ namespace MangaEpsilon.ViewModel
             foreach (var manga in latestMangas)
             {
                 //simulate real-time adding of items
-                await Task.Delay(200);
+                await Task.Delay(100);
                 NewReleasesToday.Add(manga);
             }
 

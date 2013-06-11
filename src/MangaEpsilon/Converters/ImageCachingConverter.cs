@@ -25,22 +25,12 @@ namespace MangaEpsilon.Converters
 
             if (!File.Exists(App.ImageCacheDir + filename))
             {
-                //var request = HttpWebRequest.Create(url);
-                //var response = (HttpWebResponse)request.GetResponse();
-                //if (!response.ContentType.StartsWith("image"))
-                //{
-                //    throw new FileFormatException(url, String.Format("Uri passed to ImageCacher does not return an image. Content is of type {0}.", response.ContentType));
-                //}
-                //response.Close();
-
                 var image = new BitmapImage();
                 image.BeginInit();
                 image.UriSource = url;
                 image.EndInit();
 
                 image.DownloadCompleted += image_DownloadCompleted;
-
-
 
                 return image;
             }
