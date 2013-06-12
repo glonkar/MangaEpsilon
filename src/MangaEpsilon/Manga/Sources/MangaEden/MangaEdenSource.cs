@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -8,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MangaEpsilon.Manga.Base;
+using Newtonsoft.Json;
 
 namespace MangaEpsilon.Manga.Sources.MangaEden
 {
@@ -137,7 +139,14 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
 
         public void LoadAvilableMangaFromFile(string file)
         {
-            AvailableManga = JSON.JsonSerializer.Deserialize<List<Manga.Base.Manga>>(System.IO.File.ReadAllText(file));
+            //AvailableManga = JSON.JsonSerializer.Deserialize<List<Manga.Base.Manga>>(System.IO.File.ReadAllText(file));
+            using (var str = new StreamReader(File.OpenRead(file)))
+            {
+                using (var jtr = new JsonTextReader(str))
+                {
+                    AvailableManga = App.DefaultJsonSerializer.Deserialize<List<Manga.Base.Manga>>(jtr);
+                }
+            }
         }
 
 

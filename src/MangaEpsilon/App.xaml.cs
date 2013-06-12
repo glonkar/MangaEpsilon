@@ -10,6 +10,7 @@ using System.Windows.Media;
 using Crystal.Core;
 using Crystal.Navigation;
 using MahApps.Metro.Controls;
+using Newtonsoft.Json;
 
 namespace MangaEpsilon
 {
@@ -20,6 +21,13 @@ namespace MangaEpsilon
     {
         protected override void PreStartup()
         {
+            DefaultJsonSerializer = Newtonsoft.Json.JsonSerializer.Create(
+                new Newtonsoft.Json.JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize,
+                    PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.All
+                });
+
             this.EnableCrystalLocalization = true;
             this.EnableDeepReflectionCaching = true;
             this.EnableSelfAssemblyResolution = true;
@@ -31,6 +39,7 @@ namespace MangaEpsilon
 
             if (!Directory.Exists(ImageCacheDir))
                 Directory.CreateDirectory(ImageCacheDir);
+
 
             base.PreStartup();
         }
@@ -44,6 +53,7 @@ namespace MangaEpsilon
 
         protected override void PreShutdown()
         {
+            SaveAvailableManga();
             base.PreShutdown();
         }
 
@@ -64,13 +74,13 @@ namespace MangaEpsilon
         {
             var preloaded = App.MangaSource.AvailableManga;
 
-            using (var fs = new FileStream(App.AppDataDir + "Manga.json", FileMode.OpenOrCreate))
+            using (var sw = new StreamWriter(App.AppDataDir + "Manga.json", false))
             {
-                var json = MangaEpsilon.JSON.JsonSerializer.Serialize(preloaded);
-
-                using (var sw = new StreamWriter(fs))
+                using (var jtw = new Newtonsoft.Json.JsonTextWriter(sw))
                 {
-                    await sw.WriteAsync(json);
+                    jtw.Formatting = Formatting.Indented;
+
+                    DefaultJsonSerializer.Serialize(jtw, preloaded);
                     await sw.FlushAsync();
                 }
             }
@@ -81,5 +91,6 @@ namespace MangaEpsilon
         public static readonly string AppDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\MangaEpsilon\\";
         public static string ImageCacheDir = null;
         internal static Task MangaSourceInitializationTask = null;
+        internal static JsonSerializer DefaultJsonSerializer = null;
     }
 }
