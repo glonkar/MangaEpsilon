@@ -20,6 +20,8 @@ namespace MangaEpsilon.ViewModel
 
             Manga = (Manga.Base.Manga)argument[0].Value;
 
+            //var firstEntry = Yukihyo.MAL.MyAnimeListAPI.Search(Manga.MangaName, Yukihyo.MAL.MALSearchType.manga).First(x => x.Title.ToLower() == Manga.MangaName.ToLower());
+
             OpenMangaChapterCommand = CommandManager.CreateCommand(x =>
                 {
                     ChapterEntry selectedChapter = x as ChapterEntry;

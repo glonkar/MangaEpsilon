@@ -260,7 +260,12 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="20*"/>
                     </Grid.RowDefinitions>
-                    <TextBox Grid.Row="0" VerticalAlignment="Top" HorizontalAlignment="Right" metro:TextboxHelper.Watermark="Search..." metro:TextboxHelper.ClearTextButton="True" metro:TextboxHelper.SelectAllOnFocus="True" Width="200"/>
+                    <Grid Grid.Row="0">
+                        <Label Foreground="Red" FontWeight="Bold">NOTE: This section does not work yet.</Label>
+                        <TextBox VerticalAlignment="Top" HorizontalAlignment="Right" metro:TextboxHelper.Watermark="Search..." metro:TextboxHelper.ClearTextButton="True" 
+                             metro:TextboxHelper.SelectAllOnFocus="True" Width="200"/>
+                    </Grid>
+                    
                     <ListBox Grid.Row="1" ItemsSource="{Binding AvailableMangas}" x:Name="CatalogListView" VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.IsContainerVirtualizable="True" VirtualizingPanel.IsVirtualizing="True">
                         <ListBox.ItemTemplate>
                             <DataTemplate>

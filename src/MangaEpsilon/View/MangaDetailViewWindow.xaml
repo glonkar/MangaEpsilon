@@ -49,7 +49,9 @@
                             </StackPanel>
                         </Grid>
                         <Grid Grid.Row="2">
-                            <Label Content="{Binding Path=Manga.Author, StringFormat='Author: {0}'}"/>
+                            <StackPanel>
+                                <Label Content="{Binding Path=Manga.Author}" ContentStringFormat="Author: {0}" HorizontalAlignment="Stretch"/>
+                            </StackPanel>
                         </Grid>
                     </Grid>
                     <StackPanel Orientation="Vertical">
@@ -67,7 +69,7 @@
                             </Grid>
                         </Grid>
 
-                        <Grid VerticalAlignment="Top" Height="Auto" MaxHeight="500" Width="800" x:Name="ChaptersGrid" HorizontalAlignment="Left">
+                        <Grid VerticalAlignment="Top" Height="Auto" MaxHeight="500" Width="600" x:Name="ChaptersGrid" HorizontalAlignment="Left">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="20*"/>
@@ -97,7 +99,9 @@
                             </Grid>
                         </Grid>
                     </StackPanel>
-
+                    <Grid VerticalAlignment="Top" Height="600" Width="475">
+                        
+                    </Grid>
                 </StackPanel>
             </ScrollViewer>
         </Grid>

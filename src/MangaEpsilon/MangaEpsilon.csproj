@@ -164,6 +164,10 @@
       <Project>{8c5a2d35-824e-4f52-9b18-b1aa19c42bda}</Project>
       <Name>Crystal</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Visual Studio 2010\Projects\Yukihyo\src\Yukihyo.MAL\Yukihyo.MAL.csproj">
+      <Project>{7ce8e38a-af58-41c9-bf79-dc50fefef673}</Project>
+      <Name>Yukihyo.MAL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\MahApps.Metro\MahApps.Metro\MahApps.Metro.NET45.csproj">
       <Project>{942d11c4-29f5-46c4-8c14-4b976d56c637}</Project>
       <Name>MahApps.Metro.NET45</Name>
