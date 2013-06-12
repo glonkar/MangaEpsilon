@@ -78,8 +78,10 @@
     <Compile Include="Extensions\BitmapImageEx.cs" />
     <Compile Include="Extensions\System.Windows.Controls.Image.cs" />
     <Compile Include="Manga\Sources\MangaEden\MangaEdenSource.cs" />
+    <Compile Include="PaginatedObservableCollection.cs" />
     <Compile Include="UnixTimeUtil.cs" />
     <Compile Include="ViewModel\MainWindowAmrykidsFavoritesViewModel.cs" />
+    <Compile Include="ViewModel\MainWindowCatalogViewModel.cs" />
     <Compile Include="ViewModel\MainWindowTodaysReleasesViewModel.cs" />
     <Compile Include="View\MangaChapterViewPage.xaml.cs">
       <DependentUpon>MangaChapterViewPage.xaml</DependentUpon>
@@ -184,6 +186,11 @@
     <Folder Include="Model\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
+    </VisualStudio>
+  </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

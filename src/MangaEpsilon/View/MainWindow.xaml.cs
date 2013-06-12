@@ -43,5 +43,10 @@ namespace MangaEpsilon
             if (e.ChangedButton == MouseButton.Left)
                 ((MainWindowAmrykidsFavoritesViewModel)amrykidsFavoritesListView.DataContext).MangaClickCommand.Execute((amrykidsFavoritesListView).SelectedItem);
         }
+
+        private void CatalogListView_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            
+        }
     }
 }

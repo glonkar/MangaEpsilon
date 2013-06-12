@@ -42,7 +42,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
             //Updates the existing entry for the manga for later.
             var index = AvailableManga.IndexOf(manga);
 
-            if (manga.Author != null)
+            if (manga.Author == null)
                 manga.Author = data["author"] as string;
 
             manga.Description = WebUtility.HtmlDecode(data["description"] as string);
@@ -159,7 +159,9 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                     Manga.Base.Manga mangaObj = new Base.Manga();
                     mangaObj.MangaName = manga["t"] as string;
                     mangaObj.ID = manga["i"] as string;
-                    mangaObj.BookImageUrl = "http://cdn.mangaeden.com/mangasimg/" + manga["im"] as string;
+
+                    if (manga["im"] != null)
+                        mangaObj.BookImageUrl = "http://cdn.mangaeden.com/mangasimg/" + manga["im"] as string;
 
                     list.Add(mangaObj);
                 }

@@ -42,6 +42,11 @@ namespace MangaEpsilon
             base.PostStartup();
         }
 
+        protected override void PreShutdown()
+        {
+            base.PreShutdown();
+        }
+
         private static async Task InitializeMangaComponents()
         {
             App.MangaSource = new MangaEpsilon.Manga.Sources.MangaEden.MangaEdenSource();
@@ -51,17 +56,22 @@ namespace MangaEpsilon
             else
             {
                 await App.MangaSource.AcquireAvailableManga();
-                var preloaded = App.MangaSource.AvailableManga;
+                await SaveAvailableManga();
+            }
+        }
 
-                using (var fs = new FileStream(App.AppDataDir + "Manga.json", FileMode.OpenOrCreate))
+        private static async Task SaveAvailableManga()
+        {
+            var preloaded = App.MangaSource.AvailableManga;
+
+            using (var fs = new FileStream(App.AppDataDir + "Manga.json", FileMode.OpenOrCreate))
+            {
+                var json = MangaEpsilon.JSON.JsonSerializer.Serialize(preloaded);
+
+                using (var sw = new StreamWriter(fs))
                 {
-                    var json = MangaEpsilon.JSON.JsonSerializer.Serialize(preloaded);
-
-                    using (var sw = new StreamWriter(fs))
-                    {
-                        await sw.WriteAsync(json);
-                        await sw.FlushAsync();
-                    }
+                    await sw.WriteAsync(json);
+                    await sw.FlushAsync();
                 }
             }
         }

@@ -39,6 +39,7 @@
 
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="20*"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" FontSize="21" Text="cover" Margin="50 0 0 0"/>
 
@@ -46,6 +47,9 @@
                             <StackPanel Orientation="Horizontal" Margin="15 20 0 0">
                                 <Image Height="550" Width="450" Margin="0 0 0 0" Source="{Binding Manga.BookImageUrl}" VerticalAlignment="Top" x:Name="CoverImage"/>
                             </StackPanel>
+                        </Grid>
+                        <Grid Grid.Row="2">
+                            <Label Content="{Binding Path=Manga.Author, StringFormat='Author: {0}'}"/>
                         </Grid>
                     </Grid>
                     <StackPanel Orientation="Vertical">
@@ -80,7 +84,7 @@
                                     </ListBox.ItemsPanel>
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
-                                            <Grid Background="Gray" Width="50" Height="50" Margin="1 0 1 0">
+                                            <Grid Background="Gray" Width="50" Height="50" Margin="0 1 0 1">
                                                 <TextBlock Text="{Binding VolumeNumber}" VerticalAlignment="Center" HorizontalAlignment="Center">
                                                     <TextBlock.Foreground>
                                                         <SolidColorBrush Color="{StaticResource WhiteColor}" />

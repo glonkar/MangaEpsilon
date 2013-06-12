@@ -29,7 +29,7 @@ namespace MangaEpsilon.JSON
         {
             using (MemoryStream _Stream = new MemoryStream())
             {
-                var _Serializer = new DataContractJsonSerializer(instance.GetType());
+                var _Serializer = new DataContractJsonSerializer(instance.GetType(), new DataContractJsonSerializerSettings() { EmitTypeInformation = System.Runtime.Serialization.EmitTypeInformation.Always});
                 _Serializer.WriteObject(_Stream, instance);
                 _Stream.Position = 0;
                 using (StreamReader _Reader = new StreamReader(_Stream))

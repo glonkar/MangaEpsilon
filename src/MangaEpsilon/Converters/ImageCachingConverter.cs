@@ -19,6 +19,8 @@ namespace MangaEpsilon.Converters
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
+            if (value == null) return null;
+
             var url = new Uri(value.ToString());
 
             var filename = url.Segments.Last();
