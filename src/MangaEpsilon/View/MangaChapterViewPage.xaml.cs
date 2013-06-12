@@ -36,5 +36,10 @@ namespace MangaEpsilon.View
         {
             FlipViewer.Focus();
         }
+
+        private void uiScaleSlider_MouseLeave(object sender, MouseEventArgs e)
+        {
+            FlipViewer.Focus();
+        }
     }
 }

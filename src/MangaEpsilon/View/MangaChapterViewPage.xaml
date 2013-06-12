@@ -28,14 +28,31 @@
         <vm:MangaChapterViewPageViewModel/>
     </Window.DataContext>
     <Grid>
-        <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="40" Height="40" x:Name="MainProgressIndictator" IsActive="{Binding IsBusy, UpdateSourceTrigger=PropertyChanged}" Visibility="Visible"></metro:ProgressRing>
-        <metro:FlipView ItemsSource="{Binding Pages, UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding CurrentPageIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="FlipViewer" SelectionChanged="FlipViewer_SelectionChanged" IsBannerEnabled="False">
+        <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" 
+                            HorizontalAlignment="Stretch" Width="40" Height="40" 
+                            x:Name="MainProgressIndictator" IsActive="{Binding IsBusy, UpdateSourceTrigger=PropertyChanged}" Visibility="Visible"></metro:ProgressRing>
+        <metro:FlipView ItemsSource="{Binding Pages, UpdateSourceTrigger=PropertyChanged}" 
+                        SelectedIndex="{Binding CurrentPageIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                        x:Name="FlipViewer" SelectionChanged="FlipViewer_SelectionChanged" IsBannerEnabled="False" Margin="0 30 0 30">
             <metro:FlipView.ItemTemplate>
                 <DataTemplate>
-                    <Image Source="{Binding Image}">
-                    </Image>
+                    <ScrollViewer HorizontalScrollBarVisibility="Visible">
+                        <ScrollViewer.LayoutTransform>
+                            <ScaleTransform 
+                                    CenterX="0" CenterY="0"
+                                    ScaleX="{Binding ElementName=uiScaleSlider,Path=Value}"
+                                    ScaleY="{Binding ElementName=uiScaleSlider,Path=Value}"
+                                />
+                        </ScrollViewer.LayoutTransform>
+                        <Image Source="{Binding .}" Stretch="Uniform" Width="800" Height="800">
+                        </Image>
+                    </ScrollViewer>
                 </DataTemplate>
             </metro:FlipView.ItemTemplate>
         </metro:FlipView>
+        <Slider x:Name="uiScaleSlider" Width="100" Height="20" HorizontalAlignment="Right" VerticalAlignment="Bottom" Panel.ZIndex="5" Margin="3"
+            ToolTip="{Binding Path=Value, StringFormat='Zoom: {0}'}" ToolTipService.Placement="Mouse"
+            Value="1" Minimum="0.1" Maximum="4" MouseLeave="uiScaleSlider_MouseLeave"     
+        />
     </Grid>
 </metro:MetroWindow>
