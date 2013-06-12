@@ -31,13 +31,6 @@ namespace MangaEpsilon.ViewModel
 
             NewReleasesToday = new ObservableCollection<ChapterEntry>();
 
-            foreach (var manga in latestMangas)
-            {
-                //simulate real-time adding of items
-                await Task.Delay(100);
-                NewReleasesToday.Add(manga);
-            }
-
             MangaClickCommand = CommandManager.CreateCommand((o) =>
             {
                 if (o is ChapterEntry)
@@ -46,6 +39,13 @@ namespace MangaEpsilon.ViewModel
                     NavigationService.ShowWindow<MangaChapterViewPageViewModel>(new KeyValuePair<string, object>("chapter", chapter));
                 }
             });
+
+            foreach (var manga in latestMangas)
+            {
+                //simulate real-time adding of items
+                await Task.Delay(100);
+                NewReleasesToday.Add(manga);
+            }
         }
 
         public ObservableCollection<ChapterEntry> NewReleasesToday
