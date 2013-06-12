@@ -17,14 +17,44 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
     {
         //http://www.mangaeden.com/api/
 
-        public Task<Base.ChapterLight> GetChapterLight(Base.ChapterEntry chapter)
+        public async Task<Base.ChapterLight> GetChapterLight(Base.ChapterEntry chapter)
         {
-            throw new NotImplementedException();
+            ChapterLight light = new ChapterLight(chapter.ParentManga);
+            light.Name = chapter.Name;
+            light.ID = chapter.ID;
+            light.VolumeNumber = chapter.VolumeNumber;
+            light.PagesUrls = new List<string>();
+
+            if (light.ID == null)
+            {
+                var updatedParentManga = await GetMangaInfo(chapter.ParentManga.MangaName);
+
+                var updatedChapter = updatedParentManga.Chapters.First(x => x.VolumeNumber == light.VolumeNumber);
+
+                light.ID = updatedChapter.ID;
+            }
+
+
+            string json = string.Empty;
+            using (var client = new HttpClient())
+            {
+                json = await client.GetStringAsync("http://www.mangaeden.com/api/chapter/" + light.ID + "/");
+            }
+
+            var pages = (JSON.JSON.JsonDecode(json) as Hashtable)["images"];
+            foreach (ArrayList page in (IEnumerable)pages)
+            {
+                light.PagesUrls.Add("http://cdn.mangaeden.com/mangasimg/" + page[1]);
+            }
+
+            light.TotalPages = light.PagesUrls.Count; //hmm...
+
+            return light;
         }
 
         public Task<string> GetChapterPageImageUrl(Base.ChapterLight chapter, int pageIndex)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(chapter.PagesUrls[pageIndex]);
         }
 
         public async Task<Base.Manga> GetMangaInfo(string name)
@@ -110,7 +140,16 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                 var data = Regex.Matches(mangaItem.Value, "<td>.+?</td>", RegexOptions.Singleline | RegexOptions.Compiled);
 
                 var name = Regex.Replace(data[0].Value, "<.+?>", "", RegexOptions.Singleline | RegexOptions.Compiled).Trim();
-                var chapterNum = Regex.Replace(data[2].Value, "<.+?>", "", RegexOptions.Singleline | RegexOptions.Compiled);
+                var chapterNum = Regex.Replace(
+                    Regex.Replace(
+                        Regex.Match(
+                            data[3].Value,
+                            "<a.+?>.+?<span.+?>",
+                            RegexOptions.Singleline | RegexOptions.Compiled).Value
+                        , "\".+?\"",
+                        "",
+                        RegexOptions.Singleline | RegexOptions.Compiled)
+                    , "<.+?>", "", RegexOptions.Singleline | RegexOptions.Compiled).Trim();
 
                 var date = Regex.Replace(
                     Regex.Match(data[3].Value, "<span.+?>.+?</span>", RegexOptions.Singleline | RegexOptions.Compiled).Value,

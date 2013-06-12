@@ -15,129 +15,101 @@ namespace MangaEpsilon.ViewModel
 {
     public class MangaChapterViewPageViewModel : BaseViewModel
     {
-        //public override void OnNavigatedTo(params KeyValuePair<string, object>[] argument)
-        //{
-        //    ChapterEntry entry = (ChapterEntry)argument[0].Value;
+        public override void OnNavigatedTo(params KeyValuePair<string, object>[] argument)
+        {
+            ChapterEntry entry = (ChapterEntry)argument[0].Value;
 
-        //    ChapterName = entry.Name;
+            ChapterName = entry.Name;
 
-        //    GetMangaPages(entry);
+            GetMangaPages(entry);
 
-        //    base.OnNavigatedTo(argument);
-        //}
+            base.OnNavigatedTo(argument);
+        }
 
-        //public override void OnNavigatedFrom()
-        //{
-        //    //App.ProgressIndicator.Visibility = Visibility.Collapsed;
+        private ChapterLight chapter = null;
+        private async void GetMangaPages(ChapterEntry entry)
+        {
+            IsBusy = true;
 
-        //    base.OnNavigatedFrom();
-        //}
+            chapter = await App.MangaSource.GetChapterLight(entry);
 
-        //private ChapterLight chapter = null;
-        //private async void GetMangaPages(ChapterEntry entry)
-        //{
-        //    IsBusy = true;
+            Pages = new ObservableCollection<Uri>();
 
-        //    chapter = await App.MangaSource.GetChapterLight(entry, null);
+            Pages.Add(new Uri(await App.MangaSource.GetChapterPageImageUrl(chapter, CurrentPageIndex)));
 
-        //    Pages = new ObservableCollection<MangaChapterPage>();
+            CurrentPageIndex = 0;
 
-        //    Pages.Add(new MangaChapterPage(chapter)
-        //    {
-        //        Index = 0,
-        //    });
-        //    Pages[0].ImageUrl = await App.MangaSource.GetChapterPageImageUrl(chapter, CurrentPageIndex);
+            IsBusy = false;
 
-        //    await Task.Yield();
+            for (int i = 1; i < chapter.TotalPages; i++)
+            {
+                Pages.Add(new Uri(await App.MangaSource.GetChapterPageImageUrl(chapter, i)));
+            }
 
-        //    Pages[0].Image = await LoadImgUrl(Pages[0].ImageUrl, true);
+            RaisePropertyChanged(x => this.Pages);
+        }
 
-        //    CurrentPageIndex = 0;
+        private async void GetNextBatchOfPages()
+        {
+            IsBusy = true;
 
-        //    IsBusy = false;
+            await Task.Delay(1);
 
-        //    for (int i = 1; i < chapter.TotalPages; i++)
-        //    {
-        //        var page = new MangaChapterPage(chapter);
+            for (int i = CurrentPageIndex; i < Math.Min(chapter.TotalPages, CurrentPageIndex + 3); i++)
+            {
+                if (Pages[i] == null)
+                    Pages[i] = new Uri(await App.MangaSource.GetChapterPageImageUrl(chapter, i));
+            }
 
-        //        page.Index = i;
+            await Task.Delay(1000);
 
-        //        Pages.Add(page);
+            IsBusy = false;
+        }
 
-        //        bool shouldBeLoaded = i <= Math.Min(chapter.TotalPages, 5);
+        public string ChapterName
+        {
+            get { return GetPropertyOrDefaultType<string>(x => this.ChapterName); }
+            set { SetProperty(x => this.ChapterName, value); }
+        }
 
-        //        page.ImageUrl = await App.MangaSource.GetChapterPageImageUrl(chapter, i);
+        public int CurrentPageIndex
+        {
+            get { return GetPropertyOrDefaultType<int>(x => this.CurrentPageIndex); }
+            set
+            {
+                SetProperty(x => this.CurrentPageIndex, value);
 
-        //        if (shouldBeLoaded)
-        //            page.Image = await LoadImgUrl(page.ImageUrl, true);
-        //    }
+                if (Pages != null)
+                    if (Pages.Count > 0)
+                        if (Pages.Count > value + 1)
+                            if (Pages[value + 1] == null && IsBusy == false)
+                                GetNextBatchOfPages();
+            }
+        }
 
-        //    RaisePropertyChanged(x => this.Pages);
-        //}
+        public ObservableCollection<Uri> Pages
+        {
+            get { return GetPropertyOrDefaultType<ObservableCollection<Uri>>(x => this.Pages); }
+            set { SetProperty(x => this.Pages, value); }
+        }
 
-        //private async void GetNextBatchOfPages()
-        //{
-        //    IsBusy = true;
+        public bool IsBusy
+        {
+            get { return GetPropertyOrDefaultType<bool>(x => this.IsBusy); }
+            set { SetProperty<bool>(x => this.IsBusy, value); }
+        }
 
-        //    await Task.Delay(1);
+        private async Task<BitmapImage> LoadImgUrl(string url, bool block = false)
+        {
+            BitmapImage bi = new BitmapImage();
+            bi.BeginInit();
+            bi.UriSource = new Uri(url);
+            bi.EndInit();
 
-        //    for (int i = CurrentPageIndex; i < Math.Min(chapter.TotalPages, CurrentPageIndex + 3); i++)
-        //    {
-        //        if (Pages[i].ImageUrl == null)
-        //            Pages[i].ImageUrl = await App.MangaSource.GetChapterPageImageUrl(chapter, i);
+            if (block)
+                await bi.WaitForDownloadCompletion();
 
-        //        Pages[i].Image = await LoadImgUrl(Pages[i].ImageUrl, true);
-        //    }
-
-        //    await Task.Delay(1000);
-
-        //    IsBusy = false;
-        //}
-
-        //public string ChapterName
-        //{
-        //    get { return GetPropertyOrDefaultType<string>(x => this.ChapterName); }
-        //    set { SetProperty(x => this.ChapterName, value); }
-        //}
-
-        //public int CurrentPageIndex
-        //{
-        //    get { return GetPropertyOrDefaultType<int>(x => this.CurrentPageIndex); }
-        //    set
-        //    {
-        //        SetProperty(x => this.CurrentPageIndex, value);
-
-        //        if (Pages != null)
-        //            if (Pages.Count > 0)
-        //                if (Pages.Count > value + 1)
-        //                    if (Pages[value + 1].Image == null && IsBusy == false)
-        //                        GetNextBatchOfPages();
-        //    }
-        //}
-
-        //public ObservableCollection<MangaChapterPage> Pages
-        //{
-        //    get { return GetPropertyOrDefaultType<ObservableCollection<MangaChapterPage>>(x => this.Pages); }
-        //    set { SetProperty(x => this.Pages, value); }
-        //}
-
-        //public bool IsBusy
-        //{
-        //    get { return GetPropertyOrDefaultType<bool>(x => this.IsBusy); }
-        //    set { SetProperty<bool>(x => this.IsBusy, value); }
-        //}
-
-        //private async Task<BitmapImage> LoadImgUrl(string url, bool block = false)
-        //{
-        //    BitmapImage bi = new BitmapImage();
-        //    bi.BeginInit();
-        //    bi.UriSource = new Uri(url);
-        //    bi.EndInit();
-
-        //    if (block)
-        //        await bi.WaitForDownloadCompletion();
-
-        //    return bi;
-        //}
+            return bi;
+        }
     }
 }
