@@ -11,7 +11,7 @@ using MangaEpsilon.Manga.Base;
 
 namespace MangaEpsilon.ViewModel
 {
-    public class MainWindowTodaysReleasesViewModel: BaseViewModel
+    public class MainWindowTodaysReleasesViewModel : BaseViewModel
     {
         public MainWindowTodaysReleasesViewModel()
         {
@@ -39,6 +39,17 @@ namespace MangaEpsilon.ViewModel
                     NavigationService.ShowWindow<MangaChapterViewPageViewModel>(new KeyValuePair<string, object>("chapter", chapter));
                 }
             });
+            MangaInfoCommand = CommandManager.CreateProperCommand((o) =>
+            {
+                if (o is ChapterEntry)
+                {
+                    var chapter = ((ChapterEntry)o);
+                    var manga = chapter.ParentManga;
+
+                    NavigationService.ShowWindow<MangaDetailPageViewModel>(new KeyValuePair<string, object>("manga", manga));
+                }
+            }, (o) =>
+                o != null && o is ChapterEntry);
 
             foreach (var manga in latestMangas)
             {
@@ -48,16 +59,27 @@ namespace MangaEpsilon.ViewModel
             }
         }
 
+        public ChapterEntry SelectedEntry
+        {
+            get { return GetPropertyOrDefaultType<ChapterEntry>(x => this.SelectedEntry); }
+            set { SetProperty<ChapterEntry>(x => this.SelectedEntry, value); }
+        }
+
         public ObservableCollection<ChapterEntry> NewReleasesToday
         {
             get
             {
                 return GetPropertyOrDefaultType<ObservableCollection<ChapterEntry>>(x => this.NewReleasesToday);
             }
-            set { SetProperty<object>(x => this.NewReleasesToday, value); }
+            set
+            {
+                SetProperty<object>(x => this.NewReleasesToday, value);
+                System.Windows.Input.CommandManager.InvalidateRequerySuggested();
+            }
         }
 
         public CrystalCommand MangaClickCommand { get; set; }
+        public CrystalProperCommand MangaInfoCommand { get; set; }
 
         public bool IsBusy
         {

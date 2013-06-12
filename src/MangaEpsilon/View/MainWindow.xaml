@@ -133,7 +133,7 @@
         <metro:MetroAnimatedSingleRowTabControl Margin="5 25 5 5" SelectedIndex="0">
             <metro:MetroTabItem Header="home" HeaderFontSize="15">
                 <metro:MetroTabControl Margin="0 -15 0 0">
-                    <metro:MetroTabItem Header="today's releases">
+                    <metro:MetroTabItem x:Name="todayReleasesTabItem" Header="today's releases">
                         <TabItem.DataContext>
                             <vm:MainWindowTodaysReleasesViewModel/>
                         </TabItem.DataContext>
@@ -172,7 +172,7 @@
                                             VerticalAlignment="Stretch"
                                             ItemsSource="{Binding NewReleasesToday, UpdateSourceTrigger=PropertyChanged}"
                                             MinHeight="700"
-                                            MouseUp="itemListView_MouseUp" ItemContainerStyle="{StaticResource MangaListBoxItemStyle}">
+                                            MouseDoubleClick="itemListView_MouseDoubleClick" SelectedItem="{Binding SelectedEntry, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource MangaListBoxItemStyle}">
                                                 <ListBox.ItemsPanel>
                                                     <ItemsPanelTemplate>
                                                         <WrapPanel IsItemsHost="True" Width="{Binding (FrameworkElement.ActualWidth), RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}"
@@ -182,6 +182,11 @@
                                                         </WrapPanel>
                                                     </ItemsPanelTemplate>
                                                 </ListBox.ItemsPanel>
+                                                <ListBox.ContextMenu>
+                                                    <ContextMenu HasDropShadow="True">
+                                                        <MenuItem Header="Show Manga Information..." Command="{Binding MangaInfoCommand}" CommandParameter="{Binding SelectedEntry}"/>
+                                                    </ContextMenu>
+                                                </ListBox.ContextMenu>
                                             </ListBox>
                                         </StackPanel>
                                     </Grid>
@@ -265,7 +270,7 @@
                         <TextBox VerticalAlignment="Top" HorizontalAlignment="Right" metro:TextboxHelper.Watermark="Search..." metro:TextboxHelper.ClearTextButton="True" 
                              metro:TextboxHelper.SelectAllOnFocus="True" Width="200"/>
                     </Grid>
-                    
+
                     <ListBox Grid.Row="1" ItemsSource="{Binding AvailableMangas}" x:Name="CatalogListView" VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.IsContainerVirtualizable="True" VirtualizingPanel.IsVirtualizing="True">
                         <ListBox.ItemTemplate>
                             <DataTemplate>

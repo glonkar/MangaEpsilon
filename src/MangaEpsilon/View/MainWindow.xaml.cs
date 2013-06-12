@@ -30,10 +30,7 @@ namespace MangaEpsilon
 
         private void itemListView_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            if ((itemListView).SelectedItem == null) return;
 
-            if (e.ChangedButton == MouseButton.Left)
-                ((MainWindowTodaysReleasesViewModel)itemListView.DataContext).MangaClickCommand.Execute((itemListView).SelectedItem);
         }
 
         private void amrykidsFavoritesListView_MouseUp(object sender, MouseButtonEventArgs e)
@@ -44,9 +41,17 @@ namespace MangaEpsilon
                 ((MainWindowAmrykidsFavoritesViewModel)amrykidsFavoritesListView.DataContext).MangaClickCommand.Execute((amrykidsFavoritesListView).SelectedItem);
         }
 
-        private void CatalogListView_MouseWheel(object sender, MouseWheelEventArgs e)
+        private void itemListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            
+            if ((itemListView).SelectedItem == null) return;
+
+            if (e.ChangedButton == MouseButton.Left)
+                ((MainWindowTodaysReleasesViewModel)itemListView.DataContext).MangaClickCommand.Execute((itemListView).SelectedItem);
+        }
+
+        private void itemListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            itemListView.ContextMenu.DataContext = itemListView.SelectedItem;
         }
     }
 }
