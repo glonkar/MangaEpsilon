@@ -18,7 +18,7 @@ namespace MangaEpsilon.ViewModel
         {
             if (IsDesignMode) return;
 
-            Manga = (Manga.Base.Manga)argument[0].Value;
+            Manga = (Manga.Base.Manga)argument[0].Value; 
 
             //var firstEntry = Yukihyo.MAL.MyAnimeListAPI.Search(Manga.MangaName, Yukihyo.MAL.MALSearchType.manga).First(x => x.Title.ToLower() == Manga.MangaName.ToLower());
 
@@ -28,6 +28,13 @@ namespace MangaEpsilon.ViewModel
 
                     NavigationService.ShowWindow<MangaChapterViewPageViewModel>(new KeyValuePair<string, object>("chapter", selectedChapter));
                 });
+
+            GetUpdatedInfo();
+        }
+
+        private async void GetUpdatedInfo()
+        {
+            Manga = await App.MangaSource.GetMangaInfo(Manga.MangaName, false); //Get fresh, updated information.
         }
 
         public Manga.Base.Manga Manga

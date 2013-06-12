@@ -57,55 +57,63 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
             return Task.FromResult(chapter.PagesUrls[pageIndex]);
         }
 
-        public async Task<Base.Manga> GetMangaInfo(string name)
+        public async Task<Base.Manga> GetMangaInfo(string name, bool local = true)
         {
             //http://www.mangaeden.com/api/manga/[manga.id]/ 
 
             var manga = AvailableManga.Find(x => x.MangaName == name);
 
-            string json = string.Empty;
-            using (var client = new HttpClient())
-            {
-                json = await client.GetStringAsync("http://www.mangaeden.com/api/manga/" + manga.ID + "/");
-            }
+            if (local == false)
+                try
+                {
+                    string json = string.Empty;
+                    using (var client = new HttpClient())
+                    {
+                        json = await client.GetStringAsync("http://www.mangaeden.com/api/manga/" + manga.ID + "/");
+                    }
 
-            var data = JSON.JSON.JsonDecode(json) as Hashtable;
+                    var data = JSON.JSON.JsonDecode(json) as Hashtable;
 
-            //Updates the existing entry for the manga for later.
-            var index = AvailableManga.IndexOf(manga);
+                    //Updates the existing entry for the manga for later.
+                    var index = AvailableManga.IndexOf(manga);
 
-            if (manga.Author == null)
-                manga.Author = data["author"] as string;
+                    if (manga.Author == null)
+                        manga.Author = data["author"] as string;
 
-            manga.Description = WebUtility.HtmlDecode(data["description"] as string);
+                    manga.Description = WebUtility.HtmlDecode(data["description"] as string);
 
-            manga.Chapters.Clear();
+                    manga.Chapters.Clear();
 
-            var chapters = data["chapters"] as ArrayList;
+                    var chapters = data["chapters"] as ArrayList;
 
-            foreach (ArrayList chapter in chapters)
-            {
-                ChapterEntry entry = new ChapterEntry(manga);
+                    foreach (ArrayList chapter in chapters)
+                    {
+                        ChapterEntry entry = new ChapterEntry(manga);
 
-                var chapterNum = Convert.ToInt32(double.Parse(chapter[0].ToString())).ToString();
+                        var chapterNum = Convert.ToInt32(double.Parse(chapter[0].ToString())).ToString();
 
-                var time = Sayuka.IRC.Utilities.UnixTimeUtil.UnixTimeToDateTime(chapter[1].ToString());
+                        var time = Sayuka.IRC.Utilities.UnixTimeUtil.UnixTimeToDateTime(chapter[1].ToString());
 
-                entry.Name = string.Format("{0} #{1}",
-                    manga.MangaName, chapterNum);
+                        entry.Name = string.Format("{0} #{1}",
+                            manga.MangaName, chapterNum);
 
-                entry.ReleaseDate = time;
+                        entry.ReleaseDate = time;
 
-                entry.VolumeNumber = int.Parse(chapterNum.ToString());
+                        entry.VolumeNumber = int.Parse(chapterNum.ToString());
 
-                entry.Subtitle = chapter[2];
+                        entry.Subtitle = chapter[2];
 
-                entry.ID = chapter[3] as string;
+                        entry.ID = chapter[3] as string;
 
-                manga.Chapters.Add(entry);
-            }
+                        manga.Chapters.Add(entry);
+                    }
 
-            AvailableManga[index] = manga;
+                    AvailableManga[index] = manga;
+                }
+                catch (Exception)
+                {
+                    //Probably off line. Should return whatever data we have.
+                }
 
             return manga;
         }

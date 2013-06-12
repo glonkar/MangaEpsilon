@@ -31,6 +31,9 @@ namespace MangaEpsilon.ViewModel
         {
             IsBusy = true;
 
+            if (entry.ParentManga.Chapters.Count == 0)
+                entry.ParentManga = await App.MangaSource.GetMangaInfo(entry.ParentManga.MangaName, false);
+
             chapter = await App.MangaSource.GetChapterLight(entry);
 
             Pages = new ObservableCollection<Uri>();

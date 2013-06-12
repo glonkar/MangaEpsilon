@@ -40,8 +40,14 @@ namespace MangaEpsilon
             if (!Directory.Exists(ImageCacheDir))
                 Directory.CreateDirectory(ImageCacheDir);
 
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
             base.PreStartup();
+        }
+
+        void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show(e.ExceptionObject.ToString());
         }
 
         protected override void PostStartup()
