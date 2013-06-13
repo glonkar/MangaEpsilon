@@ -17,9 +17,16 @@ namespace MangaEpsilon.Converters
     [ValueConversion(typeof(string), typeof(string))]
     public class ImageCachingConverter : IValueConverter
     {
+        private List<string> BadUrls = null;
+        public ImageCachingConverter()
+        {
+            BadUrls = new List<string>();
+        }
+
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if (value == null) return null;
+            if (BadUrls.Contains(value.ToString())) return null;
 
             var url = new Uri(value.ToString());
 
@@ -32,12 +39,21 @@ namespace MangaEpsilon.Converters
                 image.UriSource = url;
                 image.EndInit();
 
+                image.DownloadFailed += image_DownloadFailed;
                 image.DownloadCompleted += image_DownloadCompleted;
 
                 return image;
             }
             else
                 return App.ImageCacheDir + filename;
+        }
+
+        void image_DownloadFailed(object sender, ExceptionEventArgs e)
+        {
+            var image = ((BitmapImage)sender);
+            image.DownloadFailed -= image_DownloadFailed;
+
+            BadUrls.Add(image.UriSource.ToString());
         }
 
         void image_DownloadCompleted(object sender, EventArgs e)
