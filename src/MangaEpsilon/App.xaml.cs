@@ -10,6 +10,7 @@ using System.Windows.Media;
 using Crystal.Core;
 using Crystal.Navigation;
 using MahApps.Metro.Controls;
+using MangaEpsilon.Services;
 using Newtonsoft.Json;
 
 namespace MangaEpsilon
@@ -53,6 +54,8 @@ namespace MangaEpsilon
         protected override void PostStartup()
         {
             MangaSourceInitializationTask = InitializeMangaComponents();
+
+            LibraryService.Initialize();
 
             base.PostStartup();
         }

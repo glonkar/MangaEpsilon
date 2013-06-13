@@ -256,7 +256,7 @@
                     </metro:MetroTabItem>
                 </metro:MetroTabControl>
             </metro:MetroTabItem>
-            <metro:MetroTabItem Header="catalog" HeaderFontSize="15">
+            <metro:MetroTabItem Header="catalog" HeaderFontSize="15" ScrollViewer.CanContentScroll="False">
                 <TabItem.DataContext>
                     <vm:MainWindowCatalogViewModel/>
                 </TabItem.DataContext>
@@ -268,20 +268,39 @@
                     <Grid Grid.Row="0">
                         <Label Foreground="Red" FontWeight="Bold">NOTE: This section does not work yet.</Label>
                         <TextBox VerticalAlignment="Top" HorizontalAlignment="Right" metro:TextboxHelper.Watermark="Search..." metro:TextboxHelper.ClearTextButton="True" 
-                             metro:TextboxHelper.SelectAllOnFocus="True" Width="200"/>
+                             metro:TextboxHelper.SelectAllOnFocus="True" Width="200" Text="{Binding SearchFilter, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=3}"/>
                     </Grid>
 
-                    <ListBox Grid.Row="1" ItemsSource="{Binding AvailableMangas}" x:Name="CatalogListView" VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.IsContainerVirtualizable="True" VirtualizingPanel.IsVirtualizing="True">
+                    <ListBox Grid.Row="1" ItemsSource="{Binding AvailableMangas, IsAsync=True}" x:Name="CatalogListView" 
+                             VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.IsContainerVirtualizable="True" VirtualizingPanel.IsVirtualizing="True"
+                             Margin="10 0 10 0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Vertical" Margin="2">
-                                    <Label FontSize="18" Content="{Binding MangaName}"/>
-                                    <TextBlock Text="{Binding Description}" TextTrimming="CharacterEllipsis"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                    <Image Source="{Binding BookImageUrl, Converter={StaticResource ImgCache}}" MaxWidth="100"/>
+                                    <StackPanel Orientation="Vertical" Margin="2">
+                                        <Label FontSize="18" Content="{Binding MangaName}"/>
+                                        <TextBlock Text="{Binding Description}" TextTrimming="CharacterEllipsis" Margin="5 0 20 0" MaxWidth="1400"/>
+                                    </StackPanel>
                                 </StackPanel>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </Grid>
+            </metro:MetroTabItem>
+            <metro:MetroTabItem Header="downloads" HeaderFontSize="15">
+                <TabItem.DataContext>
+                    <vm:MainWindowDownloadsViewModel/>
+                </TabItem.DataContext>
+                <ListView ItemsSource="{Binding Downloads, UpdateSourceTrigger=PropertyChanged}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Chapter.Name}"/>
+                            <GridViewColumn Header="Manga" DisplayMemberBinding="{Binding Chapter.ParentManga.MangaName}"/>
+                            <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
             </metro:MetroTabItem>
         </metro:MetroAnimatedSingleRowTabControl>
     </Grid>

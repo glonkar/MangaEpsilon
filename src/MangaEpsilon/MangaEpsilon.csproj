@@ -81,10 +81,13 @@
     <Compile Include="Extensions\BitmapImageEx.cs" />
     <Compile Include="Extensions\System.Windows.Controls.Image.cs" />
     <Compile Include="Manga\Sources\MangaEden\MangaEdenSource.cs" />
+    <Compile Include="Model\MangaChapterDownload.cs" />
     <Compile Include="PaginatedObservableCollection.cs" />
+    <Compile Include="Services\LibraryService.cs" />
     <Compile Include="UnixTimeUtil.cs" />
     <Compile Include="ViewModel\MainWindowAmrykidsFavoritesViewModel.cs" />
     <Compile Include="ViewModel\MainWindowCatalogViewModel.cs" />
+    <Compile Include="ViewModel\MainWindowDownloadsViewModel.cs" />
     <Compile Include="ViewModel\MainWindowTodaysReleasesViewModel.cs" />
     <Compile Include="View\MangaChapterViewPage.xaml.cs">
       <DependentUpon>MangaChapterViewPage.xaml</DependentUpon>
@@ -190,9 +193,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
