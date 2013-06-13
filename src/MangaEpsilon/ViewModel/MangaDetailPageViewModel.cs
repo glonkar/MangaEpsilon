@@ -34,7 +34,9 @@ namespace MangaEpsilon.ViewModel
 
         private async void GetUpdatedInfo()
         {
-            Manga = await App.MangaSource.GetMangaInfo(Manga.MangaName, false); //Get fresh, updated information.
+            var newManga = await App.MangaSource.GetMangaInfo(Manga.MangaName, false); //Get fresh, updated information.
+            Manga.Description = newManga.Description;
+            Manga.Author = newManga.Author;
         }
 
         public Manga.Base.Manga Manga

@@ -279,12 +279,17 @@
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
                                     <Image Source="{Binding BookImageUrl, Converter={StaticResource ImgCache}}" MaxWidth="100"/>
                                     <StackPanel Orientation="Vertical" Margin="2">
-                                        <Label FontSize="18" Content="{Binding MangaName}"/>
-                                        <TextBlock Text="{Binding Description}" TextTrimming="CharacterEllipsis" Margin="5 0 20 0" MaxWidth="1400"/>
+                                        <Label FontSize="18" Content="{Binding MangaName, UpdateSourceTrigger=PropertyChanged}"/>
+                                        <TextBlock Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" TextTrimming="CharacterEllipsis" Margin="5 0 20 0" MaxWidth="1400"/>
                                     </StackPanel>
                                 </StackPanel>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDoubleClick">
+                                <i:InvokeCommandAction Command="{Binding MangaClickCommand}" CommandParameter="{Binding ElementName=CatalogListView,Path=SelectedItem}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                     </ListBox>
                 </Grid>
             </metro:MetroTabItem>

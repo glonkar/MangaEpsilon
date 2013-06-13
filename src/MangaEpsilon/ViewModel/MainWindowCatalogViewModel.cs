@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using Crystal.Command;
 using Crystal.Core;
+using Crystal.Navigation;
 
 namespace MangaEpsilon.ViewModel
 {
@@ -29,8 +31,17 @@ namespace MangaEpsilon.ViewModel
 
             CollectionViewSource.GetDefaultView(AvailableMangas).SortDescriptions.Add(new System.ComponentModel.SortDescription("MangaName", System.ComponentModel.ListSortDirection.Ascending));
 
+            MangaClickCommand = CommandManager.CreateCommand((o) =>
+            {
+                var manga = ((Manga.Base.Manga)o);
+
+                NavigationService.ShowWindow<MangaDetailPageViewModel>(new KeyValuePair<string, object>("manga", manga));
+            });
+
             IsBusy = false;
         }
+
+        public CrystalCommand MangaClickCommand { get; set; }
 
         public string SearchFilter
         {

@@ -10,26 +10,27 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System.Runtime.Serialization;
+using Crystal.Core;
 
 namespace MangaEpsilon.Manga.Base
 {
     [DataContract(Name = "Manga")]
-    public class Manga
+    public class Manga: BaseModel
     {
         public Manga()
         {
-            Chapters = new Collection<ChapterEntry>();
+            Chapters = new ObservableCollection<ChapterEntry>();
         }
         [DataMember]
         public string BookImageUrl { get; internal set; }
         [DataMember]
-        public Collection<ChapterEntry> Chapters { get; internal set; }
+        public ObservableCollection<ChapterEntry> Chapters { get { return GetPropertyOrDefaultType<ObservableCollection<ChapterEntry>>(x => this.Chapters); } internal set { SetProperty(x => this.Chapters, value); } }
         [DataMember]
         public string MangaName { get; internal set; }
         [DataMember]
         public string Author { get; internal set; }
         [DataMember]
-        public string Description { get; internal set; }
+        public string Description { get { return (string)GetProperty("Description"); } internal set { SetProperty("Description", value); } }
         [DataMember]
         public int StartRelease { get; internal set; }
         [DataMember]
