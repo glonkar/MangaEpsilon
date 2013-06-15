@@ -9,6 +9,7 @@
         xmlns:utils="clr-namespace:Crystal.Utilities;assembly=Amrykid.Crystal"
         xmlns:conv="clr-namespace:MangaEpsilon.Converters"
         xmlns:metrigs="clr-namespace:MangaEpsilon.Triggers"
+        xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         Title="MangaEpsilon" Height="669" Width="756" ShowTitleBar="False" x:Name="thisWindow" SaveWindowPosition="True"
                    utils:MainWindowSetterHelper.IsMainWindow="True" WindowState="Maximized" ShowActivated="True">
     <Window.DataContext>
@@ -79,7 +80,7 @@
                             <BeginStoryboard Name="LoadedStoryBoardBegin">
                                 <Storyboard>
                                     <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:.5" />
-                                
+
                                     <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.0" From="1.5" Duration="0:0:.5"/>
                                     <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.0" From="1.5" Duration="0:0:.5"/>
                                 </Storyboard>
@@ -92,10 +93,10 @@
                             <BeginStoryboard Name="MouseEnterStoryBoardBegin">
                                 <Storyboard>
                                     <Int32Animation Storyboard.TargetProperty="(Panel.ZIndex)" From="0" To="20" Duration="0:0:.2" />
-                                    
+
                                     <DoubleAnimation Storyboard.TargetProperty="Height" From="250" To="270" Duration="0:0:.5" />
                                     <DoubleAnimation Storyboard.TargetProperty="Width" From="250" To="270" Duration="0:0:.5" />
-                                    
+
                                     <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleX)" From="1.0" To="1.1" Duration="0:0:.5"/>
                                     <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleY)" From="1.0" To="1.1" Duration="0:0:.5"/>
                                 </Storyboard>
@@ -108,10 +109,10 @@
                             <BeginStoryboard>
                                 <Storyboard>
                                     <Int32Animation Storyboard.TargetProperty="(Panel.ZIndex)" From="20" To="0" Duration="0:0:.2" />
-                                    
+
                                     <DoubleAnimation Storyboard.TargetProperty="Height" To="250" From="270" Duration="0:0:.5" />
                                     <DoubleAnimation Storyboard.TargetProperty="Width" To="250" From="270" Duration="0:0:.5" />
-                                    
+
                                     <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.0" From="1.1" Duration="0:0:.5"/>
                                     <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.0" From="1.1" Duration="0:0:.5"/>
                                 </Storyboard>
@@ -267,6 +268,43 @@
                     <vm:MainWindowLibraryViewModel/>
                 </TabItem.DataContext>
                 <Grid>
+                    <!-- Group code from: http://karlshifflett.wordpress.com/2009/06/10/wpf-sample-series-listbox-grouping-sorting-subtotals-and-collapsible-regions/ -->
+                    <Grid.Resources>
+                        <CollectionViewSource x:Key="GroupedItems" Source="{Binding LibraryItems, UpdateSourceTrigger=PropertyChanged}">
+                            <CollectionViewSource.GroupDescriptions>
+                                <PropertyGroupDescription PropertyName="ParentManga.MangaName"/>
+                            </CollectionViewSource.GroupDescriptions>
+                            <CollectionViewSource.SortDescriptions>
+                                <scm:SortDescription Direction="Ascending" PropertyName="ParentManga.MangaName"/>
+                            </CollectionViewSource.SortDescriptions>
+                        </CollectionViewSource>
+                    </Grid.Resources>
+                    <ListBox ItemsSource="{Binding Source={StaticResource GroupedItems}}" SelectedItem="{Binding SelectedEntry, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <ListBox.GroupStyle>
+                            <GroupStyle>
+                                <GroupStyle.HeaderTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <!--<Image Height="100" Source="{Binding Items[0].ParentManga.BookImageUrl, Converter={StaticResource ImgCache}}"/>-->
+                                            <TextBlock Text="{Binding Name}" FontSize="17" FontWeight="bold" Margin="5 0 0 0" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GroupStyle.HeaderTemplate>
+                            </GroupStyle>
+                        </ListBox.GroupStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="10 0 0 0">
+                                    <TextBlock Text="{Binding Name}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDoubleClick">
+                                <i:InvokeCommandAction Command="{Binding MangaClickCommand}" CommandParameter="{Binding SelectedEntry}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ListBox>
                 </Grid>
             </metro:MetroTabItem>
             <metro:MetroTabItem Header="catalog" HeaderFontSize="15" ScrollViewer.CanContentScroll="False">

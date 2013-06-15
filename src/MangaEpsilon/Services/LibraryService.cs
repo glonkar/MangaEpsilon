@@ -60,7 +60,7 @@ namespace MangaEpsilon.Services
             }
         }
 
-        private static Collection<Tuple<Manga.Base.ChapterLight, string>> LibraryCollection = null;
+        internal static Collection<Tuple<Manga.Base.ChapterLight, string>> LibraryCollection = null;
 
         public static string LibraryDirectory { get; private set; }
         internal static string LibraryFile { get; private set; }
@@ -93,6 +93,9 @@ namespace MangaEpsilon.Services
                 LibraryCollection.Add(tuple);
                 await SaveLibrary();
             }
+
+            if (LibraryItemAdded != null)
+                LibraryItemAdded(tuple);
         }
 
         internal static Manga.Base.ChapterLight GetDownloadedChapterLightFromEntry(Manga.Base.ChapterEntry chapter)
@@ -103,5 +106,16 @@ namespace MangaEpsilon.Services
         {
             return LibraryCollection.First(x => x.Item1.Name == chapter.Name && x.Item1.VolumeNumber == chapter.VolumeNumber && x.Item1.ParentManga.MangaName == chapter.ParentManga.MangaName).Item2;
         }
+
+        internal static string GetPath(Manga.Base.ChapterLight chapter)
+        {
+            return LibraryCollection.First(x => x.Item1.Name == chapter.Name && x.Item1.VolumeNumber == chapter.VolumeNumber && x.Item1.ParentManga.MangaName == chapter.ParentManga.MangaName).Item2;
+        }
+
+        public delegate void LibraryItemAddedHandler(Tuple<Manga.Base.ChapterLight, string> tuple);
+        public delegate void LibraryItemRemovedHandler(Tuple<Manga.Base.ChapterLight, string> tuple);
+
+        public static event LibraryItemAddedHandler LibraryItemAdded;
+        public static event LibraryItemRemovedHandler LibraryItemRemoved;
     }
 }

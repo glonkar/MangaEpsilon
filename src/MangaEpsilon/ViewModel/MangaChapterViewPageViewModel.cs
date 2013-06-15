@@ -18,7 +18,7 @@ namespace MangaEpsilon.ViewModel
     {
         public override void OnNavigatedTo(params KeyValuePair<string, object>[] argument)
         {
-            ChapterEntry entry = (ChapterEntry)argument[0].Value;
+            ChapterBase entry = (ChapterBase)argument[0].Value;
 
             ChapterName = entry.Name;
 
@@ -28,15 +28,25 @@ namespace MangaEpsilon.ViewModel
         }
 
         private ChapterLight chapter = null;
-        private async void GetMangaPages(ChapterEntry entry)
+        private async void GetMangaPages(ChapterBase entry)
         {
             IsBusy = true;
             Pages = new ObservableCollection<Uri>();
 
-            if (LibraryService.Contains(entry))
+            if (LibraryService.Contains((dynamic)entry))
             {
-                chapter = LibraryService.GetDownloadedChapterLightFromEntry(entry);
-                var path = LibraryService.GetDownloadedChapterLightPathFromEntry(entry);
+                string path = string.Empty;
+                if (entry is ChapterEntry)
+                {
+                    chapter = LibraryService.GetDownloadedChapterLightFromEntry((ChapterEntry)entry);
+                    path = LibraryService.GetDownloadedChapterLightPathFromEntry((ChapterEntry)entry);
+                }
+                else
+                {
+                    chapter = (ChapterLight)entry;
+                    path = LibraryService.GetPath((ChapterLight)entry);
+                }
+
                 foreach (var page in chapter.PagesUrls)
                 {
                     var url = new Uri(page.ToString());
@@ -51,7 +61,12 @@ namespace MangaEpsilon.ViewModel
                 if (entry.ParentManga.Chapters.Count == 0)
                     entry.ParentManga = await App.MangaSource.GetMangaInfo(entry.ParentManga.MangaName, false);
 
-                chapter = await App.MangaSource.GetChapterLight(entry);
+                if (entry is ChapterEntry)
+                    chapter = await App.MangaSource.GetChapterLight((ChapterEntry)entry);
+                else if (entry is ChapterLight)
+                    chapter = (ChapterLight)entry;
+                else
+                    throw new Exception();
 
                 //Pages.Add(new Uri(await App.MangaSource.GetChapterPageImageUrl(chapter, CurrentPageIndex)));
 

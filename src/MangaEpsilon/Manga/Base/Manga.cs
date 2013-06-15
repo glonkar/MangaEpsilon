@@ -35,30 +35,6 @@ namespace MangaEpsilon.Manga.Base
         public int StartRelease { get; internal set; }
         [DataMember]
         public string ID { get; internal set; }
-
-        [OnSerializing]
-        internal void OnSerializingMethod(StreamingContext context)
-        {
-            //Member2 = "This value went into the data file during serialization.";
-        }
-        [OnSerialized]
-        internal void OnSerializedMethod(StreamingContext context)
-        {
-            //Member2 = "This value was reset after serialization.";
-        }
-
-        [OnDeserializing]
-        internal void OnDeserializingMethod(StreamingContext context)
-        {
-            //Member3 = "This value was set during deserialization";
-        }
-        [OnDeserialized]
-        internal void OnDeserializedMethod(StreamingContext context)
-        {
-            //Member4 = "This value was set after deserialization.";
-
-            var x = context.Context;
-        }
     }
 
     public abstract class ChapterBase
