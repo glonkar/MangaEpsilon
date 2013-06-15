@@ -54,5 +54,13 @@
             ToolTip="{Binding Path=Value, StringFormat='Zoom: {0}'}" ToolTipService.Placement="Mouse"
             Value="1" Minimum="0.1" Maximum="4" MouseLeave="uiScaleSlider_MouseLeave"     
         />
+        <Label HorizontalAlignment="Left" VerticalAlignment="Bottom" Panel.ZIndex="5" Margin="3">
+            <Label.Content>
+                <MultiBinding StringFormat="{}{0} of {1}">
+                    <Binding Path="CurrentPage" UpdateSourceTrigger="PropertyChanged"/>
+                    <Binding Path="Pages.Length" UpdateSourceTrigger="PropertyChanged" TargetNullValue="0"/>
+                </MultiBinding>
+            </Label.Content>
+        </Label>
     </Grid>
 </metro:MetroWindow>

@@ -99,6 +99,8 @@ namespace MangaEpsilon.ViewModel
             {
                 SetProperty(x => this.CurrentPageIndex, value);
 
+                CurrentPage = CurrentPageIndex + 1;
+
                 if (chapter != null)
                     if (!LibraryService.Contains(chapter))
                         if (Pages != null)
@@ -106,6 +108,14 @@ namespace MangaEpsilon.ViewModel
                                 if (Pages.Count > value + 1)
                                     if (Pages[value + 1] == null && IsBusy == false)
                                         GetNextBatchOfPages();
+            }
+        }
+        public int CurrentPage
+        {
+            get { return GetPropertyOrDefaultType<int>(x => this.CurrentPage); }
+            set
+            {
+                SetProperty(x => this.CurrentPage, value);
             }
         }
 
