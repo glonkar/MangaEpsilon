@@ -31,9 +31,9 @@
             <conv:ImageCachingConverter x:Key="ImgCache"/>
 
             <DataTemplate x:Key="MangaListBoxItemTemplate">
-                <Grid HorizontalAlignment="Left" Width="250" Height="250" Margin="1">
+                <Grid HorizontalAlignment="Left" Width="250" Height="250" Margin="5">
                     <Grid.Effect>
-                        <DropShadowEffect Color="{DynamicResource BlackColor}" BlurRadius="2" ShadowDepth=".5"/>
+                        <DropShadowEffect Color="{DynamicResource BlackColor}" BlurRadius="2" ShadowDepth="2"/>
                     </Grid.Effect>
                     <Border>
                         <Image Source="{Binding ParentManga.BookImageUrl, Converter={StaticResource ImgCache}}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Name}"/>
@@ -67,62 +67,57 @@
                                                                 <TranslateTransform />
                                                             </Setter.Value>
                                                         </Setter>-->
+                <Setter Property="RenderTransform">
+                    <Setter.Value>
+                        <ScaleTransform />
+                    </Setter.Value>
+                </Setter>
                 <Setter Property="ContentTemplate" Value="{StaticResource MangaListBoxItemTemplate}"/>
                 <Style.Triggers>
                     <EventTrigger RoutedEvent="Loaded">
                         <EventTrigger.Actions>
-                            <BeginStoryboard>
+                            <BeginStoryboard Name="LoadedStoryBoardBegin">
                                 <Storyboard>
                                     <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:.5" />
+                                
+                                    <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.0" From="1.5" Duration="0:0:.5"/>
+                                    <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.0" From="1.5" Duration="0:0:.5"/>
                                 </Storyboard>
                             </BeginStoryboard>
                         </EventTrigger.Actions>
                     </EventTrigger>
                     <EventTrigger RoutedEvent="MouseEnter">
                         <EventTrigger.Actions>
-                            <BeginStoryboard>
+                            <StopStoryboard BeginStoryboardName="LoadedStoryBoardBegin"/>
+                            <BeginStoryboard Name="MouseEnterStoryBoardBegin">
                                 <Storyboard>
                                     <Int32Animation Storyboard.TargetProperty="(Panel.ZIndex)" From="0" To="20" Duration="0:0:.2" />
+                                    
                                     <DoubleAnimation Storyboard.TargetProperty="Height" From="250" To="270" Duration="0:0:.5" />
                                     <DoubleAnimation Storyboard.TargetProperty="Width" From="250" To="270" Duration="0:0:.5" />
+                                    
+                                    <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleX)" From="1.0" To="1.5" Duration="0:0:.5"/>
+                                    <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleY)" From="1.0" To="1.5" Duration="0:0:.5"/>
                                 </Storyboard>
                             </BeginStoryboard>
                         </EventTrigger.Actions>
                     </EventTrigger>
                     <EventTrigger RoutedEvent="MouseLeave">
                         <EventTrigger.Actions>
+                            <StopStoryboard BeginStoryboardName="MouseEnterStoryBoardBegin"/>
                             <BeginStoryboard>
                                 <Storyboard>
                                     <Int32Animation Storyboard.TargetProperty="(Panel.ZIndex)" From="20" To="0" Duration="0:0:.2" />
+                                    
                                     <DoubleAnimation Storyboard.TargetProperty="Height" To="250" From="270" Duration="0:0:.5" />
                                     <DoubleAnimation Storyboard.TargetProperty="Width" To="250" From="270" Duration="0:0:.5" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger.Actions>
-                    </EventTrigger>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="RenderTransform">
-                            <Setter.Value>
-                                <ScaleTransform />
-                            </Setter.Value>
-                        </Setter>
-                        <Trigger.EnterActions>
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleX)" From="1.0" To="1.5" Duration="0:0:.5"/>
-                                    <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleY)" From="1.0" To="1.5" Duration="0:0:.5"/>
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </Trigger.EnterActions>
-                        <Trigger.ExitActions>
-                            <BeginStoryboard>
-                                <Storyboard>
+                                    
                                     <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.0" From="1.5" Duration="0:0:.5"/>
                                     <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.0" From="1.5" Duration="0:0:.5"/>
                                 </Storyboard>
                             </BeginStoryboard>
-                        </Trigger.ExitActions>
-                    </Trigger>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
                 </Style.Triggers>
             </Style>
         </ResourceDictionary>
