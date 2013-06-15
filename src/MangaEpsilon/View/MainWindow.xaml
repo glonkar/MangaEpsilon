@@ -314,7 +314,7 @@
                             <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Chapter.Name}"/>
                             <GridViewColumn Header="Manga" DisplayMemberBinding="{Binding Chapter.ParentManga.MangaName}"/>
                             <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}"/>
-                            <GridViewColumn Header="Progress">
+                            <GridViewColumn Header="Progress" Width="300">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <ProgressBar Value="{Binding Progress, UpdateSourceTrigger=PropertyChanged}" Maximum="{Binding MaxProgress, UpdateSourceTrigger=PropertyChanged}"/>
