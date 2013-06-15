@@ -78,7 +78,7 @@ namespace MangaEpsilon.ViewModel
 
                             var filename = url.Segments.Last();
                             await wc.DownloadFileTaskAsync(pageUrl, downloadPath + filename);
-                            await Task.Delay(1000);
+                            await Task.Delay(500);
 
                             download.Progress++;
                         }

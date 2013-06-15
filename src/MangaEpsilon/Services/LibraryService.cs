@@ -43,6 +43,11 @@ namespace MangaEpsilon.Services
         {
             if (!IsInitialized) return;
 
+            await SaveLibrary();
+        }
+
+        private static async Task SaveLibrary()
+        {
             using (var sw = new StreamWriter(LibraryFile, false))
             {
                 using (var jtw = new Newtonsoft.Json.JsonTextWriter(sw))
@@ -78,13 +83,16 @@ namespace MangaEpsilon.Services
             return LibraryCollection.Any(x => x.Item1.Name == chapter.Name && x.Item1.VolumeNumber == chapter.VolumeNumber && x.Item1.ParentManga.MangaName == chapter.ParentManga.MangaName);
         }
 
-        internal static void AddLibraryItem(Tuple<Manga.Base.ChapterLight, string> tuple)
+        internal static async void AddLibraryItem(Tuple<Manga.Base.ChapterLight, string> tuple)
         {
             if (!IsInitialized)
                 throw new InvalidOperationException();
 
             if (!Contains(tuple.Item1))
+            {
                 LibraryCollection.Add(tuple);
+                await SaveLibrary();
+            }
         }
 
         internal static Manga.Base.ChapterLight GetDownloadedChapterLightFromEntry(Manga.Base.ChapterEntry chapter)
