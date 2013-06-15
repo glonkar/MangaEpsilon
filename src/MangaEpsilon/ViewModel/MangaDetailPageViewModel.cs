@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using Crystal.Messaging;
+using MangaEpsilon.Services;
 
 namespace MangaEpsilon.ViewModel
 {
@@ -18,7 +20,7 @@ namespace MangaEpsilon.ViewModel
         {
             if (IsDesignMode) return;
 
-            Manga = (Manga.Base.Manga)argument[0].Value; 
+            Manga = (Manga.Base.Manga)argument[0].Value;
 
             //var firstEntry = Yukihyo.MAL.MyAnimeListAPI.Search(Manga.MangaName, Yukihyo.MAL.MALSearchType.manga).First(x => x.Title.ToLower() == Manga.MangaName.ToLower());
 
@@ -28,6 +30,18 @@ namespace MangaEpsilon.ViewModel
 
                     NavigationService.ShowWindow<MangaChapterViewPageViewModel>(new KeyValuePair<string, object>("chapter", selectedChapter));
                 });
+
+            MangaDownloadCommand = CommandManager.CreateProperCommand((o) =>
+            {
+                if (o is ChapterEntry)
+                {
+                    var chapter = ((ChapterEntry)o);
+                    var manga = chapter.ParentManga;
+
+                    Messenger.PushMessage(this, "MangaChapterDownload", chapter);
+                }
+            }, (o) =>
+                o != null && o is ChapterEntry && !LibraryService.Contains((ChapterEntry)o));
 
             GetUpdatedInfo();
         }
@@ -46,5 +60,20 @@ namespace MangaEpsilon.ViewModel
         }
 
         public CrystalCommand OpenMangaChapterCommand { get; set; }
+        public CrystalProperCommand MangaDownloadCommand
+        {
+            get { return (CrystalProperCommand)GetProperty(x => this.MangaDownloadCommand); }
+            set { SetProperty(x => this.MangaDownloadCommand, value); }
+        }
+
+        public ChapterEntry SelectedChapterItem
+        {
+            get { return (ChapterEntry)GetProperty(x => this.SelectedChapterItem); }
+            set
+            {
+                SetProperty(x => this.SelectedChapterItem, value);
+                System.Windows.Input.CommandManager.InvalidateRequerySuggested();
+            }
+        }
     }
 }
