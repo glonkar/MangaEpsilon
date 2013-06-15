@@ -8,6 +8,7 @@
         xmlns:crystal="clr-namespace:Crystal.Core;assembly=Amrykid.Crystal"
         xmlns:utils="clr-namespace:Crystal.Utilities;assembly=Amrykid.Crystal"
         xmlns:conv="clr-namespace:MangaEpsilon.Converters"
+        xmlns:metrigs="clr-namespace:MangaEpsilon.Triggers"
         Title="MangaEpsilon" Height="669" Width="756" ShowTitleBar="False" x:Name="thisWindow" SaveWindowPosition="True"
                    utils:MainWindowSetterHelper.IsMainWindow="True" WindowState="Maximized" ShowActivated="True">
     <Window.DataContext>
@@ -35,7 +36,7 @@
                         <DropShadowEffect Color="{DynamicResource BlackColor}" BlurRadius="2" ShadowDepth=".5"/>
                     </Grid.Effect>
                     <Border>
-                        <Image Source="{Binding ParentManga.BookImageUrl, Converter={StaticResource ImgCache}}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
+                        <Image Source="{Binding ParentManga.BookImageUrl, Converter={StaticResource ImgCache}}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Name}"/>
                     </Border>
                     <StackPanel VerticalAlignment="Bottom">
                         <StackPanel.Background>
@@ -172,7 +173,7 @@
                                             VerticalAlignment="Stretch"
                                             ItemsSource="{Binding NewReleasesToday, UpdateSourceTrigger=PropertyChanged}"
                                             MinHeight="700"
-                                            MouseDoubleClick="itemListView_MouseDoubleClick" SelectedItem="{Binding SelectedEntry, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource MangaListBoxItemStyle}">
+                                            SelectedItem="{Binding SelectedEntry, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource MangaListBoxItemStyle}">
                                                 <ListBox.ItemsPanel>
                                                     <ItemsPanelTemplate>
                                                         <WrapPanel IsItemsHost="True" Width="{Binding (FrameworkElement.ActualWidth), RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}"
@@ -185,8 +186,14 @@
                                                 <ListBox.ContextMenu>
                                                     <ContextMenu HasDropShadow="True">
                                                         <MenuItem Header="Show Manga Information..." Command="{Binding MangaInfoCommand}" CommandParameter="{Binding SelectedEntry}"/>
+                                                        <MenuItem Header="Download this chapter" Command="{Binding MangaDownloadCommand}" CommandParameter="{Binding SelectedEntry}"/>
                                                     </ContextMenu>
                                                 </ListBox.ContextMenu>
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="MouseDoubleClick">
+                                                        <i:InvokeCommandAction Command="{Binding MangaClickCommand}" CommandParameter="{Binding SelectedEntry}"/>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
                                             </ListBox>
                                         </StackPanel>
                                     </Grid>
@@ -208,8 +215,7 @@
                                 AutomationProperties.Name="Grouped Items"
                                 Grid.RowSpan="2"
                                 Padding="116,137,40,46"
-                                ItemsSource="{Binding AmrykidsFavorites, UpdateSourceTrigger=PropertyChanged}"
-                                MouseUp="amrykidsFavoritesListView_MouseUp">
+                                ItemsSource="{Binding AmrykidsFavorites, UpdateSourceTrigger=PropertyChanged}">
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel IsItemsHost="True">
@@ -242,7 +248,7 @@
                                     <DataTemplate>
                                         <Grid HorizontalAlignment="Left" Width="250" Height="250">
                                             <Border>
-                                                <Image Source="{Binding BookImageUrl, Converter={StaticResource ImgCache}}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
+                                                <Image Source="{Binding BookImageUrl, Converter={StaticResource ImgCache}}" Stretch="UniformToFill" AutomationProperties.Name="{Binding MangaName}"/>
                                             </Border>
                                             <StackPanel VerticalAlignment="Bottom" Background="Gray">
                                                 <TextBlock Text="{Binding MangaName}" Foreground="Black" FontSize="18" Height="60" Margin="15,0,15,0"/>
@@ -251,6 +257,11 @@
                                         </Grid>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseUp">
+                                        <i:InvokeCommandAction Command="{Binding MangaClickCommand}" CommandParameter="{Binding ElementName=amrykidsFavoritesListView,Path=SelectedItem}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
                             </ListBox>
                         </Grid>
                     </metro:MetroTabItem>

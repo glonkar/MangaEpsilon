@@ -28,12 +28,12 @@ namespace MangaEpsilon.ViewModel
                 .ContinueWith(x => AmrykidsFavorites = x.Result);
             IsBusy = false;
 
-            MangaClickCommand = CommandManager.CreateCommand((o) =>
+            MangaClickCommand = CommandManager.CreateProperCommand((o) =>
             {
                 var manga = ((Manga.Base.Manga)o);
 
                 NavigationService.ShowWindow<MangaDetailPageViewModel>(new KeyValuePair<string, object>("manga", manga));
-            });
+            }, (o) => o != null && o is Manga.Base.Manga);
         }
 
 
@@ -46,7 +46,11 @@ namespace MangaEpsilon.ViewModel
             set { SetProperty<object>(x => this.AmrykidsFavorites, value); }
         }
 
-        public CrystalCommand MangaClickCommand { get; set; }
+        public CrystalProperCommand MangaClickCommand
+        {
+            get { return (CrystalProperCommand)GetProperty(x => this.MangaClickCommand); }
+            set { SetProperty(x => this.MangaClickCommand, value); }
+        }
 
         public bool IsBusy
         {

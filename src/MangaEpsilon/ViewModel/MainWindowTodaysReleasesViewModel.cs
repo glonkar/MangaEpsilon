@@ -31,14 +31,15 @@ namespace MangaEpsilon.ViewModel
 
             NewReleasesToday = new ObservableCollection<ChapterEntry>();
 
-            MangaClickCommand = CommandManager.CreateCommand((o) =>
+            MangaClickCommand = CommandManager.CreateProperCommand((o) =>
             {
                 if (o is ChapterEntry)
                 {
                     var chapter = ((ChapterEntry)o);
                     NavigationService.ShowWindow<MangaChapterViewPageViewModel>(new KeyValuePair<string, object>("chapter", chapter));
                 }
-            });
+            }, (o) =>
+                o != null && o is ChapterEntry);
             MangaInfoCommand = CommandManager.CreateProperCommand((o) =>
             {
                 if (o is ChapterEntry)
@@ -78,7 +79,11 @@ namespace MangaEpsilon.ViewModel
             }
         }
 
-        public CrystalCommand MangaClickCommand { get; set; }
+        public CrystalProperCommand MangaClickCommand
+        {
+            get { return (CrystalProperCommand)GetProperty(x => this.MangaClickCommand); }
+            set { SetProperty(x => this.MangaClickCommand, value); }
+        }
         public CrystalProperCommand MangaInfoCommand { get; set; }
 
         public bool IsBusy

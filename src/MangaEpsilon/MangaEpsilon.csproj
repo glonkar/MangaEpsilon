@@ -84,6 +84,8 @@
     <Compile Include="Model\MangaChapterDownload.cs" />
     <Compile Include="PaginatedObservableCollection.cs" />
     <Compile Include="Services\LibraryService.cs" />
+    <Compile Include="Triggers\EventTrigger2.cs" />
+    <Compile Include="Triggers\InvokeCommandAction2.cs" />
     <Compile Include="UnixTimeUtil.cs" />
     <Compile Include="ViewModel\MainWindowAmrykidsFavoritesViewModel.cs" />
     <Compile Include="ViewModel\MainWindowCatalogViewModel.cs" />
@@ -197,7 +199,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
