@@ -82,9 +82,14 @@
     <Compile Include="Extensions\System.Windows.Controls.Image.cs" />
     <Compile Include="Manga\Sources\MangaEden\MangaEdenSource.cs" />
     <Compile Include="Model\MangaChapterDownload.cs" />
+    <Compile Include="Notifications\NotificationInfo.cs" />
+    <Compile Include="Notifications\NotificationsService.cs" />
+    <Compile Include="Notifications\NotificationsWindow.xaml.cs" />
+    <Compile Include="Notifications\NotificationType.cs" />
     <Compile Include="ObservableQueue.cs" />
     <Compile Include="PaginatedObservableCollection.cs" />
     <Compile Include="Services\LibraryService.cs" />
+    <Compile Include="SoundManager.cs" />
     <Compile Include="Triggers\EventTrigger2.cs" />
     <Compile Include="Triggers\InvokeCommandAction2.cs" />
     <Compile Include="UnixTimeUtil.cs" />
@@ -103,6 +108,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Resource>
+    <Page Include="Notifications\NotificationsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\MangaChapterViewPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

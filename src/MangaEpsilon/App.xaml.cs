@@ -55,6 +55,8 @@ namespace MangaEpsilon
         {
             MangaSourceInitializationTask = InitializeMangaComponents();
 
+            SoundManager.Initialize();
+
             LibraryService.Initialize();
 
             base.PostStartup();
