@@ -63,6 +63,7 @@ namespace MangaEpsilon
         protected override void PreShutdown()
         {
             SaveAvailableManga();
+            LibraryService.Deinitialize();
             base.PreShutdown();
         }
 

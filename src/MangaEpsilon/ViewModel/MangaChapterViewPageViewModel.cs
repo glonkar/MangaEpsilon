@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using MangaEpsilon.Services;
 
 namespace MangaEpsilon.ViewModel
 {
@@ -30,26 +31,42 @@ namespace MangaEpsilon.ViewModel
         private async void GetMangaPages(ChapterEntry entry)
         {
             IsBusy = true;
-
-            if (entry.ParentManga.Chapters.Count == 0)
-                entry.ParentManga = await App.MangaSource.GetMangaInfo(entry.ParentManga.MangaName, false);
-
-            chapter = await App.MangaSource.GetChapterLight(entry);
-
             Pages = new ObservableCollection<Uri>();
 
-            Pages.Add(new Uri(await App.MangaSource.GetChapterPageImageUrl(chapter, CurrentPageIndex)));
+            if (LibraryService.Contains(entry))
+            {
+                chapter = LibraryService.GetDownloadedChapterLightFromEntry(entry);
+                var path = LibraryService.GetDownloadedChapterLightPathFromEntry(entry);
+                foreach (var page in chapter.PagesUrls)
+                {
+                    var url = new Uri(page.ToString());
+
+                    var filename = url.Segments.Last();
+
+                    Pages.Add(new Uri(path + filename));
+                }
+            }
+            else
+            {
+                if (entry.ParentManga.Chapters.Count == 0)
+                    entry.ParentManga = await App.MangaSource.GetMangaInfo(entry.ParentManga.MangaName, false);
+
+                chapter = await App.MangaSource.GetChapterLight(entry);
+
+                //Pages.Add(new Uri(await App.MangaSource.GetChapterPageImageUrl(chapter, CurrentPageIndex)));
+
+
+                for (int i = 0; i < chapter.TotalPages; i++)
+                {
+                    Pages.Add(new Uri(await App.MangaSource.GetChapterPageImageUrl(chapter, i)));
+                }
+
+                RaisePropertyChanged(x => this.Pages);
+            }
 
             CurrentPageIndex = 0;
 
             IsBusy = false;
-
-            for (int i = 1; i < chapter.TotalPages; i++)
-            {
-                Pages.Add(new Uri(await App.MangaSource.GetChapterPageImageUrl(chapter, i)));
-            }
-
-            RaisePropertyChanged(x => this.Pages);
         }
 
         private async void GetNextBatchOfPages()
@@ -82,11 +99,12 @@ namespace MangaEpsilon.ViewModel
             {
                 SetProperty(x => this.CurrentPageIndex, value);
 
-                if (Pages != null)
-                    if (Pages.Count > 0)
-                        if (Pages.Count > value + 1)
-                            if (Pages[value + 1] == null && IsBusy == false)
-                                GetNextBatchOfPages();
+                if (!LibraryService.Contains(chapter))
+                    if (Pages != null)
+                        if (Pages.Count > 0)
+                            if (Pages.Count > value + 1)
+                                if (Pages[value + 1] == null && IsBusy == false)
+                                    GetNextBatchOfPages();
             }
         }
 

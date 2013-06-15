@@ -27,7 +27,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
 
             if (light.ID == null)
             {
-                var updatedParentManga = await GetMangaInfo(chapter.ParentManga.MangaName);
+                var updatedParentManga = await GetMangaInfo(chapter.ParentManga.MangaName, false);
 
                 var updatedChapter = updatedParentManga.Chapters.First(x => x.VolumeNumber == light.VolumeNumber);
 

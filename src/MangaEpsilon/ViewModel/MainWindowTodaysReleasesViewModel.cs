@@ -6,8 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Crystal.Command;
 using Crystal.Core;
+using Crystal.Messaging;
 using Crystal.Navigation;
 using MangaEpsilon.Manga.Base;
+using MangaEpsilon.Services;
 
 namespace MangaEpsilon.ViewModel
 {
@@ -51,6 +53,16 @@ namespace MangaEpsilon.ViewModel
                 }
             }, (o) =>
                 o != null && o is ChapterEntry);
+            MangaDownloadCommand = CommandManager.CreateProperCommand((o) =>
+            {
+                if (o is ChapterEntry)
+                {
+                    var chapter = ((ChapterEntry)o);
+                    var manga = chapter.ParentManga;
+
+                    Messenger.PushMessage(this, "MangaChapterDownload", chapter);
+                }
+            }, (o) => o != null && o is ChapterEntry && !LibraryService.Contains((ChapterEntry)o));
 
             foreach (var manga in latestMangas)
             {
@@ -84,7 +96,16 @@ namespace MangaEpsilon.ViewModel
             get { return (CrystalProperCommand)GetProperty(x => this.MangaClickCommand); }
             set { SetProperty(x => this.MangaClickCommand, value); }
         }
-        public CrystalProperCommand MangaInfoCommand { get; set; }
+        public CrystalProperCommand MangaDownloadCommand
+        {
+            get { return (CrystalProperCommand)GetProperty(x => this.MangaDownloadCommand); }
+            set { SetProperty(x => this.MangaDownloadCommand, value); }
+        }
+        public CrystalProperCommand MangaInfoCommand
+        {
+            get { return (CrystalProperCommand)GetProperty(x => this.MangaInfoCommand); }
+            set { SetProperty(x => this.MangaInfoCommand, value); }
+        }
 
         public bool IsBusy
         {

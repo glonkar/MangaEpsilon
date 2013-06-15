@@ -82,6 +82,7 @@
     <Compile Include="Extensions\System.Windows.Controls.Image.cs" />
     <Compile Include="Manga\Sources\MangaEden\MangaEdenSource.cs" />
     <Compile Include="Model\MangaChapterDownload.cs" />
+    <Compile Include="ObservableQueue.cs" />
     <Compile Include="PaginatedObservableCollection.cs" />
     <Compile Include="Services\LibraryService.cs" />
     <Compile Include="Triggers\EventTrigger2.cs" />
