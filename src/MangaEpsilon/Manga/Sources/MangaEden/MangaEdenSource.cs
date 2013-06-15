@@ -47,6 +47,8 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                 light.PagesUrls.Add("http://cdn.mangaeden.com/mangasimg/" + page[1]);
             }
 
+            light.PagesUrls.Reverse();
+
             light.TotalPages = light.PagesUrls.Count; //hmm...
 
             return light;
