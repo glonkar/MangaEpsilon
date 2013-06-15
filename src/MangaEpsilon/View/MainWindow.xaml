@@ -31,7 +31,7 @@
             <conv:ImageCachingConverter x:Key="ImgCache"/>
 
             <DataTemplate x:Key="MangaListBoxItemTemplate">
-                <Grid HorizontalAlignment="Left" Width="250" Height="250" Margin="5">
+                <Grid HorizontalAlignment="Left" Width="250" Height="250" Margin="6">
                     <Grid.Effect>
                         <DropShadowEffect Color="{DynamicResource BlackColor}" BlurRadius="2" ShadowDepth="2"/>
                     </Grid.Effect>
@@ -96,8 +96,8 @@
                                     <DoubleAnimation Storyboard.TargetProperty="Height" From="250" To="270" Duration="0:0:.5" />
                                     <DoubleAnimation Storyboard.TargetProperty="Width" From="250" To="270" Duration="0:0:.5" />
                                     
-                                    <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleX)" From="1.0" To="1.5" Duration="0:0:.5"/>
-                                    <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleY)" From="1.0" To="1.5" Duration="0:0:.5"/>
+                                    <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleX)" From="1.0" To="1.1" Duration="0:0:.5"/>
+                                    <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleY)" From="1.0" To="1.1" Duration="0:0:.5"/>
                                 </Storyboard>
                             </BeginStoryboard>
                         </EventTrigger.Actions>
@@ -112,8 +112,8 @@
                                     <DoubleAnimation Storyboard.TargetProperty="Height" To="250" From="270" Duration="0:0:.5" />
                                     <DoubleAnimation Storyboard.TargetProperty="Width" To="250" From="270" Duration="0:0:.5" />
                                     
-                                    <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.0" From="1.5" Duration="0:0:.5"/>
-                                    <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.0" From="1.5" Duration="0:0:.5"/>
+                                    <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.0" From="1.1" Duration="0:0:.5"/>
+                                    <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.0" From="1.1" Duration="0:0:.5"/>
                                 </Storyboard>
                             </BeginStoryboard>
                         </EventTrigger.Actions>
