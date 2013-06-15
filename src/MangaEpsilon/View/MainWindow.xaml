@@ -267,6 +267,13 @@
                     </metro:MetroTabItem>
                 </metro:MetroTabControl>
             </metro:MetroTabItem>
+            <metro:MetroTabItem Header="library" HeaderFontSize="15" ScrollViewer.CanContentScroll="False">
+                <TabItem.DataContext>
+                    <vm:MainWindowLibraryViewModel/>
+                </TabItem.DataContext>
+                <Grid>
+                </Grid>
+            </metro:MetroTabItem>
             <metro:MetroTabItem Header="catalog" HeaderFontSize="15" ScrollViewer.CanContentScroll="False">
                 <TabItem.DataContext>
                     <vm:MainWindowCatalogViewModel/>

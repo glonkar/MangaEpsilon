@@ -96,6 +96,7 @@
     <Compile Include="ViewModel\MainWindowAmrykidsFavoritesViewModel.cs" />
     <Compile Include="ViewModel\MainWindowCatalogViewModel.cs" />
     <Compile Include="ViewModel\MainWindowDownloadsViewModel.cs" />
+    <Compile Include="ViewModel\MainWindowLibraryViewModel.cs" />
     <Compile Include="ViewModel\MainWindowTodaysReleasesViewModel.cs" />
     <Compile Include="View\MangaChapterViewPage.xaml.cs">
       <DependentUpon>MangaChapterViewPage.xaml</DependentUpon>
