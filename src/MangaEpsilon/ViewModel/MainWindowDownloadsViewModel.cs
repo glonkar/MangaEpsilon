@@ -41,7 +41,7 @@ namespace MangaEpsilon.ViewModel
 
             if (!LibraryService.Contains(chap))
             {
-                Downloads.Enqueue(new MangaChapterDownload(chap) { Status = MangaChapterDownloadStatus.Queued });
+                Downloads.Enqueue(new MangaChapterDownload(chap) { MaxProgress = chap.PagesUrls.Count, Status = MangaChapterDownloadStatus.Queued });
 
                 RaisePropertyChanged(x => this.Downloads);
 
