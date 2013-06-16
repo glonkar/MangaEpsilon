@@ -78,7 +78,7 @@
                     <EventTrigger RoutedEvent="Loaded">
                         <EventTrigger.Actions>
                             <BeginStoryboard Name="LoadedStoryBoardBegin">
-                                <Storyboard>
+                                <Storyboard  Timeline.DesiredFrameRate="30">
                                     <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:.5" />
 
                                     <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.0" From="1.5" Duration="0:0:.5"/>
@@ -334,7 +334,7 @@
 
                     <ListBox Grid.Row="1" ItemsSource="{Binding AvailableMangas, IsAsync=True}" x:Name="CatalogListView" 
                              VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.IsContainerVirtualizable="True" VirtualizingPanel.IsVirtualizing="True"
-                             Margin="10 0 10 0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                             HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">

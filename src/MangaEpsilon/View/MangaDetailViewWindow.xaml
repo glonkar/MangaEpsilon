@@ -54,7 +54,7 @@
                         </Grid>
                         <Grid Grid.Row="2">
                             <StackPanel>
-                                <Label Content="{Binding Author, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="Author: {0}" HorizontalAlignment="Stretch"/>
+                                <TextBlock Text="{Binding Author, UpdateSourceTrigger=PropertyChanged,StringFormat='Author: {0}'}" HorizontalAlignment="Center" FontSize="18"/>
                             </StackPanel>
                         </Grid>
                     </Grid>
@@ -82,10 +82,10 @@
 
                             <Grid Grid.Row="1">
                                 <ListBox ItemsSource="{Binding Manga.Chapters, UpdateSourceTrigger=PropertyChanged}" Margin="50 20 0 0" Visibility="Visible" HorizontalAlignment="Left" 
-									x:Name="chaptersGridView" VerticalAlignment="Stretch" Width="600" Height="Auto" SelectedItem="{Binding SelectedChapterItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+									x:Name="chaptersGridView" VerticalAlignment="Stretch" Width="620" Height="Auto" SelectedItem="{Binding SelectedChapterItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                                     <ListBox.ItemsPanel>
                                         <ItemsPanelTemplate>
-                                            <WrapPanel IsItemsHost="True" ItemHeight="50" Width="600" />
+                                            <WrapPanel IsItemsHost="True" ItemHeight="50" Width="590" />
                                         </ItemsPanelTemplate>
                                     </ListBox.ItemsPanel>
                                     <ListBox.ItemTemplate>
@@ -113,7 +113,6 @@
                             </Grid>
                         </Grid>
                     </StackPanel>
-                    <Grid VerticalAlignment="Top" Height="600" Width="475"/>
                 </StackPanel>
             </ScrollViewer>
         </Grid>
