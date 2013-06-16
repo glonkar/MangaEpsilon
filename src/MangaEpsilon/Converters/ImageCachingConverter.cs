@@ -14,7 +14,7 @@ using MangaEpsilon.Extensions;
 
 namespace MangaEpsilon.Converters
 {
-    [ValueConversion(typeof(string), typeof(string))]
+    //[ValueConversion(typeof(string), typeof(string))]
     public class ImageCachingConverter : IValueConverter
     {
         private List<string> BadUrls = null;
@@ -23,7 +23,7 @@ namespace MangaEpsilon.Converters
             BadUrls = new List<string>();
         }
 
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public virtual object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if (value == null) return null;
             if (BadUrls.Contains(value.ToString())) return null;
@@ -89,6 +89,35 @@ namespace MangaEpsilon.Converters
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             throw new NotImplementedException();
+        }
+    }
+    public class ThumbnailImageCachingConverter : ImageCachingConverter
+    {
+        public override object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null) return null;
+
+            var url = new Uri(value.ToString());
+
+            var filename = url.Segments.Last();
+
+            if (File.Exists(App.ImageCacheDir + filename))
+            {
+                return CreateThumbnail(new Uri(App.ImageCacheDir + filename), int.Parse(parameter.ToString()));
+            }
+            else
+                return base.Convert(value, targetType, parameter, culture);
+        }
+
+        private BitmapImage CreateThumbnail(Uri Source, int PreferredWidth)
+        {
+            BitmapImage bi = new BitmapImage();
+            bi.BeginInit();
+            bi.DecodePixelWidth = PreferredWidth;
+            bi.CacheOption = BitmapCacheOption.OnLoad;
+            bi.UriSource = Source;
+            bi.EndInit();
+            return bi;
         }
     }
 }

@@ -30,14 +30,18 @@
                 <ResourceDictionary Source="/Resources/StandardStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <conv:ImageCachingConverter x:Key="ImgCache"/>
+            <conv:ThumbnailImageCachingConverter x:Key="TImgCache"/>
 
             <DataTemplate x:Key="MangaListBoxItemTemplate">
                 <Grid HorizontalAlignment="Left" Width="250" Height="250" Margin="6">
+                    <Grid.CacheMode>
+                        <BitmapCache EnableClearType="True" RenderAtScale="1.0" />
+                    </Grid.CacheMode>
                     <Grid.Effect>
                         <DropShadowEffect Color="{DynamicResource BlackColor}" BlurRadius="2" ShadowDepth="2"/>
                     </Grid.Effect>
                     <Border>
-                        <Image Source="{Binding ParentManga.BookImageUrl, Converter={StaticResource ImgCache}}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Name}"/>
+                        <Image Source="{Binding ParentManga.BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=250}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Name}"/>
                     </Border>
                     <StackPanel VerticalAlignment="Bottom">
                         <StackPanel.Background>
@@ -78,7 +82,7 @@
                     <EventTrigger RoutedEvent="Loaded">
                         <EventTrigger.Actions>
                             <BeginStoryboard Name="LoadedStoryBoardBegin">
-                                <Storyboard  Timeline.DesiredFrameRate="30">
+                                <Storyboard  Timeline.DesiredFrameRate="60">
                                     <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:.5" />
 
                                     <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.0" From="1.5" Duration="0:0:.5"/>
@@ -91,7 +95,7 @@
                         <EventTrigger.Actions>
                             <StopStoryboard BeginStoryboardName="LoadedStoryBoardBegin"/>
                             <BeginStoryboard Name="MouseEnterStoryBoardBegin">
-                                <Storyboard>
+                                <Storyboard Timeline.DesiredFrameRate="30">
                                     <Int32Animation Storyboard.TargetProperty="(Panel.ZIndex)" From="0" To="20" Duration="0:0:.2" />
 
                                     <DoubleAnimation Storyboard.TargetProperty="Height" From="250" To="270" Duration="0:0:.5" />
@@ -107,7 +111,7 @@
                         <EventTrigger.Actions>
                             <StopStoryboard BeginStoryboardName="MouseEnterStoryBoardBegin"/>
                             <BeginStoryboard>
-                                <Storyboard>
+                                <Storyboard Timeline.DesiredFrameRate="30">
                                     <Int32Animation Storyboard.TargetProperty="(Panel.ZIndex)" From="20" To="0" Duration="0:0:.2" />
 
                                     <DoubleAnimation Storyboard.TargetProperty="Height" To="250" From="270" Duration="0:0:.5" />
@@ -244,7 +248,7 @@
                                     <DataTemplate>
                                         <Grid HorizontalAlignment="Left" Width="250" Height="250">
                                             <Border>
-                                                <Image Source="{Binding BookImageUrl, Converter={StaticResource ImgCache}}" Stretch="UniformToFill" AutomationProperties.Name="{Binding MangaName}"/>
+                                                <Image Source="{Binding BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=250}" Stretch="UniformToFill" AutomationProperties.Name="{Binding MangaName}"/>
                                             </Border>
                                             <StackPanel VerticalAlignment="Bottom" Background="Gray">
                                                 <TextBlock Text="{Binding MangaName}" Foreground="Black" FontSize="18" Height="60" Margin="15,0,15,0"/>
@@ -338,7 +342,7 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                                    <Image Source="{Binding BookImageUrl, Converter={StaticResource ImgCache}}" MaxWidth="100"/>
+                                    <Image Source="{Binding BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=100}" MaxWidth="100"/>
                                     <StackPanel Orientation="Vertical" Margin="2">
                                         <Label FontSize="18" Content="{Binding MangaName, UpdateSourceTrigger=PropertyChanged}"/>
                                         <TextBlock Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" TextTrimming="CharacterEllipsis" Margin="5 0 20 0" MaxWidth="1400"/>
