@@ -11,7 +11,7 @@
         xmlns:utils="clr-namespace:Crystal.Utilities;assembly=Amrykid.Crystal"
         xmlns:local="clr-namespace:MangaEpsilon.View" x:Class="MangaEpsilon.View.MangaDetailViewWindow"
         ShowTitleBar="False" x:Name="thisWindow" Loaded="thisWindow_Loaded"
-        SaveWindowPosition="True" Height="458" Width="1284" ResizeMode="CanResize" ShowActivated="True" Title="{Binding ViewTitle, UpdateSourceTrigger=PropertyChanged}">
+        SaveWindowPosition="True" Height="658" Width="1284" ResizeMode="CanResize" ShowActivated="True" Title="{Binding ViewTitle, UpdateSourceTrigger=PropertyChanged}">
     <metro:MetroWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
