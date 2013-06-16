@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("MangaEpsilon")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Hewlett-Packard Company")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("MangaEpsilon")]
-[assembly: AssemblyCopyright("Copyright © Hewlett-Packard Company 2013")]
+[assembly: AssemblyCopyright("Copyright © ")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -51,5 +51,5 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.1.262.0")]
-[assembly: AssemblyFileVersion("0.1.262.0")]
+[assembly: AssemblyVersion("0.2.262.0")]
+[assembly: AssemblyFileVersion("0.2.262.0")]
