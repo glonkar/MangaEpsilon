@@ -37,6 +37,18 @@ namespace MangaEpsilon.ViewModel
                 }
             }, (o) =>
                 o != null && o is ChapterLight);
+
+            MangaInfoCommand = CommandManager.CreateProperCommand((o) =>
+            {
+                if (o is ChapterLight)
+                {
+                    var chapter = ((ChapterLight)o);
+                    var manga = chapter.ParentManga;
+
+                    NavigationService.ShowWindow<MangaDetailPageViewModel>(new KeyValuePair<string, object>("manga", manga));
+                }
+            }, (o) =>
+                o != null && o is ChapterLight);
         }
 
         async void LibraryService_LibraryItemAdded(Tuple<Manga.Base.ChapterLight, string> tuple)
@@ -57,6 +69,12 @@ namespace MangaEpsilon.ViewModel
         {
             get { return (CrystalProperCommand)GetProperty(x => this.MangaClickCommand); }
             set { SetProperty(x => this.MangaClickCommand, value); }
+        }
+
+        public CrystalProperCommand MangaInfoCommand
+        {
+            get { return (CrystalProperCommand)GetProperty(x => this.MangaInfoCommand); }
+            set { SetProperty(x => this.MangaInfoCommand, value); }
         }
 
         public ChapterLight SelectedEntry

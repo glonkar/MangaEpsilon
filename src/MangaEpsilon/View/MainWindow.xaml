@@ -317,6 +317,11 @@
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
+                            <ListBox.ContextMenu>
+                                <ContextMenu HasDropShadow="True">
+                                    <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='ShowMangaMenuItem',NullValue='Show Manga Information...'}" Command="{Binding MangaInfoCommand}" CommandParameter="{Binding SelectedEntry}"/>
+                                </ContextMenu>
+                            </ListBox.ContextMenu>
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseDoubleClick">
                                     <i:InvokeCommandAction Command="{Binding MangaClickCommand}" CommandParameter="{Binding SelectedEntry}"/>
