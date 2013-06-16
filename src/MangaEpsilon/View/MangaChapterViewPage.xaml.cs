@@ -41,6 +41,9 @@ namespace MangaEpsilon.View
 
         private void thisWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            // didn't want to do it this way but you can't extend Binding/BindingBase to throw this into a MultiBinding.
+            this.Title = ((MangaChapterViewPageViewModel)this.DataContext).ChapterName + " - " + Crystal.Localization.LocalizationManager.GetLocalizedValue("MainApplicationTitle");
+
             FlipViewer.Focus();
         }
 

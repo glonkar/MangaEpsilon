@@ -4,10 +4,11 @@
         xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:vm="clr-namespace:MangaEpsilon.ViewModel"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:i18n="clr-namespace:Crystal.Localization;assembly=Amrykid.Crystal"
         xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
         xmlns:crystal="clr-namespace:Crystal.Core;assembly=Amrykid.Crystal"
         xmlns:utils="clr-namespace:Crystal.Utilities;assembly=Amrykid.Crystal"
-        Title="{Binding ChapterName, StringFormat='{}{0} - MangaEpsilon'}" ShowTitleBar="False" x:Name="thisWindow" SaveWindowPosition="True" Height="658" Width="1284" ShowActivated="True" Loaded="thisWindow_Loaded">
+        ShowTitleBar="False" x:Name="thisWindow" SaveWindowPosition="True" Height="658" Width="1284" ShowActivated="True" Loaded="thisWindow_Loaded">
     <i:Interaction.Behaviors>
         <Behaviours:BorderlessWindowBehavior ResizeWithGrip="True" EnableDWMDropShadow="True" />
     </i:Interaction.Behaviors>

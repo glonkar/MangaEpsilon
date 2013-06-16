@@ -20,16 +20,33 @@ namespace MangaEpsilon.ViewModel
         {
             if (IsDesignMode) return;
 
-            Manga = (Manga.Base.Manga)argument[0].Value;
+            SetManga(argument);
+        }
+
+        private void SetManga(KeyValuePair<string, object>[] argument)
+        {
+            IsBusy = true;
+
+            var selectedManga = (Manga.Base.Manga)argument[0].Value;
+
+            //create a copy since directly binding to the Chapters collection slows the app down if there is 500+ entries.
+            Manga = new Manga.Base.Manga();
+            Manga.MangaName = selectedManga.MangaName;
+            Manga.ID = selectedManga.ID;
+            Manga.Description = selectedManga.Description;
+            Manga.Author = selectedManga.Author;
+            Manga.BookImageUrl = selectedManga.BookImageUrl;
+
+            ViewTitle = Manga.MangaName + " - " + Crystal.Localization.LocalizationManager.GetLocalizedValue("MangaDetailsTitle") + " - " + Crystal.Localization.LocalizationManager.GetLocalizedValue("MainApplicationTitle");
 
             //var firstEntry = Yukihyo.MAL.MyAnimeListAPI.Search(Manga.MangaName, Yukihyo.MAL.MALSearchType.manga).First(x => x.Title.ToLower() == Manga.MangaName.ToLower());
 
             OpenMangaChapterCommand = CommandManager.CreateCommand(x =>
-                {
-                    ChapterEntry selectedChapter = x as ChapterEntry;
+            {
+                ChapterEntry selectedChapter = x as ChapterEntry;
 
-                    NavigationService.ShowWindow<MangaChapterViewPageViewModel>(new KeyValuePair<string, object>("chapter", selectedChapter));
-                });
+                NavigationService.ShowWindow<MangaChapterViewPageViewModel>(new KeyValuePair<string, object>("chapter", selectedChapter));
+            });
 
             MangaDownloadCommand = CommandManager.CreateProperCommand((o) =>
             {
@@ -43,14 +60,39 @@ namespace MangaEpsilon.ViewModel
             }, (o) =>
                 o != null && o is ChapterEntry && !LibraryService.Contains((ChapterEntry)o));
 
+            MangaChapters = new PaginatedObservableCollection<ChapterEntry>(selectedManga.Chapters);
+            MangaChapters.PageSize = 40;
+
+            NextChapterPageCommand = CommandManager.CreateProperCommand((o) =>
+            {
+                MangaChapters.CurrentPage++;
+            }, (o) =>
+            {
+                return true;
+            });
+            PreviousChapterPageCommand = CommandManager.CreateProperCommand((o) =>
+            {
+                MangaChapters.CurrentPage--;
+            }, (o) =>
+            {
+                return true;
+            });
+
+            IsBusy = false;
+
             GetUpdatedInfo();
+
         }
 
         private async void GetUpdatedInfo()
         {
+            await Task.Delay(2000);
             var newManga = await App.MangaSource.GetMangaInfo(Manga.MangaName, false); //Get fresh, updated information.
             Manga.Description = newManga.Description;
             Manga.Author = newManga.Author;
+
+            if (MangaChapters.Count != newManga.Chapters.Count)
+                MangaChapters = new PaginatedObservableCollection<ChapterEntry>(newManga.Chapters, 40);
         }
 
         public Manga.Base.Manga Manga
@@ -59,6 +101,14 @@ namespace MangaEpsilon.ViewModel
             set { SetProperty(x => this.Manga, value); }
         }
 
+        public PaginatedObservableCollection<Manga.Base.ChapterEntry> MangaChapters
+        {
+            get { return GetPropertyOrDefaultType<PaginatedObservableCollection<Manga.Base.ChapterEntry>>(x => this.MangaChapters); }
+            set { SetProperty(x => this.MangaChapters, value); }
+        }
+
+        public CrystalProperCommand PreviousChapterPageCommand { get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.PreviousChapterPageCommand); } set { SetProperty<CrystalProperCommand>(x => this.PreviousChapterPageCommand, value); } }
+        public CrystalProperCommand NextChapterPageCommand { get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.NextChapterPageCommand); } set { SetProperty<CrystalProperCommand>(x => this.NextChapterPageCommand, value); } }
         public CrystalCommand OpenMangaChapterCommand { get; set; }
         public CrystalProperCommand MangaDownloadCommand
         {
@@ -74,6 +124,18 @@ namespace MangaEpsilon.ViewModel
                 SetProperty(x => this.SelectedChapterItem, value);
                 System.Windows.Input.CommandManager.InvalidateRequerySuggested();
             }
+        }
+
+        public string ViewTitle
+        {
+            get { return GetPropertyOrDefaultType<string>(x => this.ViewTitle); }
+            set { SetProperty(x => this.ViewTitle, value); }
+        }
+
+        public bool IsBusy
+        {
+            get { return GetPropertyOrDefaultType<bool>(x => this.IsBusy); }
+            set { SetProperty<bool>(x => this.IsBusy, value); }
         }
     }
 }

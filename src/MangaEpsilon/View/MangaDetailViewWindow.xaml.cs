@@ -27,9 +27,9 @@ namespace MangaEpsilon.View
             InitializeComponent();
         }
 
-        private void chaptersGridView_MouseUp(object sender, MouseButtonEventArgs e)
+        private void thisWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            ((MangaDetailPageViewModel)this.DataContext).OpenMangaChapterCommand.Execute(chaptersGridView.SelectedItem);
+            
         }
     }
 }

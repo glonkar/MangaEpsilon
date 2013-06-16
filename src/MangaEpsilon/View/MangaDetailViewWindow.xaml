@@ -3,14 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:vm="clr-namespace:MangaEpsilon.ViewModel"
+        xmlns:i18n="clr-namespace:Crystal.Localization;assembly=Amrykid.Crystal"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
         xmlns:crystal="clr-namespace:Crystal.Core;assembly=Amrykid.Crystal"
         xmlns:conv="clr-namespace:MangaEpsilon.Converters"
         xmlns:utils="clr-namespace:Crystal.Utilities;assembly=Amrykid.Crystal"
         xmlns:local="clr-namespace:MangaEpsilon.View" x:Class="MangaEpsilon.View.MangaDetailViewWindow"
-        Title="{Binding Manga.MangaName, StringFormat=\{0\} - Manga Details - MangaEpsilon}" ShowTitleBar="False" x:Name="thisWindow" 
-        SaveWindowPosition="True" Height="458" Width="1284" ResizeMode="CanResize" ShowActivated="True">
+        ShowTitleBar="False" x:Name="thisWindow" Loaded="thisWindow_Loaded"
+        SaveWindowPosition="True" Height="458" Width="1284" ResizeMode="CanResize" ShowActivated="True" Title="{Binding ViewTitle, UpdateSourceTrigger=PropertyChanged}">
     <metro:MetroWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -35,6 +36,9 @@
         <Label Panel.ZIndex="100" HorizontalAlignment="Center" VerticalAlignment="Top" 
 			Content="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type metro:MetroWindow}}}" FontSize="14"/>
 
+        <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="40" Height="40" 
+                                                IsActive="{Binding IsBusy, UpdateSourceTrigger=PropertyChanged}" Visibility="Visible"></metro:ProgressRing>
+
         <Grid Margin="0 25 0 0">
             <ScrollViewer  VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" x:Name="PageScrollViewer" Margin="0">
                 <StackPanel Orientation="Horizontal">
@@ -45,7 +49,7 @@
                             <RowDefinition Height="20*"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" FontSize="21" Text="cover" Margin="50 0 0 0"/>
+                        <TextBlock Grid.Row="0" FontSize="21" Text="{i18n:CrystalLocalizedValueMarkup Key='CoverSection',NullValue='cover'}" Margin="50 0 0 0"/>
 
                         <Grid Grid.Row="1">
                             <StackPanel Orientation="Horizontal" Margin="15 20 0 0">
@@ -64,7 +68,7 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="20*"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" FontSize="21" Text="about" Margin="50 0 0 0"/>
+                            <TextBlock Grid.Row="0" FontSize="21" Text="{i18n:CrystalLocalizedValueMarkup Key='AboutSection',NullValue='about'}" Margin="50 0 0 0"/>
 
                             <Grid Grid.Row="1">
                                 <StackPanel Orientation="Horizontal" Margin="50 20 0 0">
@@ -78,38 +82,58 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="20*"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" FontSize="21" Text="chapters" Margin="50 0 0 0"/>
+                            <TextBlock Grid.Row="0" FontSize="21" Text="{i18n:CrystalLocalizedValueMarkup Key='ChaptersSection',NullValue='chapters'}" Margin="50 0 0 0"/>
 
                             <Grid Grid.Row="1">
-                                <ListBox ItemsSource="{Binding Manga.Chapters, UpdateSourceTrigger=PropertyChanged}" Margin="50 20 0 0" Visibility="Visible" HorizontalAlignment="Left" 
-									x:Name="chaptersGridView" VerticalAlignment="Stretch" Width="620" Height="Auto" SelectedItem="{Binding SelectedChapterItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
-                                    <ListBox.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <WrapPanel IsItemsHost="True" ItemHeight="50" Width="590" />
-                                        </ItemsPanelTemplate>
-                                    </ListBox.ItemsPanel>
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid Background="Gray" Width="50" Height="50" Margin="0 1 0 1">
-                                                <TextBlock Text="{Binding VolumeNumber}" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                                    <TextBlock.Foreground>
-                                                        <SolidColorBrush Color="{StaticResource WhiteColor}" />
-                                                    </TextBlock.Foreground>
-                                                </TextBlock>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="MouseDoubleClick">
-                                            <i:InvokeCommandAction Command="{Binding DataContext.OpenMangaChapterCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" CommandParameter="{Binding SelectedChapterItem}"/>
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                    <ListBox.ContextMenu>
-                                        <ContextMenu HasDropShadow="True" PlacementTarget="{Binding ElementName=chaptersGridView}">
-                                            <MenuItem Header="Download this chapter" Command="{Binding MangaDownloadCommand}" CommandParameter="{Binding SelectedChapterItem}"/>
-                                        </ContextMenu>
-                                    </ListBox.ContextMenu>
-                                </ListBox>
+                                <StackPanel>
+                                    <ListBox ItemsSource="{Binding MangaChapters, UpdateSourceTrigger=PropertyChanged, Delay=1000}" Margin="20 20 0 0" Visibility="Visible" HorizontalAlignment="Left" 
+									x:Name="chaptersGridView" VerticalAlignment="Stretch" 
+                                    Width="625" Height="Auto" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" 
+                                    SelectedItem="{Binding SelectedChapterItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                                        <ListBox.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel IsItemsHost="True" ItemHeight="50" Width="600" />
+                                            </ItemsPanelTemplate>
+                                        </ListBox.ItemsPanel>
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Background="Gray" Width="50" Height="50" Margin="0 1 0 1">
+                                                    <TextBlock Text="{Binding VolumeNumber}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                        <TextBlock.Foreground>
+                                                            <SolidColorBrush Color="{StaticResource WhiteColor}" />
+                                                        </TextBlock.Foreground>
+                                                    </TextBlock>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="MouseDoubleClick">
+                                                <i:InvokeCommandAction Command="{Binding DataContext.OpenMangaChapterCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" CommandParameter="{Binding SelectedChapterItem}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                        <ListBox.ContextMenu>
+                                            <ContextMenu HasDropShadow="True" PlacementTarget="{Binding ElementName=chaptersGridView}">
+                                                <MenuItem Header="Download this chapter" Command="{Binding MangaDownloadCommand}" CommandParameter="{Binding SelectedChapterItem}"/>
+                                            </ContextMenu>
+                                        </ListBox.ContextMenu>
+                                    </ListBox>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <Button Style="{DynamicResource MetroCircleButtonStyle}" Height="40" Width="40" Command="{Binding PreviousChapterPageCommand, UpdateSourceTrigger=PropertyChanged}">
+                                            <Rectangle Width="20" Height="20">
+                                                <Rectangle.Fill>
+                                                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_arrow_left}" />
+                                                </Rectangle.Fill>
+                                            </Rectangle>
+                                        </Button>
+                                        <Button Style="{DynamicResource MetroCircleButtonStyle}" Height="40" Width="40" Command="{Binding NextChapterPageCommand, UpdateSourceTrigger=PropertyChanged}">
+                                            <Rectangle Width="20" Height="20">
+                                                <Rectangle.Fill>
+                                                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_arrow_right}" />
+                                                </Rectangle.Fill>
+                                            </Rectangle>
+                                        </Button>
+                                    </StackPanel>
+                                </StackPanel>
                             </Grid>
                         </Grid>
                     </StackPanel>

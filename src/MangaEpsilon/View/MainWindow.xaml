@@ -7,10 +7,11 @@
         xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
         xmlns:crystal="clr-namespace:Crystal.Core;assembly=Amrykid.Crystal"
         xmlns:utils="clr-namespace:Crystal.Utilities;assembly=Amrykid.Crystal"
+        xmlns:i18n="clr-namespace:Crystal.Localization;assembly=Amrykid.Crystal"
         xmlns:conv="clr-namespace:MangaEpsilon.Converters"
         xmlns:metrigs="clr-namespace:MangaEpsilon.Triggers"
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
-        Title="MangaEpsilon" Height="669" Width="756" ShowTitleBar="False" x:Name="thisWindow" SaveWindowPosition="True"
+        Title="{i18n:CrystalLocalizedValueMarkup Key='MainApplicationTitle',NullValue='MangaEpsilon'}" Height="669" Width="756" ShowTitleBar="False" x:Name="thisWindow" SaveWindowPosition="True"
                    utils:MainWindowSetterHelper.IsMainWindow="True" WindowState="Maximized" ShowActivated="True" Closing="thisWindow_Closing">
     <Window.DataContext>
         <vm:MainPageViewModel/>
@@ -132,9 +133,9 @@
                Content="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type metro:MetroWindow}}}" FontSize="14"/>
 
         <metro:MetroAnimatedSingleRowTabControl Margin="5 25 5 5" SelectedIndex="0">
-            <metro:MetroTabItem Header="home" HeaderFontSize="15">
+            <metro:MetroTabItem Header="{i18n:CrystalLocalizedValueMarkup Key='HomeTabHeader',NullValue='home'}" HeaderFontSize="15">
                 <metro:MetroTabControl Margin="0 -15 0 0">
-                    <metro:MetroTabItem x:Name="todayReleasesTabItem" Header="today's releases">
+                    <metro:MetroTabItem x:Name="todayReleasesTabItem" Header="{i18n:CrystalLocalizedValueMarkup Key='NewReleasesTabHeader', NullValue='today&quot;s releases'}">
                         <TabItem.DataContext>
                             <vm:MainWindowTodaysReleasesViewModel/>
                         </TabItem.DataContext>
@@ -185,8 +186,8 @@
                                                 </ListBox.ItemsPanel>
                                                 <ListBox.ContextMenu>
                                                     <ContextMenu HasDropShadow="True">
-                                                        <MenuItem Header="Show Manga Information..." Command="{Binding MangaInfoCommand}" CommandParameter="{Binding SelectedEntry}"/>
-                                                        <MenuItem Header="Download this chapter" Command="{Binding MangaDownloadCommand}" CommandParameter="{Binding SelectedEntry}"/>
+                                                        <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='ShowMangaMenuItem',NullValue='Show Manga Information...'}" Command="{Binding MangaInfoCommand}" CommandParameter="{Binding SelectedEntry}"/>
+                                                        <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='DownloadChapterMenuItem',NullValue='Download this chapter.'}" Command="{Binding MangaDownloadCommand}" CommandParameter="{Binding SelectedEntry}"/>
                                                     </ContextMenu>
                                                 </ListBox.ContextMenu>
                                                 <i:Interaction.Triggers>
@@ -201,7 +202,7 @@
                             </ScrollViewer>
                         </Grid>
                     </metro:MetroTabItem>
-                    <metro:MetroTabItem Header="amrykid's favorites">
+                    <metro:MetroTabItem Header="{i18n:CrystalLocalizedValueMarkup Key='AmrykidsFavoritesTabHeader',NullValue='amrykid&quot;s favorites'}">
                         <TabItem.DataContext>
                             <vm:MainWindowAmrykidsFavoritesViewModel />
                         </TabItem.DataContext>
@@ -267,7 +268,7 @@
                     </metro:MetroTabItem>
                 </metro:MetroTabControl>
             </metro:MetroTabItem>
-            <metro:MetroTabItem Header="library" HeaderFontSize="15" ScrollViewer.CanContentScroll="False">
+            <metro:MetroTabItem Header="{i18n:CrystalLocalizedValueMarkup Key='LibraryTabHeader',NullValue='library'}" HeaderFontSize="15" ScrollViewer.CanContentScroll="False">
                 <TabItem.DataContext>
                     <vm:MainWindowLibraryViewModel/>
                 </TabItem.DataContext>
@@ -322,7 +323,7 @@
                     </Grid>
                 </Grid>
             </metro:MetroTabItem>
-            <metro:MetroTabItem Header="catalog" HeaderFontSize="15" ScrollViewer.CanContentScroll="False">
+            <metro:MetroTabItem Header="{i18n:CrystalLocalizedValueMarkup Key='CatalogTabHeader',NullValue='catalog'}" HeaderFontSize="15" ScrollViewer.CanContentScroll="False">
                 <TabItem.DataContext>
                     <vm:MainWindowCatalogViewModel/>
                 </TabItem.DataContext>
@@ -358,17 +359,17 @@
                     </ListBox>
                 </Grid>
             </metro:MetroTabItem>
-            <metro:MetroTabItem Header="downloads" HeaderFontSize="15">
+            <metro:MetroTabItem Header="{i18n:CrystalLocalizedValueMarkup Key='DownloadsTabHeader',NullValue='downloads'}" HeaderFontSize="15">
                 <TabItem.DataContext>
                     <vm:MainWindowDownloadsViewModel/>
                 </TabItem.DataContext>
                 <ListView ItemsSource="{Binding Downloads, UpdateSourceTrigger=PropertyChanged}">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Chapter.Name}"/>
-                            <GridViewColumn Header="Manga" DisplayMemberBinding="{Binding Chapter.ParentManga.MangaName}"/>
-                            <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}"/>
-                            <GridViewColumn Header="Progress" Width="300">
+                            <GridViewColumn Header="{i18n:CrystalLocalizedValueMarkup Key='MangaDownloadNameColumn',NullValue='Name'}" DisplayMemberBinding="{Binding Chapter.Name}"/>
+                            <GridViewColumn Header="{i18n:CrystalLocalizedValueMarkup Key='MangaDownloadParentMangaColumn',NullValue='Manga'}" DisplayMemberBinding="{Binding Chapter.ParentManga.MangaName}"/>
+                            <GridViewColumn Header="{i18n:CrystalLocalizedValueMarkup Key='MangaDownloadStatusColumn',NullValue='Status'}" DisplayMemberBinding="{Binding Status}"/>
+                            <GridViewColumn Header="{i18n:CrystalLocalizedValueMarkup Key='MangaDownloadProgressColumn',NullValue='Progress'}" Width="300">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <ProgressBar Value="{Binding Progress, UpdateSourceTrigger=PropertyChanged}" Maximum="{Binding MaxProgress, UpdateSourceTrigger=PropertyChanged}"/>

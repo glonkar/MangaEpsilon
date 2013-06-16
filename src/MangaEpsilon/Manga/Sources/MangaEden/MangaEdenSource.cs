@@ -84,31 +84,36 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
 
                     manga.Description = WebUtility.HtmlDecode(data["description"] as string);
 
-                    manga.Chapters.Clear();
+                    //manga.Chapters.Clear();
 
-                    var chapters = data["chapters"] as ArrayList;
+                    await Task.Run(() =>
+                        {
+                            var chapters = data["chapters"] as ArrayList;
 
-                    foreach (ArrayList chapter in chapters)
-                    {
-                        ChapterEntry entry = new ChapterEntry(manga);
+                            foreach (ArrayList chapter in chapters)
+                            {
+                                ChapterEntry entry = new ChapterEntry(manga);
 
-                        var chapterNum = Convert.ToInt32(double.Parse(chapter[0].ToString())).ToString();
+                                var chapterNum = Convert.ToInt32(double.Parse(chapter[0].ToString())).ToString();
 
-                        var time = Sayuka.IRC.Utilities.UnixTimeUtil.UnixTimeToDateTime(chapter[1].ToString());
+                                var time = Sayuka.IRC.Utilities.UnixTimeUtil.UnixTimeToDateTime(chapter[1].ToString());
 
-                        entry.Name = string.Format("{0} #{1}",
-                            manga.MangaName, chapterNum);
+                                entry.Name = string.Format("{0} #{1}",
+                                    manga.MangaName, chapterNum);
 
-                        entry.ReleaseDate = time;
+                                entry.ReleaseDate = time;
 
-                        entry.VolumeNumber = int.Parse(chapterNum.ToString());
+                                entry.VolumeNumber = int.Parse(chapterNum.ToString());
 
-                        entry.Subtitle = chapter[2];
+                                entry.Subtitle = chapter[2];
 
-                        entry.ID = chapter[3] as string;
+                                entry.ID = chapter[3] as string;
 
-                        manga.Chapters.Add(entry);
-                    }
+
+                                if (!manga.Chapters.Any(x => x.VolumeNumber == entry.VolumeNumber))
+                                    manga.Chapters.Add(entry);
+                            }
+                        });
 
                     AvailableManga[index] = manga;
                 }

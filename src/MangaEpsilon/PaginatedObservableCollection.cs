@@ -12,6 +12,7 @@ namespace MangaEpsilon
     /// This class represents a single Page collection, but have the entire items available inside
     /// </summary>
     /// from http://paginatedcollection.codeplex.com/ - http://jobijoy.blogspot.com/2008/12/paginated-observablecollection.html
+    /// modified by Amrykid
 
     public class PaginatedObservableCollection<T> : ObservableCollection<T>
     {
@@ -66,6 +67,14 @@ namespace MangaEpsilon
             _currentPageIndex = 0;
             _itemCountPerPage = 1;
             originalCollection = new List<T>();
+        }
+
+        public PaginatedObservableCollection(IEnumerable<T> collecton, int itemsPerPage)
+        {
+            _currentPageIndex = 0;
+            _itemCountPerPage = itemsPerPage;
+            originalCollection = new List<T>(collecton);
+            RecalculateThePageItems();
         }
         #endregion
 
