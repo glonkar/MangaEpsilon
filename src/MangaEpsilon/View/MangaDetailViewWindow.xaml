@@ -44,98 +44,77 @@
                 <StackPanel Orientation="Horizontal">
                     <Grid VerticalAlignment="Top" Height="600" Width="475" x:Name="MangaInfoGrid" DataContext="{Binding Manga, UpdateSourceTrigger=PropertyChanged}">
                         <Grid.RowDefinitions>
-
-                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="20*"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" FontSize="21" Text="{i18n:CrystalLocalizedValueMarkup Key='CoverSection',NullValue='cover'}" Margin="50 0 0 0"/>
 
-                        <Grid Grid.Row="1">
-                            <StackPanel Orientation="Horizontal" Margin="15 20 0 0">
+                        <Grid Grid.Row="0">
+                            <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='CoverSection',NullValue='cover'}" >
                                 <Image Height="550" Width="450" Margin="0 0 0 0" Source="{Binding BookImageUrl, Converter={StaticResource ImgCache}}" VerticalAlignment="Top" x:Name="CoverImage"/>
-                            </StackPanel>
+                            </GroupBox>
                         </Grid>
-                        <Grid Grid.Row="2">
+                        <Grid Grid.Row="1">
                             <StackPanel>
                                 <TextBlock Text="{Binding Author, UpdateSourceTrigger=PropertyChanged,StringFormat='Author: {0}'}" HorizontalAlignment="Center" FontSize="18"/>
                             </StackPanel>
                         </Grid>
                     </Grid>
                     <StackPanel Orientation="Vertical">
-                        <Grid VerticalAlignment="Top" Height="300" Width="550" x:Name="DescriptionGrid" HorizontalAlignment="Left" DataContext="{Binding Manga, UpdateSourceTrigger=PropertyChanged}">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="20*"/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" FontSize="21" Text="{i18n:CrystalLocalizedValueMarkup Key='AboutSection',NullValue='about'}" Margin="50 0 0 0"/>
+                        <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='AboutSection',NullValue='about'}" DataContext="{Binding Manga, UpdateSourceTrigger=PropertyChanged}">
+                            <TextBlock FontSize="17" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" Width="450" HorizontalAlignment="Center" x:Name="DescriptionTextBlock" />
+                        </GroupBox>
 
-                            <Grid Grid.Row="1">
-                                <StackPanel Orientation="Horizontal" Margin="50 20 0 0">
-                                    <TextBlock FontSize="17" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" Width="450" HorizontalAlignment="Center" x:Name="DescriptionTextBlock" />
-                                </StackPanel>
-                            </Grid>
-                        </Grid>
-
-                        <Grid VerticalAlignment="Top" Height="Auto" MaxHeight="500" Width="600" x:Name="ChaptersGrid" HorizontalAlignment="Left">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="20*"/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" FontSize="21" Text="{i18n:CrystalLocalizedValueMarkup Key='ChaptersSection',NullValue='chapters'}" Margin="50 0 0 0"/>
-
-                            <Grid Grid.Row="1">
-                                <StackPanel>
-                                    <ListBox ItemsSource="{Binding MangaChapters, UpdateSourceTrigger=PropertyChanged, Delay=1000}" Margin="20 20 0 0" Visibility="Visible" HorizontalAlignment="Left" 
+                        <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='ChaptersSection',NullValue='chapters'}">
+                            <StackPanel>
+                                <ListBox ItemsSource="{Binding MangaChapters, UpdateSourceTrigger=PropertyChanged, Delay=1000}" Margin="20 20 0 0" Visibility="Visible" HorizontalAlignment="Left" 
 									x:Name="chaptersGridView" VerticalAlignment="Stretch" 
                                     Width="625" Height="Auto" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" 
                                     SelectedItem="{Binding SelectedChapterItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
-                                        <ListBox.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <WrapPanel IsItemsHost="True" ItemHeight="50" Width="600" />
-                                            </ItemsPanelTemplate>
-                                        </ListBox.ItemsPanel>
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <Grid Background="Gray" Width="50" Height="50" Margin="0 1 0 1">
-                                                    <TextBlock Text="{Binding VolumeNumber}" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                                        <TextBlock.Foreground>
-                                                            <SolidColorBrush Color="{StaticResource WhiteColor}" />
-                                                        </TextBlock.Foreground>
-                                                    </TextBlock>
-                                                </Grid>
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="MouseDoubleClick">
-                                                <i:InvokeCommandAction Command="{Binding DataContext.OpenMangaChapterCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" CommandParameter="{Binding SelectedChapterItem}"/>
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
-                                        <ListBox.ContextMenu>
-                                            <ContextMenu HasDropShadow="True" PlacementTarget="{Binding ElementName=chaptersGridView}">
-                                                <MenuItem Header="Download this chapter" Command="{Binding MangaDownloadCommand}" CommandParameter="{Binding SelectedChapterItem}"/>
-                                            </ContextMenu>
-                                        </ListBox.ContextMenu>
-                                    </ListBox>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        <Button Style="{DynamicResource MetroCircleButtonStyle}" Height="40" Width="40" Command="{Binding PreviousChapterPageCommand, UpdateSourceTrigger=PropertyChanged}">
-                                            <Rectangle Width="20" Height="20">
-                                                <Rectangle.Fill>
-                                                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_arrow_left}" />
-                                                </Rectangle.Fill>
-                                            </Rectangle>
-                                        </Button>
-                                        <Button Style="{DynamicResource MetroCircleButtonStyle}" Height="40" Width="40" Command="{Binding NextChapterPageCommand, UpdateSourceTrigger=PropertyChanged}">
-                                            <Rectangle Width="20" Height="20">
-                                                <Rectangle.Fill>
-                                                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_arrow_right}" />
-                                                </Rectangle.Fill>
-                                            </Rectangle>
-                                        </Button>
-                                    </StackPanel>
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel IsItemsHost="True" ItemHeight="50" Width="600" />
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Background="Gray" Width="50" Height="50" Margin="0 1 0 1">
+                                                <TextBlock Text="{Binding VolumeNumber}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                    <TextBlock.Foreground>
+                                                        <SolidColorBrush Color="{StaticResource WhiteColor}" />
+                                                    </TextBlock.Foreground>
+                                                </TextBlock>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseDoubleClick">
+                                            <i:InvokeCommandAction Command="{Binding DataContext.OpenMangaChapterCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" CommandParameter="{Binding SelectedChapterItem}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                    <ListBox.ContextMenu>
+                                        <ContextMenu HasDropShadow="True" PlacementTarget="{Binding ElementName=chaptersGridView}">
+                                            <MenuItem Header="Download this chapter" Command="{Binding MangaDownloadCommand}" CommandParameter="{Binding SelectedChapterItem}"/>
+                                        </ContextMenu>
+                                    </ListBox.ContextMenu>
+                                </ListBox>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Button Style="{DynamicResource MetroCircleButtonStyle}" Height="40" Width="40" Command="{Binding PreviousChapterPageCommand, UpdateSourceTrigger=PropertyChanged}">
+                                        <Rectangle Width="20" Height="20">
+                                            <Rectangle.Fill>
+                                                <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_arrow_left}" />
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+                                    </Button>
+                                    <Button Style="{DynamicResource MetroCircleButtonStyle}" Height="40" Width="40" Command="{Binding NextChapterPageCommand, UpdateSourceTrigger=PropertyChanged}">
+                                        <Rectangle Width="20" Height="20">
+                                            <Rectangle.Fill>
+                                                <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_arrow_right}" />
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+                                    </Button>
                                 </StackPanel>
-                            </Grid>
-                        </Grid>
+                            </StackPanel>
+                        </GroupBox>
                     </StackPanel>
                 </StackPanel>
             </ScrollViewer>
