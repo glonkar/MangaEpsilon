@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Crystal.Localization;
 using MahApps.Metro.Controls;
 using MangaEpsilon.ViewModel;
 
@@ -44,7 +45,7 @@ namespace MangaEpsilon
 
             if (App.DownloadsRunning)
             {
-                if (MessageBox.Show("Downloads are in progress. Exiting now will stop them. You would to manually select the items for download again. Are you sure you want to exit?", "Downloads Running", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                if (MessageBox.Show(LocalizationManager.GetLocalizedValue("DownloadClosingWarningMsg"), LocalizationManager.GetLocalizedValue("DownloadClosingWarningTitle"), MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     e.Cancel = false;
                 else
                     e.Cancel = true;

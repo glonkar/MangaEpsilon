@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Crystal.Command;
 using Crystal.Core;
+using Crystal.Localization;
 using Crystal.Navigation;
 
 namespace MangaEpsilon.ViewModel
@@ -28,7 +29,7 @@ namespace MangaEpsilon.ViewModel
             {
                 //until I implement the IMessageBoxService, this will do.
 
-                System.Windows.MessageBox.Show("Something went wrong with initialization process. It is a rare bug but so far, it seems to be associated with slower internet speeds. Sometimes, this bug can be resolved by restarting MangaEpsilon. Please do so if you wish to continue.");
+                System.Windows.MessageBox.Show(LocalizationManager.GetLocalizedValue("RareTaskInitializationInternetSpeedBug"));
             }
             else
             {
