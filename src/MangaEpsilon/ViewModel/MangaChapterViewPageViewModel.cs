@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using MangaEpsilon.Services;
+using Crystal.Localization;
 
 namespace MangaEpsilon.ViewModel
 {
@@ -123,6 +124,9 @@ namespace MangaEpsilon.ViewModel
                                 if (Pages.Count > value + 1)
                                     if (Pages[value + 1] == null && IsBusy == false)
                                         GetNextBatchOfPages();
+
+                CurrentPageLabelString = String.Format(LocalizationManager.GetLocalizedValue("MangaChapterViewCurrentPageLabelFormatString"),
+                    CurrentPage.ToString(), Pages.Count.ToString());
             }
         }
         public int CurrentPage
@@ -144,6 +148,12 @@ namespace MangaEpsilon.ViewModel
         {
             get { return GetPropertyOrDefaultType<bool>(x => this.IsBusy); }
             set { SetProperty<bool>(x => this.IsBusy, value); }
+        }
+
+        public string CurrentPageLabelString
+        {
+            get{ return GetPropertyOrDefaultType<string>(x => this.CurrentPageLabelString);}
+            set { SetProperty(x => this.CurrentPageLabelString, value);}
         }
 
         private async Task<BitmapImage> LoadImgUrl(string url, bool block = false)
