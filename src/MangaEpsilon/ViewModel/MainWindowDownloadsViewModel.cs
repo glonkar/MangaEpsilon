@@ -46,7 +46,7 @@ namespace MangaEpsilon.ViewModel
 
                 RaisePropertyChanged(x => this.Downloads);
 
-                if (!downloaderIsRunning)
+                if (!App.DownloadsRunning)
                     DownloadAllQueuedChapters();
             }
         }
@@ -55,7 +55,7 @@ namespace MangaEpsilon.ViewModel
         {
             await Task.Run(async () =>
             {
-                downloaderIsRunning = true;
+                App.DownloadsRunning = true;
 
                 Messenger.PushMessage(this, "UpdateMainWindowState", System.Windows.Shell.TaskbarItemProgressState.Normal);
 
@@ -97,7 +97,7 @@ namespace MangaEpsilon.ViewModel
 
                 Messenger.PushMessage(this, "UpdateMainWindowState", System.Windows.Shell.TaskbarItemProgressState.None);
 
-                downloaderIsRunning = false;
+                App.DownloadsRunning = false;
             });
         }
 
@@ -107,6 +107,5 @@ namespace MangaEpsilon.ViewModel
             set { SetProperty<ObservableQueue<MangaChapterDownload>>(x => this.Downloads, value); }
         }
 
-        private volatile bool downloaderIsRunning = false;
     }
 }

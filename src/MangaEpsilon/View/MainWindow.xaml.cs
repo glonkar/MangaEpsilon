@@ -39,6 +39,15 @@ namespace MangaEpsilon
             {
                 e.Cancel = true;
                 Application.Current.Windows[Application.Current.Windows.Count - 1].Focus();
+                return;
+            }
+
+            if (App.DownloadsRunning)
+            {
+                if (MessageBox.Show("Downloads are in progress. Exiting now will stop them. You would to manually select the items for download again. Are you sure you want to exit?", "Downloads Running", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    e.Cancel = false;
+                else
+                    e.Cancel = true;
             }
         }
     }
