@@ -337,7 +337,7 @@
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0">
                         <TextBox VerticalAlignment="Top" HorizontalAlignment="Right" metro:TextboxHelper.Watermark="Search..." metro:TextboxHelper.ClearTextButton="True" 
-                             metro:TextboxHelper.SelectAllOnFocus="True" Width="200" Text="{Binding SearchFilter, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=3}"/>
+                             metro:TextboxHelper.SelectAllOnFocus="True" Width="200" Text="{Binding SearchFilter, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=200}"/>
                     </Grid>
 
                     <ListBox Grid.Row="1" ItemsSource="{Binding AvailableMangas, IsAsync=True}" x:Name="CatalogListView" 
