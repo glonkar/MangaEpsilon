@@ -39,9 +39,12 @@ namespace MangaEpsilon.ViewModel
                 o != null && o is ChapterLight);
         }
 
-        void LibraryService_LibraryItemAdded(Tuple<Manga.Base.ChapterLight, string> tuple)
+        async void LibraryService_LibraryItemAdded(Tuple<Manga.Base.ChapterLight, string> tuple)
         {
-            
+            await Dispatcher.InvokeAsync(() =>
+                {
+                    LibraryItems.Add(tuple.Item1);
+                });
         }
 
         public ObservableCollection<Manga.Base.ChapterLight> LibraryItems
