@@ -32,5 +32,14 @@ namespace MangaEpsilon
         {
             itemListView.ContextMenu.DataContext = itemListView.SelectedItem;
         }
+
+        private void thisWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (Application.Current.Windows.Count > 1)
+            {
+                e.Cancel = true;
+                Application.Current.Windows[Application.Current.Windows.Count - 1].Focus();
+            }
+        }
     }
 }

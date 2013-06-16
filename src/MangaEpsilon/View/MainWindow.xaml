@@ -11,7 +11,7 @@
         xmlns:metrigs="clr-namespace:MangaEpsilon.Triggers"
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         Title="MangaEpsilon" Height="669" Width="756" ShowTitleBar="False" x:Name="thisWindow" SaveWindowPosition="True"
-                   utils:MainWindowSetterHelper.IsMainWindow="True" WindowState="Maximized" ShowActivated="True">
+                   utils:MainWindowSetterHelper.IsMainWindow="True" WindowState="Maximized" ShowActivated="True" Closing="thisWindow_Closing">
     <Window.DataContext>
         <vm:MainPageViewModel/>
     </Window.DataContext>
