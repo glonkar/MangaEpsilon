@@ -16,6 +16,9 @@
     <Window.DataContext>
         <vm:MainPageViewModel/>
     </Window.DataContext>
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo ProgressState="{Binding MainWindowProgressState, UpdateSourceTrigger=PropertyChanged}" ProgressValue="{Binding MainWindowProgressValue, UpdateSourceTrigger=PropertyChanged}"/>
+    </Window.TaskbarItemInfo>
     <i:Interaction.Behaviors>
         <Behaviours:BorderlessWindowBehavior ResizeWithGrip="True" EnableDWMDropShadow="True" />
     </i:Interaction.Behaviors>

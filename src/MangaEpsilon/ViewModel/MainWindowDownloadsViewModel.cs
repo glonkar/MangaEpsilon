@@ -7,6 +7,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Crystal.Core;
+using Crystal.Messaging;
 using MangaEpsilon.Manga.Base;
 using MangaEpsilon.Model;
 using MangaEpsilon.Services;
@@ -56,6 +57,8 @@ namespace MangaEpsilon.ViewModel
             {
                 downloaderIsRunning = true;
 
+                Messenger.PushMessage(this, "UpdateMainWindowState", System.Windows.Shell.TaskbarItemProgressState.Normal);
+
                 while (Downloads.Count > 0)
                 {
                     var download = Downloads.Peek();
@@ -81,6 +84,8 @@ namespace MangaEpsilon.ViewModel
                             await Task.Delay(500);
 
                             download.Progress++;
+
+                            Messenger.PushMessage(this, "UpdateMainWindowProgress", (Convert.ToDouble(download.Progress) / Convert.ToDouble(download.MaxProgress)));
                         }
                     }
 
@@ -89,6 +94,8 @@ namespace MangaEpsilon.ViewModel
 
                     Notifications.NotificationsService.AddNotification("Download Completed!", download.Chapter.Name + " Downloaded");
                 }
+
+                Messenger.PushMessage(this, "UpdateMainWindowState", System.Windows.Shell.TaskbarItemProgressState.None);
 
                 downloaderIsRunning = false;
             });
