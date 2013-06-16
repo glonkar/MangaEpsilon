@@ -36,7 +36,7 @@ namespace MangaEpsilon
             get { return _currentPageIndex; }
             set
             {
-                if (value >= 0)
+                if (value >= 0 && (CanPageUp && value > _currentPageIndex || CanPageDown && value < _currentPageIndex))
                 {
                     _currentPageIndex = value;
                     RecalculateThePageItems();
@@ -81,9 +81,15 @@ namespace MangaEpsilon
         #region private
         private void RecalculateThePageItems()
         {
-            Clear();
-
             int startIndex = _currentPageIndex * _itemCountPerPage;
+
+            CanPageUp = originalCollection.Count >= (_currentPageIndex + 1) * _itemCountPerPage;
+            CanPageDown = startIndex >= _itemCountPerPage;
+
+            if (originalCollection.Count <= startIndex)
+                return; //prevents it from navigating to a page with no items.
+
+            Clear();
 
             for (int i = startIndex; i < startIndex + _itemCountPerPage; i++)
             {
@@ -137,5 +143,7 @@ namespace MangaEpsilon
         private int _currentPageIndex;
         private int _itemCountPerPage;
 
+        public bool CanPageUp { get; private set; }
+        public bool CanPageDown { get; private set; }
     }
 }

@@ -66,16 +66,18 @@ namespace MangaEpsilon.ViewModel
             NextChapterPageCommand = CommandManager.CreateProperCommand((o) =>
             {
                 MangaChapters.CurrentPage++;
+                System.Windows.Input.CommandManager.InvalidateRequerySuggested();
             }, (o) =>
             {
-                return true;
+                return MangaChapters.CanPageUp;
             });
             PreviousChapterPageCommand = CommandManager.CreateProperCommand((o) =>
             {
                 MangaChapters.CurrentPage--;
+                System.Windows.Input.CommandManager.InvalidateRequerySuggested();
             }, (o) =>
             {
-                return true;
+                return MangaChapters.CanPageDown;
             });
 
             IsBusy = false;
