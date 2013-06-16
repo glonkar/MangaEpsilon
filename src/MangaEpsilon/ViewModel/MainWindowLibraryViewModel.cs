@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using Crystal.Command;
 using Crystal.Core;
 using Crystal.Navigation;
@@ -22,6 +23,10 @@ namespace MangaEpsilon.ViewModel
             LibraryService.LibraryItemAdded += LibraryService_LibraryItemAdded;
 
             LibraryItems = new ObservableCollection<Manga.Base.ChapterLight>(LibraryService.LibraryCollection.Select(x => x.Item1));
+
+            var libraryItemsView = CollectionViewSource.GetDefaultView(LibraryItems);
+            libraryItemsView.GroupDescriptions.Add(new PropertyGroupDescription("ParentManga.MangaName"));
+            libraryItemsView.SortDescriptions.Add(new System.ComponentModel.SortDescription("ParentManga.MangaName", System.ComponentModel.ListSortDirection.Ascending));
 
             MangaClickCommand = CommandManager.CreateProperCommand((o) =>
             {
@@ -57,5 +62,30 @@ namespace MangaEpsilon.ViewModel
             set { SetProperty<ChapterLight>(x => this.SelectedEntry, value); }
         }
 
+        public string SearchFilter
+        {
+            get { return GetPropertyOrDefaultType<string>(x => this.SearchFilter); }
+            set
+            {
+                SetProperty<string>(x => this.SearchFilter, value);
+
+                if (LibraryItems != null)
+                {
+                    var view = CollectionViewSource.GetDefaultView(LibraryItems);
+
+                    if (string.IsNullOrWhiteSpace(value))
+                        view.Filter = null;
+                    else
+                    {
+                        view.Filter = new Predicate<object>(x =>
+                        {
+                            var manga = (ChapterLight)x;
+
+                            return manga.Name.ToLower().Contains(value.ToLower()) || manga.ParentManga.MangaName.ToLower().Contains(value.ToLower());
+                        });
+                    }
+                }
+            }
+        }
     }
 }
