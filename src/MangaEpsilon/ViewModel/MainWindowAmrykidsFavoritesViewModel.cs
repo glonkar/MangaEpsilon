@@ -22,10 +22,19 @@ namespace MangaEpsilon.ViewModel
         private async void Initialize()
         {
             IsBusy = true;
-            await Task.WhenAny(App.MangaSourceInitializationTask); //Checks (and waits if needed) for the Manga Source's initialization.
+            await Task.WhenAll(App.MangaSourceInitializationTask); //Checks (and waits if needed) for the Manga Source's initialization.
 
-            await Task.WhenAll(App.MangaSource.GetMangaInfo("Naruto"), App.MangaSource.GetMangaInfo("Sekirei"), App.MangaSource.GetMangaInfo("Fairy Tail"), App.MangaSource.GetMangaInfo("Freezing"))
-                .ContinueWith(x => AmrykidsFavorites = x.Result);
+            if (App.MangaSourceInitializationTask.IsCanceled)
+            {
+                //until I implement the IMessageBoxService, this will do.
+
+                System.Windows.MessageBox.Show("Something went wrong with initialization process. It is a rare bug but so far, it seems to be associated with slower internet speeds. Sometimes, this bug can be resolved by restarting MangaEpsilon. Please do so if you wish to continue.");
+            }
+            else
+            {
+                await Task.WhenAll(App.MangaSource.GetMangaInfo("Naruto"), App.MangaSource.GetMangaInfo("Sekirei"), App.MangaSource.GetMangaInfo("Fairy Tail"), App.MangaSource.GetMangaInfo("Freezing"))
+                    .ContinueWith(x => AmrykidsFavorites = x.Result);
+            }
             IsBusy = false;
 
             MangaClickCommand = CommandManager.CreateProperCommand((o) =>

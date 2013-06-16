@@ -23,7 +23,9 @@ namespace MangaEpsilon.ViewModel
         private async void Initialize()
         {
             IsBusy = true;
-            await Task.WhenAny(App.MangaSourceInitializationTask); //Checks (and waits if needed) for the Manga Source's initialization.
+            await Task.WhenAll(App.MangaSourceInitializationTask); //Checks (and waits if needed) for the Manga Source's initialization.
+
+            if (App.MangaSourceInitializationTask.IsCanceled) return; //MainWindowAmrykidsFavoritesViewModel will show a messagebox about this rare circumstance.
 
             AvailableMangas = new ObservableCollection<Manga.Base.Manga>(App.MangaSource.AvailableManga); // I hope virtualization is on.
             // new PaginatedObservableCollection<Manga.Base.Manga>(App.MangaSource.AvailableManga);
@@ -69,7 +71,7 @@ namespace MangaEpsilon.ViewModel
             }
         }
 
-        public ObservableCollection<Manga.Base.Manga> AvailableMangas { get; private set; }
+        public ObservableCollection<Manga.Base.Manga> AvailableMangas { get { return GetPropertyOrDefaultType<ObservableCollection<Manga.Base.Manga>>(x => this.AvailableMangas); } set { SetProperty(x => this.AvailableMangas, value); } }
 
         public bool IsBusy
         {

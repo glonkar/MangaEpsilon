@@ -79,6 +79,7 @@ namespace MangaEpsilon
             {
                 await App.MangaSource.AcquireAvailableManga();
                 await SaveAvailableManga();
+                await Task.Delay(500);
             }
         }
 

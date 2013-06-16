@@ -25,7 +25,9 @@ namespace MangaEpsilon.ViewModel
         private async void Initialize()
         {
             IsBusy = true;
-            await Task.WhenAny(App.MangaSourceInitializationTask); //Checks (and waits if needed) for the Manga Source's initialization.
+            await Task.WhenAll(App.MangaSourceInitializationTask); //Checks (and waits if needed) for the Manga Source's initialization.
+
+            if (App.MangaSourceInitializationTask.IsCanceled) return; //MainWindowAmrykidsFavoritesViewModel will show a messagebox about this rare circumstance.
 
             var latestMangas = await App.MangaSource.GetNewReleasesOfToday(12);
 

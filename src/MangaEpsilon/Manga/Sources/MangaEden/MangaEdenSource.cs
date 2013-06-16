@@ -113,6 +113,8 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                                 if (!manga.Chapters.Any(x => x.VolumeNumber == entry.VolumeNumber))
                                     manga.Chapters.Add(entry);
                             }
+
+                            manga.Chapters = new System.Collections.ObjectModel.ObservableCollection<ChapterEntry>(manga.Chapters.OrderByDescending(x => x.VolumeNumber));
                         });
 
                     AvailableManga[index] = manga;
