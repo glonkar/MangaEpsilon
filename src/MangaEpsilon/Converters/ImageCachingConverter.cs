@@ -111,6 +111,7 @@ namespace MangaEpsilon.Converters
 
         private BitmapImage CreateThumbnail(Uri Source, int PreferredWidth)
         {
+            //http://mrpfister.com/journal/improving-wpf-rendering-performance/
             BitmapImage bi = new BitmapImage();
             bi.BeginInit();
             bi.DecodePixelWidth = PreferredWidth;
