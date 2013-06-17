@@ -21,6 +21,7 @@ namespace MangaEpsilon.ViewModel
                 LibraryService.Initialize();
 
             LibraryService.LibraryItemAdded += LibraryService_LibraryItemAdded;
+            LibraryService.LibraryItemRemoved += LibraryService_LibraryItemRemoved;
 
             LibraryItems = new ObservableCollection<Manga.Base.ChapterLight>(LibraryService.LibraryCollection.Select(x => x.Item1));
 
@@ -49,6 +50,24 @@ namespace MangaEpsilon.ViewModel
                 }
             }, (o) =>
                 o != null && o is ChapterLight);
+
+            DeleteMangaCommand = CommandManager.CreateProperCommand((o) =>
+            {
+                if (o is ChapterLight)
+                {
+                    var chapter = ((ChapterLight)o);
+                    LibraryService.RemoveLibraryItem(new Tuple<ChapterLight, string>(chapter, LibraryService.GetPath(chapter)), true);
+                }
+            }, (o) =>
+                o != null && o is ChapterLight);
+        }
+
+        async void LibraryService_LibraryItemRemoved(Tuple<ChapterLight, string> tuple)
+        {
+            await Dispatcher.InvokeAsync(() =>
+            {
+                LibraryItems.Remove(tuple.Item1);
+            });
         }
 
         async void LibraryService_LibraryItemAdded(Tuple<Manga.Base.ChapterLight, string> tuple)
@@ -75,6 +94,11 @@ namespace MangaEpsilon.ViewModel
         {
             get { return (CrystalProperCommand)GetProperty(x => this.MangaInfoCommand); }
             set { SetProperty(x => this.MangaInfoCommand, value); }
+        }
+        public CrystalProperCommand DeleteMangaCommand
+        {
+            get { return (CrystalProperCommand)GetProperty(x => this.DeleteMangaCommand); }
+            set { SetProperty(x => this.DeleteMangaCommand, value); }
         }
 
         public ChapterLight SelectedEntry

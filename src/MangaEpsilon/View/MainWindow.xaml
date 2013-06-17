@@ -320,8 +320,13 @@
                             <ListBox.ContextMenu>
                                 <ContextMenu HasDropShadow="True">
                                     <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='ShowMangaMenuItem',NullValue='Show Manga Information...'}" Command="{Binding MangaInfoCommand}" CommandParameter="{Binding SelectedEntry}"/>
+                                    <Separator />
+                                    <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='DeleteMangaMenuItem',NullValue='Delete'}" Command="{Binding DeleteMangaCommand}" CommandParameter="{Binding SelectedEntry}"/>
                                 </ContextMenu>
                             </ListBox.ContextMenu>
+                            <ListBox.InputBindings>
+                                <KeyBinding Command="{Binding DeleteMangaCommand}" Key="Delete" CommandParameter="{Binding SelectedEntry}" />
+                            </ListBox.InputBindings>
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseDoubleClick">
                                     <i:InvokeCommandAction Command="{Binding MangaClickCommand}" CommandParameter="{Binding SelectedEntry}"/>

@@ -92,10 +92,31 @@ namespace MangaEpsilon.Services
             {
                 LibraryCollection.Add(tuple);
                 await SaveLibrary();
-            }
 
-            if (LibraryItemAdded != null)
-                LibraryItemAdded(tuple);
+                if (LibraryItemAdded != null)
+                    LibraryItemAdded(tuple);
+            }
+        }
+
+        internal static async void RemoveLibraryItem(Tuple<Manga.Base.ChapterLight, string> tuple, bool deleteData = false)
+        {
+            if (!IsInitialized)
+                throw new InvalidOperationException();
+
+            if (Contains(tuple.Item1))
+            {
+                LibraryCollection.Remove(LibraryCollection.First(x => x.Item1.Name == tuple.Item1.Name && x.Item2 == tuple.Item2));
+                await SaveLibrary();
+
+                if (deleteData)
+                {
+                    if (Directory.Exists(tuple.Item2))
+                        Directory.Delete(tuple.Item2, true);
+                }
+
+                if (LibraryItemRemoved != null)
+                    LibraryItemRemoved(tuple);
+            }
         }
 
         internal static Manga.Base.ChapterLight GetDownloadedChapterLightFromEntry(Manga.Base.ChapterEntry chapter)
