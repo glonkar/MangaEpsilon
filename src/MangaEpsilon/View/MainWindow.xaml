@@ -39,7 +39,7 @@
             <BooleanToVisibilityConverter x:Key="BTV"/>
 
             <DataTemplate x:Key="MangaListBoxItemTemplate">
-                <Grid HorizontalAlignment="Left" Width="250" Height="250" Margin="6">
+                <Grid HorizontalAlignment="Left" Width="250" Height="250" Margin="6" Cursor="Hand">
                     <Grid.CacheMode>
                         <BitmapCache EnableClearType="True" RenderAtScale="1.0" />
                     </Grid.CacheMode>
@@ -258,7 +258,7 @@
                                 </ListBox.ItemContainerStyle>
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid HorizontalAlignment="Left" Width="250" Height="250">
+                                        <Grid HorizontalAlignment="Left" Width="250" Height="250" Cursor="Hand">
                                             <Border>
                                                 <Image Source="{Binding BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=250}" Stretch="UniformToFill" AutomationProperties.Name="{Binding MangaName}"/>
                                             </Border>
@@ -320,7 +320,7 @@
                             </ListBox.GroupStyle>
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid Margin="10 0 0 0">
+                                    <Grid Margin="10 0 0 0" Cursor="Hand">
                                         <TextBlock Text="{Binding Name}"/>
                                     </Grid>
                                 </DataTemplate>
@@ -363,7 +363,7 @@
                              HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Cursor="Hand">
                                     <Image Source="{Binding BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=100}" MaxWidth="100"/>
                                     <StackPanel Orientation="Vertical" Margin="2">
                                         <Label FontSize="18" Content="{Binding MangaName, UpdateSourceTrigger=PropertyChanged}"/>
