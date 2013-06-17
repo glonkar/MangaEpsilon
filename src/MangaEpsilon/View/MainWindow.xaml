@@ -387,8 +387,8 @@
                 <ListView ItemsSource="{Binding Downloads, UpdateSourceTrigger=PropertyChanged}">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="{i18n:CrystalLocalizedValueMarkup Key='MangaDownloadNameColumn',NullValue='Name'}" DisplayMemberBinding="{Binding Chapter.Name}"/>
-                            <GridViewColumn Header="{i18n:CrystalLocalizedValueMarkup Key='MangaDownloadParentMangaColumn',NullValue='Manga'}" DisplayMemberBinding="{Binding Chapter.ParentManga.MangaName}"/>
+                            <GridViewColumn Header="{i18n:CrystalLocalizedValueMarkup Key='MangaDownloadNameColumn',NullValue='Name'}" DisplayMemberBinding="{Binding Chapter.Name}" Width="Auto"/>
+                            <GridViewColumn Header="{i18n:CrystalLocalizedValueMarkup Key='MangaDownloadParentMangaColumn',NullValue='Manga'}" DisplayMemberBinding="{Binding Chapter.ParentManga.MangaName}" Width="Auto"/>
                             <GridViewColumn Header="{i18n:CrystalLocalizedValueMarkup Key='MangaDownloadStatusColumn',NullValue='Status'}" DisplayMemberBinding="{Binding Status}"/>
                             <GridViewColumn Header="{i18n:CrystalLocalizedValueMarkup Key='MangaDownloadProgressColumn',NullValue='Progress'}" Width="300">
                                 <GridViewColumn.CellTemplate>
