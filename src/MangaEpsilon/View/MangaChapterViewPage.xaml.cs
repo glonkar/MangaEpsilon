@@ -35,7 +35,8 @@ namespace MangaEpsilon.View
 
                 var scroller = contentPresenter.ContentTemplate.FindName("Scroller", contentPresenter) as ScrollViewer;
 
-                uiScaleSlider.Value = 1;
+                if (!(bool)SaveZoomPosition.IsChecked)
+                    uiScaleSlider.Value = 1;
             }
         }
 

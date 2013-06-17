@@ -55,6 +55,9 @@
             ToolTip="{Binding Path=Value, StringFormat='Zoom: {0}'}" ToolTipService.Placement="Mouse"
             Value="1" Minimum="0.1" Maximum="4" MouseLeave="uiScaleSlider_MouseLeave"     
         />
-        <Label HorizontalAlignment="Left" VerticalAlignment="Bottom" Panel.ZIndex="5" Margin="3" Content="{Binding CurrentPageLabelString, UpdateSourceTrigger=PropertyChanged}" />
+        <StackPanel Margin="3" HorizontalAlignment="Left" VerticalAlignment="Bottom" Panel.ZIndex="5" Orientation="Horizontal">
+            <Label Content="{Binding CurrentPageLabelString, UpdateSourceTrigger=PropertyChanged}" />
+            <CheckBox Content="{i18n:CrystalLocalizedValueMarkup Key='MangaSaveZoomPositionMsg',NullValue='Save Zoom Position'}" IsEnabled="True" x:Name="SaveZoomPosition" VerticalAlignment="Center" Margin="3 0 0 0"/>
+        </StackPanel>
     </Grid>
 </metro:MetroWindow>
