@@ -33,17 +33,21 @@ namespace MangaEpsilon.ViewModel
 
             CollectionViewSource.GetDefaultView(AvailableMangas).SortDescriptions.Add(new System.ComponentModel.SortDescription("MangaName", System.ComponentModel.ListSortDirection.Ascending));
 
-            MangaClickCommand = CommandManager.CreateCommand((o) =>
+            MangaClickCommand = CommandManager.CreateProperCommand((o) =>
             {
                 var manga = ((Manga.Base.Manga)o);
 
                 NavigationService.ShowWindow<MangaDetailPageViewModel>(new KeyValuePair<string, object>("manga", manga));
-            });
+            }, (o) => o != null && o is Manga.Base.Manga);
 
             IsBusy = false;
         }
 
-        public CrystalCommand MangaClickCommand { get; set; }
+        public CrystalProperCommand MangaClickCommand
+        {
+            get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.MangaClickCommand); }
+            set { SetProperty(x => this.MangaClickCommand, value); }
+        }
 
         public string SearchFilter
         {
