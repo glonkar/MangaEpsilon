@@ -36,6 +36,8 @@
             <conv:ImageCachingConverter x:Key="ImgCache"/>
             <conv:ThumbnailImageCachingConverter x:Key="TImgCache"/>
 
+            <BooleanToVisibilityConverter x:Key="BTV"/>
+
             <DataTemplate x:Key="MangaListBoxItemTemplate">
                 <Grid HorizontalAlignment="Left" Width="250" Height="250" Margin="6">
                     <Grid.CacheMode>
@@ -145,6 +147,12 @@
                         <Grid>
                             <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="40" Height="40" 
                                                 IsActive="{Binding IsBusy, UpdateSourceTrigger=PropertyChanged}" Visibility="Visible"></metro:ProgressRing>
+                            <Grid x:Name="todayReleasesErrorGrid" Visibility="{Binding IsError, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BTV}}" HorizontalAlignment="Center" VerticalAlignment="Center" Panel.ZIndex="5">
+                                <StackPanel>
+                                    <TextBlock Text="{i18n:CrystalLocalizedValueMarkup Key='ErrorRetrievingDataMsg', NullValue='Error retrieving data'}" FontSize="17"/>
+                                    <Button HorizontalAlignment="Center" Content="{i18n:CrystalLocalizedValueMarkup Key='RetryTxt',NullValue='Retry'}" Command="{Binding RetryCommand}" Margin="0 3 0 0"/>
+                                </StackPanel>
+                            </Grid>
                             <ScrollViewer>
                                 <Grid>
                                     <Grid.RowDefinitions>

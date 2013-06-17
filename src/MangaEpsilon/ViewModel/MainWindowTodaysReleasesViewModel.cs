@@ -29,11 +29,6 @@ namespace MangaEpsilon.ViewModel
 
             if (App.MangaSourceInitializationTask.IsCanceled) return; //MainWindowAmrykidsFavoritesViewModel will show a messagebox about this rare circumstance.
 
-            var latestMangas = await App.MangaSource.GetNewReleasesOfToday(12);
-
-            IsBusy = false;
-
-            NewReleasesToday = new ObservableCollection<ChapterEntry>();
 
             MangaClickCommand = CommandManager.CreateProperCommand((o) =>
             {
@@ -66,11 +61,41 @@ namespace MangaEpsilon.ViewModel
                 }
             }, (o) => o != null && o is ChapterEntry && !LibraryService.Contains((ChapterEntry)o));
 
-            foreach (var manga in latestMangas)
+            RetryCommand = CommandManager.CreateProperCommand(async (o) => await GetNewReleases(), (o) => IsError);
+
+            await GetNewReleases();
+
+        }
+
+        private async Task GetNewReleases()
+        {
+            try
             {
-                //simulate real-time adding of items
-                await Task.Delay(100);
-                NewReleasesToday.Add(manga);
+                IsError = false;
+
+                if (!IsBusy)
+                    IsBusy = true;
+
+                var latestMangas = await App.MangaSource.GetNewReleasesOfToday(12);
+
+                NewReleasesToday = new ObservableCollection<ChapterEntry>();
+
+                foreach (var manga in latestMangas)
+                {
+                    //simulate real-time adding of items
+                    await Task.Delay(100);
+                    NewReleasesToday.Add(manga);
+                }
+
+                IsError = false;
+            }
+            catch (Exception)
+            {
+                IsError = true;
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 
@@ -109,10 +134,22 @@ namespace MangaEpsilon.ViewModel
             set { SetProperty(x => this.MangaInfoCommand, value); }
         }
 
+        public CrystalProperCommand RetryCommand
+        {
+            get { return (CrystalProperCommand)GetProperty(x => this.RetryCommand); }
+            set { SetProperty(x => this.RetryCommand, value); }
+        }
+
         public bool IsBusy
         {
             get { return GetPropertyOrDefaultType<bool>(x => this.IsBusy); }
             set { SetProperty<bool>(x => this.IsBusy, value); }
+        }
+
+        public bool IsError
+        {
+            get { return GetPropertyOrDefaultType<bool>(x => this.IsError); }
+            set { SetProperty<bool>(x => this.IsError, value); }
         }
     }
 }
