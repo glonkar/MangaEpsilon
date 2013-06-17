@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("MangaEpsilon")]
-[assembly: AssemblyCopyright("Copyright © ")]
+[assembly: AssemblyCopyright("Copyright © Amrykid (http://amrykid.devsocket.net)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
