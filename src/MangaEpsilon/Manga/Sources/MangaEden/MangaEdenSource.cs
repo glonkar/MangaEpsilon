@@ -82,7 +82,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                     if (manga.Author == null)
                         manga.Author = data["author"] as string;
 
-                    manga.Description = WebUtility.HtmlDecode(data["description"] as string);
+                    manga.Description = Regex.Replace(WebUtility.HtmlDecode(data["description"] as string), "<.+?>", "", RegexOptions.Singleline | RegexOptions.Compiled);
 
                     //manga.Chapters.Clear();
 
