@@ -75,7 +75,11 @@ namespace MangaEpsilon.ViewModel
             }
         }
 
-        public ObservableCollection<Manga.Base.Manga> AvailableMangas { get { return GetPropertyOrDefaultType<ObservableCollection<Manga.Base.Manga>>(x => this.AvailableMangas); } set { SetProperty(x => this.AvailableMangas, value); } }
+        public ObservableCollection<Manga.Base.Manga> AvailableMangas
+        {
+            get { return GetPropertyOrDefaultType<ObservableCollection<Manga.Base.Manga>>(x => this.AvailableMangas); }
+            set { SetProperty(x => this.AvailableMangas, value); }
+        }
 
         public bool IsBusy
         {
