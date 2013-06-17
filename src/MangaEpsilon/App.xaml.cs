@@ -32,6 +32,8 @@ namespace MangaEpsilon
             this.EnableCrystalLocalization = true;
             this.EnableDeepReflectionCaching = true;
             this.EnableSelfAssemblyResolution = true;
+            this.LocalizationFallbackBehavior = Crystal.Localization.LocalizationFallbackBehavior.Fallback;
+            this.FallbackLocale = new System.Globalization.CultureInfo("en-US");
 
             if (!Directory.Exists(AppDataDir))
                 Directory.CreateDirectory(AppDataDir);

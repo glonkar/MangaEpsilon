@@ -33,7 +33,8 @@ namespace MangaEpsilon.ViewModel
             }
             else
             {
-                await Task.WhenAll(App.MangaSource.GetMangaInfo("Naruto"), App.MangaSource.GetMangaInfo("Sekirei"), App.MangaSource.GetMangaInfo("Fairy Tail"), App.MangaSource.GetMangaInfo("Freezing"))
+                await Task.WhenAll(App.MangaSource.GetMangaInfo("Naruto"), App.MangaSource.GetMangaInfo("Sekirei"), 
+                    App.MangaSource.GetMangaInfo("Fairy Tail"), App.MangaSource.GetMangaInfo("Freezing"), App.MangaSource.GetMangaInfo("Steins;Gate"))
                     .ContinueWith(x => AmrykidsFavorites = x.Result);
             }
             IsBusy = false;
