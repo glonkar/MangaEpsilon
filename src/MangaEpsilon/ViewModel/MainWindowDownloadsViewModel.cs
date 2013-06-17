@@ -73,26 +73,56 @@ namespace MangaEpsilon.ViewModel
 
                     download.MaxProgress = download.Chapter.PagesUrls.Count;
 
+                    bool error = false;
+
                     using (WebClient wc = new WebClient())
                     {
+
                         foreach (var pageUrl in download.Chapter.PagesUrls)
                         {
                             var url = new Uri(pageUrl.ToString());
 
                             var filename = url.Segments.Last();
-                            await wc.DownloadFileTaskAsync(pageUrl, downloadPath + filename);
-                            await Task.Delay(500);
 
-                            download.Progress++;
+                            for (int i = 0; i < 3; i++)
+                            {
+                                //attempts to download the file a maximum of 3 times, in case the download fails.
+                                try
+                                {
+                                    await wc.DownloadFileTaskAsync(pageUrl, downloadPath + filename);
+                                    error = false;
+                                    break;
+                                }
+                                catch (Exception)
+                                {
+                                    error = true;
+                                }
+                            }
+                            if (!error)
+                            {
+                                await Task.Delay(500);
 
-                            Messenger.PushMessage(this, "UpdateMainWindowProgress", (Convert.ToDouble(download.Progress) / Convert.ToDouble(download.MaxProgress)));
+                                download.Progress++;
+
+                                Messenger.PushMessage(this, "UpdateMainWindowProgress", (Convert.ToDouble(download.Progress) / Convert.ToDouble(download.MaxProgress)));
+                            }
+                            else
+                            {
+                                Messenger.PushMessage(this, "UpdateMainWindowState", System.Windows.Shell.TaskbarItemProgressState.None);
+                                Notifications.NotificationsService.AddNotification("Download Failed!", download.Chapter.Name + " has failed to download.");
+                                return;
+                            }
                         }
                     }
 
-                    LibraryService.AddLibraryItem(new Tuple<ChapterLight, string>(download.Chapter, downloadPath));
-                    Downloads.Dequeue();
+                    if (!error)
+                    {
+                        LibraryService.AddLibraryItem(new Tuple<ChapterLight, string>(download.Chapter, downloadPath));                    
 
-                    Notifications.NotificationsService.AddNotification("Download Completed!", download.Chapter.Name + " Downloaded");
+                        Notifications.NotificationsService.AddNotification("Download Completed!", download.Chapter.Name + " Downloaded");
+                    }
+                    
+                    Downloads.Dequeue();
                 }
 
                 Messenger.PushMessage(this, "UpdateMainWindowState", System.Windows.Shell.TaskbarItemProgressState.None);
