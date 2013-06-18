@@ -27,7 +27,7 @@
             <conv:ImageCachingConverter x:Key="ImgCache"/>
 
             <DataTemplate x:Key="DefaultChapterTemplate">
-                <Grid Background="Gray" Width="50" Height="50" Margin="0 1 0 1" Cursor="Hand">
+                <Grid Background="Gray" Width="50" Height="50" Margin="0 1 0 1" Cursor="Hand" ToolTip="{Binding Subtitle}">
                     <TextBlock Text="{Binding VolumeNumber}" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <TextBlock.Foreground>
                             <SolidColorBrush Color="{StaticResource WhiteColor}" />
@@ -37,7 +37,7 @@
             </DataTemplate>
 
             <DataTemplate x:Key="DownloadedChapterTemplate">
-                <Grid Background="{DynamicResource AccentColorBrush}" Width="50" Height="50" Margin="0 1 0 1" Cursor="Hand">
+                <Grid Background="{DynamicResource AccentColorBrush}" Width="50" Height="50" Margin="0 1 0 1" Cursor="Hand" ToolTip="{Binding Subtitle}">
                     <TextBlock Text="{Binding VolumeNumber}" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <TextBlock.Foreground>
                             <SolidColorBrush Color="{StaticResource WhiteColor}" />
