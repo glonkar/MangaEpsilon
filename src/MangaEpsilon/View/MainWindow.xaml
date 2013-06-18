@@ -286,7 +286,7 @@
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                                 <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="MouseUp">
+                                    <i:EventTrigger EventName="MouseDoubleClick">
                                         <i:InvokeCommandAction Command="{Binding MangaClickCommand}" CommandParameter="{Binding ElementName=amrykidsFavoritesListView,Path=SelectedItem}"/>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
