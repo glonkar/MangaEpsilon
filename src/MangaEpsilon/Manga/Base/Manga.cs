@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System.Runtime.Serialization;
 using Crystal.Core;
+using System.Collections;
 
 namespace MangaEpsilon.Manga.Base
 {
@@ -35,8 +36,21 @@ namespace MangaEpsilon.Manga.Base
         public int StartRelease { get; internal set; }
         [DataMember]
         public string ID { get; internal set; }
+        [DataMember]
+        public ArrayList Categories { get { return (ArrayList)GetProperty("Categories"); } internal set { SetProperty("Categories", value); } }
+        [DataMember]
+        public MangaStatus Status { get { return GetPropertyOrDefaultType<MangaStatus>("Status"); } internal set { SetProperty("Status", value); } }
+
     }
 
+    public enum MangaStatus
+    {
+        None = 0,
+        YetToBegin = 1,
+        Running = 2,
+        Completed = 3
+    }
+    
     public abstract class ChapterBase
     {
         public string Name { get; set; }
