@@ -89,7 +89,8 @@
                         <Grid Grid.Row="1">
                             <StackPanel>
                                 <TextBlock Text="{Binding Author, UpdateSourceTrigger=PropertyChanged,StringFormat='Author: {0}'}" HorizontalAlignment="Center" FontSize="16"/>
-                                <ListBox ItemsSource="{Binding Categories}">
+                                <TextBlock Text="{Binding Status, UpdateSourceTrigger=PropertyChanged,StringFormat='Status: {0}'}" HorizontalAlignment="Center" FontSize="16" Foreground="{DynamicResource AccentColorBrush}"/>
+                                <ListBox ItemsSource="{Binding Categories}" Margin="4 0 0 0">
                                     <ListBox.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <WrapPanel ItemHeight="60" ItemWidth="Auto" IsItemsHost="True" 
