@@ -110,16 +110,16 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                             {
                                 ChapterEntry entry = new ChapterEntry(manga);
 
-                                var chapterNum = Convert.ToInt32(double.Parse(chapter[0].ToString())).ToString();
+                                var chapterNum = double.Parse(chapter[0].ToString());
 
                                 var time = Sayuka.IRC.Utilities.UnixTimeUtil.UnixTimeToDateTime(chapter[1].ToString());
 
                                 entry.Name = string.Format("{0} #{1}",
-                                    manga.MangaName, chapterNum);
+                                    manga.MangaName, chapterNum.ToString());
 
                                 entry.ReleaseDate = time;
 
-                                entry.VolumeNumber = int.Parse(chapterNum.ToString());
+                                entry.VolumeNumber = double.Parse(chapterNum.ToString());
 
                                 entry.Subtitle = chapter[2];
 
