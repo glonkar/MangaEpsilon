@@ -36,7 +36,7 @@
         <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" 
                             HorizontalAlignment="Stretch" Width="40" Height="40" 
                             x:Name="MainProgressIndictator" IsActive="{Binding IsBusy, UpdateSourceTrigger=PropertyChanged}" Visibility="Visible"></metro:ProgressRing>
-        <Grid x:Name="DownloadGrid" Panel.ZIndex="6" VerticalAlignment="Center" Width="80" Visibility="{Binding Source={StaticResource ImgDl}, Path=IsDownloading, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BTV}}">
+        <Grid x:Name="DownloadGrid" Panel.ZIndex="6" VerticalAlignment="Center" Width="100" Visibility="{Binding Source={StaticResource ImgDl}, Path=IsDownloading, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BTV}}">
             <ProgressBar Value="{Binding Source={StaticResource ImgDl},Path=DownloadProgress, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
         <metro:FlipView ItemsSource="{Binding Pages, UpdateSourceTrigger=PropertyChanged}" 
