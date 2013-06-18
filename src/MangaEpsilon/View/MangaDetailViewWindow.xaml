@@ -9,6 +9,7 @@
         xmlns:crystal="clr-namespace:Crystal.Core;assembly=Amrykid.Crystal"
         xmlns:conv="clr-namespace:MangaEpsilon.Converters"
         xmlns:utils="clr-namespace:Crystal.Utilities;assembly=Amrykid.Crystal"
+        xmlns:selectors="clr-namespace:MangaEpsilon.Selectors"
         xmlns:local="clr-namespace:MangaEpsilon.View" x:Class="MangaEpsilon.View.MangaDetailViewWindow"
         ShowTitleBar="False" x:Name="thisWindow" Loaded="thisWindow_Loaded"
         SaveWindowPosition="True" Height="658" Width="1284" ResizeMode="CanResize" ShowActivated="True" Title="{Binding ViewTitle, UpdateSourceTrigger=PropertyChanged}">
@@ -24,6 +25,29 @@
                 <ResourceDictionary Source="/Resources/StandardStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <conv:ImageCachingConverter x:Key="ImgCache"/>
+
+            <DataTemplate x:Key="DefaultChapterTemplate">
+                <Grid Background="Gray" Width="50" Height="50" Margin="0 1 0 1" Cursor="Hand">
+                    <TextBlock Text="{Binding VolumeNumber}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock.Foreground>
+                            <SolidColorBrush Color="{StaticResource WhiteColor}" />
+                        </TextBlock.Foreground>
+                    </TextBlock>
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="DownloadedChapterTemplate">
+                <Grid Background="{DynamicResource AccentColorBrush}" Width="50" Height="50" Margin="0 1 0 1" Cursor="Hand">
+                    <TextBlock Text="{Binding VolumeNumber}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock.Foreground>
+                            <SolidColorBrush Color="{StaticResource WhiteColor}" />
+                        </TextBlock.Foreground>
+                    </TextBlock>
+                </Grid>
+            </DataTemplate>
+
+            <selectors:MangaDetailViewChapterTemplateSelector 
+                DefaultTemplate="{StaticResource DefaultChapterTemplate}" DownloadedTemplate="{StaticResource DownloadedChapterTemplate}" x:Key="ChapterTemplateSelector"/>
         </ResourceDictionary>
     </metro:MetroWindow.Resources>
     <i:Interaction.Behaviors>
@@ -69,23 +93,12 @@
                                 <ListBox ItemsSource="{Binding MangaChapters, UpdateSourceTrigger=PropertyChanged, Delay=1000}" Margin="20 20 0 0" Visibility="Visible" HorizontalAlignment="Left" 
 									x:Name="chaptersGridView" VerticalAlignment="Stretch" 
                                     Width="625" Height="Auto" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" 
-                                    SelectedItem="{Binding SelectedChapterItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                                    SelectedItem="{Binding SelectedChapterItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ItemTemplateSelector="{StaticResource ChapterTemplateSelector}">
                                     <ListBox.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <WrapPanel IsItemsHost="True" ItemHeight="50" Width="600" />
                                         </ItemsPanelTemplate>
                                     </ListBox.ItemsPanel>
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid Background="Gray" Width="50" Height="50" Margin="0 1 0 1" Cursor="Hand">
-                                                <TextBlock Text="{Binding VolumeNumber}" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                                    <TextBlock.Foreground>
-                                                        <SolidColorBrush Color="{StaticResource WhiteColor}" />
-                                                    </TextBlock.Foreground>
-                                                </TextBlock>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseDoubleClick">
                                             <i:InvokeCommandAction Command="{Binding DataContext.OpenMangaChapterCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" CommandParameter="{Binding SelectedChapterItem}"/>

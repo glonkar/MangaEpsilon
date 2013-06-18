@@ -89,6 +89,7 @@
     <Compile Include="Notifications\NotificationType.cs" />
     <Compile Include="ObservableQueue.cs" />
     <Compile Include="PaginatedObservableCollection.cs" />
+    <Compile Include="Selectors\MangaDetailViewChapterTemplateSelector.cs" />
     <Compile Include="Services\LibraryService.cs" />
     <Compile Include="SoundManager.cs" />
     <Compile Include="Triggers\EventTrigger2.cs" />
@@ -212,7 +213,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildAction="Build" BuildVersion_ConfigurationName="Debug" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_ConfigurationName="Debug" BuildVersion_BuildAction="Build" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
