@@ -41,9 +41,15 @@ namespace MangaEpsilon.ViewModel
 
             MangaClickCommand = CommandManager.CreateProperCommand((o) =>
             {
-                var manga = ((Manga.Base.Manga)o);
+                var manga = (Manga.Base.Manga)o;
 
-                NavigationService.ShowWindow<MangaDetailPageViewModel>(new KeyValuePair<string, object>("manga", manga));
+                Predicate<ICrystalViewModel> pred = (vm) => { return vm.ContainsProperty("Manga") && ((Manga.Base.Manga)vm.GetProperty("Manga")).MangaName == manga.MangaName; };
+                var win = ViewModelOperations.FindWindow(pred); //checks if its already open. probably not MVVM-ish.
+
+                if (win == null)
+                    NavigationService.ShowWindow<MangaDetailPageViewModel>(new KeyValuePair<string, object>("manga", manga));
+                else
+                    win.Focus();
             }, (o) => o != null && o is Manga.Base.Manga);
         }
 

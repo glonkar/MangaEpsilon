@@ -46,7 +46,13 @@ namespace MangaEpsilon.ViewModel
                     var chapter = ((ChapterEntry)o);
                     var manga = chapter.ParentManga;
 
-                    NavigationService.ShowWindow<MangaDetailPageViewModel>(new KeyValuePair<string, object>("manga", manga));
+                    Predicate<ICrystalViewModel> pred = (vm) => { return vm.ContainsProperty("Manga") && ((Manga.Base.Manga)vm.GetProperty("Manga")).MangaName == manga.MangaName; };
+                    var win = ViewModelOperations.FindWindow(pred); //checks if its already open. probably not MVVM-ish.
+
+                    if (win == null)
+                        NavigationService.ShowWindow<MangaDetailPageViewModel>(new KeyValuePair<string, object>("manga", manga));
+                    else
+                        win.Focus();
                 }
             }, (o) =>
                 o != null && o is ChapterEntry);
