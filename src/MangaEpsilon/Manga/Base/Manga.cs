@@ -45,7 +45,8 @@ namespace MangaEpsilon.Manga.Base
 
     public enum MangaStatus
     {
-        None = 0,
+        None = -1,
+        Unknown = 0,
         YetToBegin = 1,
         Running = 2,
         Completed = 3
