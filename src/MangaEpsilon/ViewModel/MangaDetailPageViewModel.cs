@@ -36,6 +36,7 @@ namespace MangaEpsilon.ViewModel
             Manga.Description = selectedManga.Description;
             Manga.Author = selectedManga.Author;
             Manga.BookImageUrl = selectedManga.BookImageUrl;
+            Manga.Status = selectedManga.Status;
 
             ViewTitle = Manga.MangaName + " - " + Crystal.Localization.LocalizationManager.GetLocalizedValue("MangaDetailsTitle") + " - " + Crystal.Localization.LocalizationManager.GetLocalizedValue("MainApplicationTitle");
 
@@ -82,15 +83,22 @@ namespace MangaEpsilon.ViewModel
 
             IsBusy = false;
 
-            GetUpdatedInfo();
+            Task.Run(async () =>
+                {
+                    Manga.Categories = selectedManga.Categories;
+
+                    await GetUpdatedInfo();
+                });
 
         }
 
-        private async void GetUpdatedInfo()
+        private async Task GetUpdatedInfo()
         {
             var newManga = await App.MangaSource.GetMangaInfo(Manga.MangaName, false); //Get fresh, updated information.
             Manga.Description = newManga.Description;
             Manga.Author = newManga.Author;
+            Manga.Status = newManga.Status;
+            Manga.Categories = newManga.Categories;
 
             if (MangaChapters.Count != newManga.Chapters.Count)
                 MangaChapters = new PaginatedObservableCollection<ChapterEntry>(newManga.Chapters, 40);

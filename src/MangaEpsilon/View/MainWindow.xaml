@@ -383,7 +383,38 @@
                                     <Image Source="{Binding BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=100}" MaxWidth="100"/>
                                     <StackPanel Orientation="Vertical" Margin="2">
                                         <Label FontSize="18" Content="{Binding MangaName, UpdateSourceTrigger=PropertyChanged}"/>
-                                        <TextBlock Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" TextTrimming="CharacterEllipsis" Margin="5 0 20 0" MaxWidth="1400"/>
+                                        <TextBlock Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" TextTrimming="CharacterEllipsis" Margin="5 0 20 0" MaxWidth="1400" Height="Auto"/>
+                                        <ListBox ItemsSource="{Binding Categories, UpdateSourceTrigger=PropertyChanged}">
+                                            <ListBox.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <WrapPanel ItemHeight="60" ItemWidth="Auto" IsItemsHost="True" 
+                                                               Width="{Binding (FrameworkElement.ActualWidth), RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}"/>
+                                                </ItemsPanelTemplate>
+                                            </ListBox.ItemsPanel>
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="1" CornerRadius="4" Padding="1" Background="{DynamicResource AccentColorBrush}">
+                                                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{DynamicResource AccentColorBrush}">
+                                                            <Label Content="{Binding .}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                                <Label.Foreground>
+                                                                    <SolidColorBrush Color="{DynamicResource WhiteColor}"/>
+                                                                </Label.Foreground>
+                                                            </Label>
+                                                        </Grid>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                            <ListBox.Resources>
+                                                <Style TargetType="{x:Type ListBoxItem}">
+                                                    <Style.Resources>
+                                                        <!-- Background of selected item when focussed -->
+                                                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                                                        <!-- Background of selected item when not focussed -->
+                                                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                                                    </Style.Resources>
+                                                </Style>
+                                            </ListBox.Resources>
+                                        </ListBox>
                                     </StackPanel>
                                 </StackPanel>
                             </DataTemplate>
