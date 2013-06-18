@@ -48,6 +48,15 @@
 
             <selectors:MangaDetailViewChapterTemplateSelector 
                 DefaultTemplate="{StaticResource DefaultChapterTemplate}" DownloadedTemplate="{StaticResource DownloadedChapterTemplate}" x:Key="ChapterTemplateSelector"/>
+
+            <Style TargetType="{x:Type ListBoxItem}">
+                <Style.Resources>
+                    <!-- Background of selected item when focussed -->
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                    <!-- Background of selected item when not focussed -->
+                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                </Style.Resources>
+            </Style>
         </ResourceDictionary>
     </metro:MetroWindow.Resources>
     <i:Interaction.Behaviors>
