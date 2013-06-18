@@ -43,9 +43,6 @@
                     <Grid.CacheMode>
                         <BitmapCache EnableClearType="True" RenderAtScale="1.0" />
                     </Grid.CacheMode>
-                    <Grid.Effect>
-                        <DropShadowEffect Color="{DynamicResource BlackColor}" BlurRadius="2" ShadowDepth="2"/>
-                    </Grid.Effect>
                     <Border>
                         <Image Source="{Binding ParentManga.BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=250}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Name}"/>
                     </Border>
@@ -97,10 +94,10 @@
                             </BeginStoryboard>
                         </EventTrigger.Actions>
                     </EventTrigger>
-                    <EventTrigger RoutedEvent="MouseEnter">
-                        <EventTrigger.Actions>
+                    <!--<MultiTrigger>
+                        <MultiTrigger.EnterActions>
                             <StopStoryboard BeginStoryboardName="LoadedStoryBoardBegin"/>
-                            <BeginStoryboard Name="MouseEnterStoryBoardBegin">
+                            <BeginStoryboard Name="MouseEnterStoryBoardBegin" HandoffBehavior="SnapshotAndReplace">
                                 <Storyboard Timeline.DesiredFrameRate="30">
                                     <Int32Animation Storyboard.TargetProperty="(Panel.ZIndex)" From="0" To="20" Duration="0:0:.2" />
 
@@ -111,12 +108,10 @@
                                     <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleY)" From="1.0" To="1.1" Duration="0:0:.5"/>
                                 </Storyboard>
                             </BeginStoryboard>
-                        </EventTrigger.Actions>
-                    </EventTrigger>
-                    <EventTrigger RoutedEvent="MouseLeave">
-                        <EventTrigger.Actions>
+                        </MultiTrigger.EnterActions>
+                        <MultiTrigger.ExitActions>
                             <StopStoryboard BeginStoryboardName="MouseEnterStoryBoardBegin"/>
-                            <BeginStoryboard>
+                            <BeginStoryboard HandoffBehavior="SnapshotAndReplace">
                                 <Storyboard Timeline.DesiredFrameRate="30">
                                     <Int32Animation Storyboard.TargetProperty="(Panel.ZIndex)" From="20" To="0" Duration="0:0:.2" />
 
@@ -127,8 +122,27 @@
                                     <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.0" From="1.1" Duration="0:0:.5"/>
                                 </Storyboard>
                             </BeginStoryboard>
+                        </MultiTrigger.ExitActions>
+                        <MultiTrigger.Conditions>
+                            <Condition Property="UIElement.IsMouseOver" Value="True"/>
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Panel.ZIndex" Value="20"/>
+                        <Setter Property="Grid.Effect">
+                            <Setter.Value>
+                                <DropShadowEffect Color="Gray" Opacity=".50" ShadowDepth="16" />
+                            </Setter.Value>
+                        </Setter>
+                    </MultiTrigger>
+                    <EventTrigger RoutedEvent="MouseEnter">
+                        <EventTrigger.Actions>
+ 
                         </EventTrigger.Actions>
                     </EventTrigger>
+                    <EventTrigger RoutedEvent="MouseLeave">
+                        <EventTrigger.Actions>
+
+                        </EventTrigger.Actions>
+                    </EventTrigger>-->
                 </Style.Triggers>
             </Style>
         </ResourceDictionary>
@@ -183,6 +197,7 @@
                                             AutomationProperties.Name="Grouped Items"
                                             Padding="116,137,40,46"
                                             VerticalAlignment="Stretch"
+                                            HorizontalAlignment="Stretch"
                                             ItemsSource="{Binding NewReleasesToday, UpdateSourceTrigger=PropertyChanged}"
                                             MinHeight="700"
                                             SelectedItem="{Binding SelectedEntry, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource MangaListBoxItemStyle}">
@@ -191,6 +206,7 @@
                                                         <WrapPanel IsItemsHost="True" Width="{Binding (FrameworkElement.ActualWidth), RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}"
     				                                       ItemWidth="250"
     				                                       MinWidth="{Binding ItemWidth, RelativeSource={RelativeSource Self}}"
+                                                           MinHeight="700"
     				                                       ItemHeight="250">
                                                         </WrapPanel>
                                                     </ItemsPanelTemplate>
