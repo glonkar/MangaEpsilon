@@ -279,8 +279,8 @@
                                                 <Image Source="{Binding BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=250}" Stretch="UniformToFill" AutomationProperties.Name="{Binding MangaName}"/>
                                             </Border>
                                             <StackPanel VerticalAlignment="Bottom" Background="Gray">
-                                                <TextBlock Text="{Binding MangaName}" Foreground="Black" FontSize="18" Height="60" Margin="15,0,15,0"/>
-                                                <TextBlock Text="{Binding Author}" Foreground="White" FontSize="15" TextWrapping="NoWrap" Margin="15,0,15,10"/>
+                                                <TextBlock Text="{Binding MangaName, UpdateSourceTrigger=PropertyChanged}" Foreground="Black" FontSize="18" Height="60" Margin="15,0,15,0"/>
+                                                <TextBlock Text="{Binding Author, UpdateSourceTrigger=PropertyChanged}" Foreground="White" FontSize="15" TextWrapping="NoWrap" Margin="15,0,15,10"/>
                                             </StackPanel>
                                         </Grid>
                                     </DataTemplate>

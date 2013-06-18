@@ -29,7 +29,7 @@ namespace MangaEpsilon.Manga.Base
         [DataMember]
         public string MangaName { get; internal set; }
         [DataMember]
-        public string Author { get; internal set; }
+        public string Author { get{ return (string)GetProperty("Author"); } internal set { SetProperty("Author", value); }
         [DataMember]
         public string Description { get { return (string)GetProperty("Description"); } internal set { SetProperty("Description", value); } }
         [DataMember]
