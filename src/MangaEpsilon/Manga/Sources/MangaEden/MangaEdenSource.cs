@@ -84,7 +84,13 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
 
                     manga.Description = Regex.Replace(WebUtility.HtmlDecode(data["description"] as string), "<.+?>", "", RegexOptions.Singleline | RegexOptions.Compiled);
 
-                    manga.Categories = data["categories"] as ArrayList;
+                    try
+                    {
+                        manga.Categories = data["categories"] as ArrayList;
+                    }
+                    catch (Exception)
+                    {
+                    }
 
                     switch (int.Parse(data["status"].ToString()))
                     {
