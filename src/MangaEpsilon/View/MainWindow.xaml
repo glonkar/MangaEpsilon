@@ -71,10 +71,10 @@
             <Style TargetType="{x:Type ListBoxItem}" x:Key="MangaListBoxItemStyle">
                 <!-- http://stackoverflow.com/questions/13035766/listbox-slide-animation-on-new-item-added -->
                 <!--<Setter Property="LayoutTransform">
-                                                            <Setter.Value>
-                                                                <TranslateTransform />
-                                                            </Setter.Value>
-                                                        </Setter>-->
+                        <Setter.Value>
+                            <TranslateTransform />
+                        </Setter.Value>
+                    </Setter>-->
                 <Setter Property="RenderTransform">
                     <Setter.Value>
                         <ScaleTransform />

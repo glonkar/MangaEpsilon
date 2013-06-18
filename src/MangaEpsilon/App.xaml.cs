@@ -76,7 +76,14 @@ namespace MangaEpsilon
             App.MangaSource = new MangaEpsilon.Manga.Sources.MangaEden.MangaEdenSource();
 
             if (File.Exists(App.AppDataDir + "Manga.json"))
+            {
                 App.MangaSource.LoadAvilableMangaFromFile(App.AppDataDir + "Manga.json");
+
+                if (App.MangaSource.AvailableManga == null)
+                {
+                    //corruption.
+                }
+            }
             else
             {
                 await App.MangaSource.AcquireAvailableManga();
