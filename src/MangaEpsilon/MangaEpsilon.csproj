@@ -81,6 +81,7 @@
     <Compile Include="Converters\ImageDownloadingConverter.cs" />
     <Compile Include="Extensions\BitmapImageEx.cs" />
     <Compile Include="Extensions\System.Windows.Controls.Image.cs" />
+    <Compile Include="MAL\MALReviewGrabber.cs" />
     <Compile Include="Manga\Sources\MangaEden\MangaEdenSource.cs" />
     <Compile Include="Model\MangaChapterDownload.cs" />
     <Compile Include="Notifications\NotificationInfo.cs" />

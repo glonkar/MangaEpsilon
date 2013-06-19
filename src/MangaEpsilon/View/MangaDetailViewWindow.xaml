@@ -25,6 +25,7 @@
                 <ResourceDictionary Source="/Resources/StandardStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <conv:ImageCachingConverter x:Key="ImgCache"/>
+            <BooleanToVisibilityConverter x:Key="BTV"/>
 
             <DataTemplate x:Key="DefaultChapterTemplate">
                 <Grid Background="Gray" Width="50" Height="50" Margin="0 1 0 1" Cursor="Hand" ToolTip="{Binding Subtitle}">
@@ -48,15 +49,6 @@
 
             <selectors:MangaDetailViewChapterTemplateSelector 
                 DefaultTemplate="{StaticResource DefaultChapterTemplate}" DownloadedTemplate="{StaticResource DownloadedChapterTemplate}" x:Key="ChapterTemplateSelector"/>
-
-            <Style TargetType="{x:Type ListBoxItem}">
-                <Style.Resources>
-                    <!-- Background of selected item when focussed -->
-                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
-                    <!-- Background of selected item when not focussed -->
-                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
-                </Style.Resources>
-            </Style>
         </ResourceDictionary>
     </metro:MetroWindow.Resources>
     <i:Interaction.Behaviors>
@@ -150,6 +142,16 @@
                                             <MenuItem Header="Download this chapter" Command="{Binding MangaDownloadCommand}" CommandParameter="{Binding SelectedChapterItem}"/>
                                         </ContextMenu>
                                     </ListBox.ContextMenu>
+                                    <ListBox.Resources>
+                                        <Style TargetType="{x:Type ListBoxItem}">
+                                            <Style.Resources>
+                                                <!-- Background of selected item when focussed -->
+                                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                                                <!-- Background of selected item when not focussed -->
+                                                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                                            </Style.Resources>
+                                        </Style>
+                                    </ListBox.Resources>
                                 </ListBox>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                     <Button Style="{DynamicResource MetroCircleButtonStyle}" Height="40" Width="40" Command="{Binding PreviousChapterPageCommand, UpdateSourceTrigger=PropertyChanged}" Cursor="Hand">
@@ -170,6 +172,31 @@
                             </StackPanel>
                         </GroupBox>
                     </StackPanel>
+                    <Grid VerticalAlignment="Top" Width="400" x:Name="MangaReviewsGrid">
+                        <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='ReviewSection',NullValue='reviews'}">
+                            <Grid>
+                                <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="40" Height="40" 
+                                                IsActive="{Binding IsBusy_Reviews, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding IsBusy_Reviews, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BTV}}"></metro:ProgressRing>
+                                <ListBox ItemsSource="{Binding Reviews, UpdateSourceTrigger=PropertyChanged}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Width="360">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Source="{Binding ReviewAuthorAvatar}"/>
+                                                    <StackPanel>
+                                                        <Label Content="{Binding ReviewAuthor}" FontWeight="Bold" FontSize="17"/>
+                                                        <TextBlock Text="{Binding Overall_Rating}" Foreground="{DynamicResource AccentColorBrush}" FontSize="18" Margin="5 0 0 5"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                                <TextBlock TextTrimming="CharacterEllipsis" TextWrapping="Wrap" Width="360" Height="200" Text="{Binding ReviewText}"/>
+                                                <Line />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
                 </StackPanel>
             </ScrollViewer>
         </Grid>

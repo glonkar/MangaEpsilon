@@ -88,8 +88,26 @@ namespace MangaEpsilon.ViewModel
                     Manga.Categories = selectedManga.Categories;
 
                     await GetUpdatedInfo();
+
+                    await GetReviews();
                 });
 
+        }
+
+        private async Task GetReviews()
+        {
+            try
+            {
+                IsError_Reviews = false;
+                IsBusy_Reviews = true;
+                Reviews = await MAL.MALReviewGrabber.GetReviews(Manga.MangaName);
+                IsBusy_Reviews = false;
+            }
+            catch (Exception)
+            {
+                IsBusy_Reviews = false;
+                IsError_Reviews = true;
+            }
         }
 
         private async Task GetUpdatedInfo()
@@ -145,6 +163,23 @@ namespace MangaEpsilon.ViewModel
         {
             get { return GetPropertyOrDefaultType<bool>(x => this.IsBusy); }
             set { SetProperty<bool>(x => this.IsBusy, value); }
+        }
+
+        public bool IsBusy_Reviews
+        {
+            get { return GetPropertyOrDefaultType<bool>(x => this.IsBusy_Reviews); }
+            set { SetProperty<bool>(x => this.IsBusy_Reviews, value); }
+        }
+        public bool IsError_Reviews
+        {
+            get { return GetPropertyOrDefaultType<bool>(x => this.IsError_Reviews); }
+            set { SetProperty<bool>(x => this.IsError_Reviews, value); }
+        }
+
+        public List<MAL.MALReview> Reviews
+        {
+            get { return GetPropertyOrDefaultType<List<MAL.MALReview>>(x => this.Reviews); }
+            set { SetProperty(x => this.Reviews, value); }
         }
     }
 }
