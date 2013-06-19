@@ -155,7 +155,7 @@ namespace MangaEpsilon.ViewModel
         public bool IsError
         {
             get { return GetPropertyOrDefaultType<bool>(x => this.IsError); }
-            set { SetProperty<bool>(x => this.IsError, value); }
+            set { SetProperty<bool>(x => this.IsError, value); System.Windows.Input.CommandManager.InvalidateRequerySuggested(); }
         }
     }
 }
