@@ -196,7 +196,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
 
                 entry.Name = string.Format("{0} #{1}",
                     name, chapterNum);
-                entry.VolumeNumber = int.Parse(chapterNum);
+                entry.VolumeNumber = double.Parse(chapterNum);
 
                 entry.ReleaseDate = DateTime.Parse(date);
 
