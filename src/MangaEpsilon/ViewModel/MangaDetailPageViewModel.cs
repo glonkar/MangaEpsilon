@@ -87,9 +87,12 @@ namespace MangaEpsilon.ViewModel
                 {
                     Manga.Categories = selectedManga.Categories;
 
-                    await GetUpdatedInfo();
+                    if (Yukihyo.MAL.Utils.NetworkUtils.IsConnectedToInternet())
+                    {
+                        await GetUpdatedInfo();
 
-                    await GetReviews();
+                        await GetReviews();
+                    }
                 });
 
         }
