@@ -59,7 +59,7 @@ namespace MangaEpsilon
 
             SoundManager.Initialize();
 
-            LibraryService.Initialize();
+            LibraryInitializationTask = LibraryService.Initialize();
 
             base.PostStartup();
         }
@@ -113,6 +113,7 @@ namespace MangaEpsilon
         public static readonly string AppDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\MangaEpsilon\\";
         public static string ImageCacheDir = null;
         internal static Task MangaSourceInitializationTask = null;
+        internal static Task LibraryInitializationTask = null;
         internal static JsonSerializer DefaultJsonSerializer = null;
 
         public static volatile bool DownloadsRunning = false;

@@ -17,8 +17,17 @@ namespace MangaEpsilon.ViewModel
     {
         public MainWindowLibraryViewModel()
         {
-            if (!LibraryService.IsInitialized)
-                LibraryService.Initialize();
+            if (IsDesignMode) return;
+
+            Initialize();
+        }
+
+        private async void Initialize()
+        {
+            if (!LibraryService.IsInitialized && App.LibraryInitializationTask == null)
+                await LibraryService.Initialize();
+            else
+                await Task.WhenAll(App.LibraryInitializationTask);
 
             LibraryService.LibraryItemAdded += LibraryService_LibraryItemAdded;
             LibraryService.LibraryItemRemoved += LibraryService_LibraryItemRemoved;

@@ -11,7 +11,7 @@ namespace MangaEpsilon.Services
 {
     public static class LibraryService
     {
-        public static async void Initialize()
+        public static async Task Initialize()
         {
             if (IsInitialized) return;
 
