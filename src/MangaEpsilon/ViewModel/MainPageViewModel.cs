@@ -26,6 +26,11 @@ namespace MangaEpsilon.ViewModel
 
             RegisterForMessages("UpdateMainWindowState");
             RegisterForMessages("UpdateMainWindowProgress");
+
+            SettingsFlyoutCommand = CommandManager.CreateCommand((o) =>
+                {
+                    SettingsFlyoutOpen = !SettingsFlyoutOpen;
+                });
         }
 
         public override bool ReceiveMessage(object source, Crystal.Messaging.Message message)
@@ -53,6 +58,18 @@ namespace MangaEpsilon.ViewModel
         {
             get { return GetPropertyOrDefaultType<double>(x => this.MainWindowProgressValue); }
             set { SetProperty(x => this.MainWindowProgressValue, value); }
+        }
+
+        public bool SettingsFlyoutOpen
+        {
+            get { return GetPropertyOrDefaultType<bool>(x => this.SettingsFlyoutOpen); }
+            set { SetProperty(x => this.SettingsFlyoutOpen, value); }
+        }
+
+        public CrystalCommand SettingsFlyoutCommand
+        {
+            get { return GetPropertyOrDefaultType<CrystalCommand>(x => this.SettingsFlyoutCommand); }
+            set { SetProperty(x => this.SettingsFlyoutCommand, value); }
         }
     }
 }

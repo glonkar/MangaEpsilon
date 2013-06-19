@@ -2,6 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:metro2="clr-namespace:MahApps.Metro;assembly=MahApps.Metro"
         xmlns:vm="clr-namespace:MangaEpsilon.ViewModel"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
@@ -450,5 +451,49 @@
                 </ListView>
             </metro:MetroTabItem>
         </metro:MetroAnimatedSingleRowTabControl>
+
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Height="40" Width="40" Command="{Binding SettingsFlyoutCommand, UpdateSourceTrigger=PropertyChanged}" Cursor="Hand" Panel.ZIndex="100" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <Rectangle Width="20" Height="20">
+                <Rectangle.Fill>
+                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_settings}" />
+                </Rectangle.Fill>
+            </Rectangle>
+        </Button>
     </Grid>
+    <metro:MetroWindow.Flyouts>
+        <metro:Flyout Header="{i18n:CrystalLocalizedValueMarkup Key='SettingsFlyoutHeader',NullValue='settings'}" x:Name="SettingsFlyout" IsOpen="{Binding ElementName=thisWindow,Path=DataContext.SettingsFlyoutOpen, UpdateSourceTrigger=PropertyChanged}">
+            <metro:Flyout.DataContext>
+                <vm:MainWindowSettingsViewModel />
+            </metro:Flyout.DataContext>
+            <metro:Flyout.Resources>
+                <ObjectDataProvider MethodName="GetValues"
+                        ObjectType="{x:Type metro2:Theme}"
+                        x:Key="ThemeValues">
+                    <ObjectDataProvider.MethodParameters>
+                        <x:Type TypeName="metro2:Theme" />
+                    </ObjectDataProvider.MethodParameters>
+                </ObjectDataProvider>
+            </metro:Flyout.Resources>
+            <StackPanel>
+            <GroupBox Header="Theme" Height="Auto">
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox ItemsSource="{Binding AvailableAccents, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedAccent, UpdateSourceTrigger=PropertyChanged}" Height="20" DisplayMemberPath="Name"/>
+                        <ComboBox ItemsSource="{Binding Source={StaticResource
+                                             ThemeValues}}" SelectedItem="{Binding SelectedTheme, UpdateSourceTrigger=PropertyChanged}" Height="20">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <!-- This combobox doesn't like the flyout very well so I am forcing it to use the color I want.-->
+                                    <TextBlock Text="{Binding .}">
+                                        <TextBlock.Foreground>
+                                            <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                                        </TextBlock.Foreground>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+            </GroupBox>
+            </StackPanel>
+        </metro:Flyout>
+    </metro:MetroWindow.Flyouts>
 </metro:MetroWindow>

@@ -79,6 +79,7 @@
     </ApplicationDefinition>
     <Compile Include="Converters\ImageCachingConverter.cs" />
     <Compile Include="Converters\ImageDownloadingConverter.cs" />
+    <Compile Include="Data\SettingsInfo.cs" />
     <Compile Include="Extensions\BitmapImageEx.cs" />
     <Compile Include="Extensions\System.Windows.Controls.Image.cs" />
     <Compile Include="MAL\MALReviewGrabber.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="ViewModel\MainWindowCatalogViewModel.cs" />
     <Compile Include="ViewModel\MainWindowDownloadsViewModel.cs" />
     <Compile Include="ViewModel\MainWindowLibraryViewModel.cs" />
+    <Compile Include="ViewModel\MainWindowSettingsViewModel.cs" />
     <Compile Include="ViewModel\MainWindowTodaysReleasesViewModel.cs" />
     <Compile Include="View\MangaChapterViewPage.xaml.cs">
       <DependentUpon>MangaChapterViewPage.xaml</DependentUpon>
@@ -214,7 +216,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_ConfigurationName="Debug" BuildVersion_BuildAction="Build" />
+      <UserProperties BuildVersion_BuildAction="Build" BuildVersion_ConfigurationName="Debug" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

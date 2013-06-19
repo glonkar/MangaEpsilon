@@ -117,5 +117,8 @@ namespace MangaEpsilon
         internal static JsonSerializer DefaultJsonSerializer = null;
 
         public static volatile bool DownloadsRunning = false;
+
+        internal static object CurrentTheme = null;
+        internal static object CurrentThemeAccent = null;
     }
 }

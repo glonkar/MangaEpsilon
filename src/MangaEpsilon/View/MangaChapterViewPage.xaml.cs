@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MahApps.Metro;
 using MahApps.Metro.Controls;
 using MangaEpsilon.ViewModel;
 
@@ -42,6 +43,8 @@ namespace MangaEpsilon.View
 
         private void thisWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            ThemeManager.ChangeTheme(this, (Accent)App.CurrentThemeAccent, (Theme)App.CurrentTheme);
+
             // didn't want to do it this way but you can't extend Binding/BindingBase to throw this into a MultiBinding.
             this.Title = ((MangaChapterViewPageViewModel)this.DataContext).ChapterName + " - " + Crystal.Localization.LocalizationManager.GetLocalizedValue("MainApplicationTitle");
 
