@@ -65,7 +65,7 @@
                                                 IsActive="{Binding IsBusy, UpdateSourceTrigger=PropertyChanged}" Visibility="Visible"></metro:ProgressRing>
 
         <Grid Margin="0 25 0 0">
-            <ScrollViewer  VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" x:Name="PageScrollViewer" Margin="0">
+            <ScrollViewer  VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" x:Name="PageScrollViewer" Margin="0">
                 <StackPanel Orientation="Horizontal">
                     <Grid VerticalAlignment="Top" Height="600" Width="475" x:Name="MangaInfoGrid" DataContext="{Binding Manga, UpdateSourceTrigger=PropertyChanged}">
                         <Grid.RowDefinitions>
