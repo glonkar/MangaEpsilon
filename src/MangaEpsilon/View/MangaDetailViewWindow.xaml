@@ -26,6 +26,7 @@
             </ResourceDictionary.MergedDictionaries>
             <conv:ImageCachingConverter x:Key="ImgCache"/>
             <BooleanToVisibilityConverter x:Key="BTV"/>
+            <conv:ThumbnailImageCachingConverter x:Key="TImgCache"/>
 
             <DataTemplate x:Key="DefaultChapterTemplate">
                 <Grid Background="Gray" Width="50" Height="50" Margin="0 1 0 1" Cursor="Hand" ToolTip="{Binding Subtitle}">
@@ -170,6 +171,78 @@
                                     </Button>
                                 </StackPanel>
                             </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='RelatedMangaSection',NullValue='related manga'}">
+                            <Grid>
+                                <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="40" Height="270" 
+                                                IsActive="{Binding IsBusy_RelatedManga, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding IsBusy_RelatedManga, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BTV}}"></metro:ProgressRing>
+                                <ListBox ItemsSource="{Binding RelatedManga, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{DynamicResource MangaListBoxItemStyle}" x:Name="RelatedMangaListView">
+                                    <ListBox.Resources>
+                                        <DataTemplate x:Key="MangaListBoxItemTemplate">
+                                            <Grid HorizontalAlignment="Left" Width="250" Height="250" Margin="6" Cursor="Hand">
+                                                <Grid.CacheMode>
+                                                    <BitmapCache EnableClearType="True" RenderAtScale="1.0" />
+                                                </Grid.CacheMode>
+                                                <Border>
+                                                    <Image Source="{Binding BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=250}" Stretch="UniformToFill" AutomationProperties.Name="{Binding MangaName}"/>
+                                                </Border>
+                                                <StackPanel VerticalAlignment="Bottom">
+                                                    <StackPanel.Background>
+                                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                            <GradientStop Color="Transparent" Offset="-1"/>
+                                                            <!--<GradientStop Color="{DynamicResource WhiteColor}" Offset="1"/> Produces a nice effect-->
+                                                            <GradientStop Color="{DynamicResource BlackColor}" Offset="1"/>
+                                                        </LinearGradientBrush>
+                                                    </StackPanel.Background>
+                                                    <TextBlock Text="{Binding MangaName}" FontSize="18" Height="60" Margin="15,0,15,0">
+                                                        <TextBlock.Foreground>
+                                                            <SolidColorBrush Color="{DynamicResource WhiteColor}"/>
+                                                        </TextBlock.Foreground>
+                                                    </TextBlock>
+                                                    <TextBlock Text="{Binding ReleaseDate}" FontSize="15" TextWrapping="NoWrap" Margin="15,0,15,10">
+                                                        <TextBlock.Foreground>
+                                                            <SolidColorBrush Color="{DynamicResource WhiteColor}"/>
+                                                        </TextBlock.Foreground>
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </Grid>
+                                        </DataTemplate>
+
+                                        <Style TargetType="{x:Type ListBoxItem}" x:Key="MangaListBoxItemStyle">
+                                            <Setter Property="RenderTransform">
+                                                <Setter.Value>
+                                                    <ScaleTransform />
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter Property="ContentTemplate" Value="{StaticResource MangaListBoxItemTemplate}"/>
+                                            <Style.Triggers>
+                                                <EventTrigger RoutedEvent="Loaded">
+                                                    <EventTrigger.Actions>
+                                                        <BeginStoryboard Name="LoadedStoryBoardBegin">
+                                                            <Storyboard  Timeline.DesiredFrameRate="60">
+                                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:.5" />
+
+                                                                <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.0" From="1.5" Duration="0:0:.5"/>
+                                                                <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.0" From="1.5" Duration="0:0:.5"/>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger.Actions>
+                                                </EventTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ListBox.Resources>
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel IsItemsHost="True" ItemHeight="260" Width="600" />
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseDoubleClick">
+                                            <i:InvokeCommandAction Command="{Binding MangaClickCommand}" CommandParameter="{Binding ElementName=RelatedMangaListView,Path=SelectedItem}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </ListBox>
+                            </Grid>
                         </GroupBox>
                     </StackPanel>
                     <Grid VerticalAlignment="Top" Width="400" x:Name="MangaReviewsGrid">

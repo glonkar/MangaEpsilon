@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using Crystal.Messaging;
 using MangaEpsilon.Services;
+using System.Collections.ObjectModel;
 
 namespace MangaEpsilon.ViewModel
 {
@@ -80,6 +81,18 @@ namespace MangaEpsilon.ViewModel
             {
                 return MangaChapters.CanPageDown;
             });
+            MangaClickCommand = CommandManager.CreateProperCommand((o) =>
+            {
+                var manga = ((Manga.Base.Manga)o);
+
+                var win = ViewModelOperations.FindWindow((vm) => vm.ContainsProperty("Manga") && ((Manga.Base.Manga)vm.GetProperty("Manga")).MangaName == manga.MangaName); //checks if its already open. probably not MVVM-ish.
+
+                if (win == null)
+                    NavigationService.ShowWindow<MangaDetailPageViewModel>(new KeyValuePair<string, object>("manga", manga));
+                else
+                    win.Focus();
+
+            }, (o) => o != null && o is Manga.Base.Manga);
 
             IsBusy = false;
 
@@ -92,6 +105,7 @@ namespace MangaEpsilon.ViewModel
                         await GetUpdatedInfo();
 
                         await GetReviews();
+                        await GetRelatedManga();
                     }
                 });
 
@@ -110,6 +124,38 @@ namespace MangaEpsilon.ViewModel
             {
                 IsBusy_Reviews = false;
                 IsError_Reviews = true;
+            }
+        }
+
+        private async Task GetRelatedManga()
+        {
+            try
+            {
+                IsError_RelatedManga = false;
+                IsBusy_RelatedManga = true;
+
+                await Task.Run(() =>
+                    {
+                        var results = Yukihyo.MAL.MyAnimeListAPI.Search(Manga.MangaName, Yukihyo.MAL.MALSearchType.manga);
+                        var results2 = results.Where(x =>
+                                x.Title.ToLower().Trim() != Manga.MangaName.ToLower().Trim() &&
+                                App.MangaSource.AvailableManga.Any(y =>
+                                    LevenshteinDistance.Compute(y.MangaName.ToLower().Trim(), x.Title.ToLower().Trim()) <= 2)).ToArray();
+
+
+                        RelatedManga = new ObservableCollection<Manga.Base.Manga>(
+                            results2.Select(x =>
+                                App.MangaSource.AvailableManga.Find(y =>
+                                    LevenshteinDistance.Compute(y.MangaName, x.Title) <= 2 && y.MangaName != Manga.MangaName))
+                                    .Where(x => x != null));
+
+                    });
+                IsBusy_RelatedManga = false;
+            }
+            catch (Exception)
+            {
+                IsBusy_RelatedManga = false;
+                IsError_RelatedManga = true;
             }
         }
 
@@ -135,6 +181,12 @@ namespace MangaEpsilon.ViewModel
         {
             get { return GetPropertyOrDefaultType<PaginatedObservableCollection<Manga.Base.ChapterEntry>>(x => this.MangaChapters); }
             set { SetProperty(x => this.MangaChapters, value); }
+        }
+
+        public CrystalProperCommand MangaClickCommand
+        {
+            get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.MangaClickCommand); }
+            set { SetProperty(x => this.MangaClickCommand, value); }
         }
 
         public CrystalProperCommand PreviousChapterPageCommand { get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.PreviousChapterPageCommand); } set { SetProperty<CrystalProperCommand>(x => this.PreviousChapterPageCommand, value); } }
@@ -183,6 +235,23 @@ namespace MangaEpsilon.ViewModel
         {
             get { return GetPropertyOrDefaultType<List<MAL.MALReview>>(x => this.Reviews); }
             set { SetProperty(x => this.Reviews, value); }
+        }
+
+        public bool IsBusy_RelatedManga
+        {
+            get { return GetPropertyOrDefaultType<bool>(x => this.IsBusy_RelatedManga); }
+            set { SetProperty<bool>(x => this.IsBusy_RelatedManga, value); }
+        }
+        public bool IsError_RelatedManga
+        {
+            get { return GetPropertyOrDefaultType<bool>(x => this.IsError_RelatedManga); }
+            set { SetProperty<bool>(x => this.IsError_RelatedManga, value); }
+        }
+
+        public ObservableCollection<Manga.Base.Manga> RelatedManga
+        {
+            get { return GetPropertyOrDefaultType<ObservableCollection<Manga.Base.Manga>>(x => this.RelatedManga); }
+            set { SetProperty(x => this.RelatedManga, value); }
         }
     }
 }
