@@ -1,1 +1,0 @@
-Icon was created by Vijay "X@MPP" Atwater-Van Ness [ https://github.com/XAMPP ]

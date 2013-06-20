@@ -1,9 +1,0 @@
-﻿<crystal:BaseCrystalApplication x:Class="MangaEpsilon.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:crystal="clr-namespace:Crystal.Core;assembly=Amrykid.Crystal"
-             StartupUri="View\MainWindow.xaml">
-    <Application.Resources>
-         
-    </Application.Resources>
-</crystal:BaseCrystalApplication>
