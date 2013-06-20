@@ -44,6 +44,7 @@ namespace MangaEpsilon.ViewModel
                 settings = new SettingsInfo();
                 settings.CurrentTheme = Theme.Light;
                 settings.CurrentThemeAccent = "Blue";
+                settings.MinimizeToTray = false;
             }
 
             #region Theme stuff
@@ -51,12 +52,15 @@ namespace MangaEpsilon.ViewModel
             SelectedAccent = ThemeManager.DefaultAccents.First(x => x.Name == settings.CurrentThemeAccent);
             SelectedTheme = (Theme)Enum.Parse(typeof(Theme), settings.CurrentTheme.ToString());
             #endregion
+
+            App.CanMinimizeToTray = settings.MinimizeToTray;
         }
         private void SaveSettings()
         {
             SettingsInfo settings = new SettingsInfo();
             settings.CurrentTheme = SelectedTheme;
             settings.CurrentThemeAccent = SelectedAccent.Name;
+            settings.MinimizeToTray = App.CanMinimizeToTray;
 
             using (var sw = new StreamWriter(SettingsFile))
             {
@@ -98,5 +102,15 @@ namespace MangaEpsilon.ViewModel
             }
         }
         #endregion
+
+        public bool CanMinimizeToTray
+        {
+            get { return GetPropertyOrDefaultType<bool>(x => this.CanMinimizeToTray); }
+            set
+            {
+                SetProperty(x => this.CanMinimizeToTray, value);
+                App.CanMinimizeToTray = value;
+            }
+        }
     }
 }

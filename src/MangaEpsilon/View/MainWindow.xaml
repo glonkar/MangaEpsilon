@@ -13,7 +13,7 @@
         xmlns:metrigs="clr-namespace:MangaEpsilon.Triggers"
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         Title="{i18n:CrystalLocalizedValueMarkup Key='MainApplicationTitle',NullValue='MangaEpsilon'}" Height="669" Width="756" ShowTitleBar="False" x:Name="thisWindow" SaveWindowPosition="True"
-                   utils:MainWindowSetterHelper.IsMainWindow="True" WindowState="Maximized" ShowActivated="True" Closing="thisWindow_Closing" Icon="/Resources/AxVXk48.png">
+                   utils:MainWindowSetterHelper.IsMainWindow="True" WindowState="Maximized" ShowActivated="True" Closing="thisWindow_Closing" Icon="/Resources/AxVXk48.png" StateChanged="thisWindow_StateChanged">
     <Window.DataContext>
         <vm:MainPageViewModel/>
     </Window.DataContext>
@@ -475,9 +475,12 @@
                 </ObjectDataProvider>
             </metro:Flyout.Resources>
             <StackPanel>
-            <GroupBox Header="Theme" Height="Auto">
-                <StackPanel Orientation="Horizontal">
-                    <ComboBox ItemsSource="{Binding AvailableAccents, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedAccent, UpdateSourceTrigger=PropertyChanged}" Height="20" DisplayMemberPath="Name"/>
+                <GroupBox Header="General" Height="Auto">
+                    <metro:ToggleSwitch IsChecked="{Binding CanMinimizeToTray, UpdateSourceTrigger=PropertyChanged}" Header="Can Minimize To Tray?"/>
+                </GroupBox>
+                <GroupBox Header="Theme" Height="Auto">
+                    <StackPanel Orientation="Horizontal">
+                        <ComboBox ItemsSource="{Binding AvailableAccents, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedAccent, UpdateSourceTrigger=PropertyChanged}" Height="20" DisplayMemberPath="Name"/>
                         <ComboBox ItemsSource="{Binding Source={StaticResource
                                              ThemeValues}}" SelectedItem="{Binding SelectedTheme, UpdateSourceTrigger=PropertyChanged}" Height="20">
                             <ComboBox.ItemTemplate>
@@ -492,7 +495,7 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
                     </StackPanel>
-            </GroupBox>
+                </GroupBox>
             </StackPanel>
         </metro:Flyout>
     </metro:MetroWindow.Flyouts>

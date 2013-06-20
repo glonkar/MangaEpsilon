@@ -120,5 +120,7 @@ namespace MangaEpsilon
 
         internal static object CurrentTheme = null;
         internal static object CurrentThemeAccent = null;
+
+        internal static bool CanMinimizeToTray = false;
     }
 }

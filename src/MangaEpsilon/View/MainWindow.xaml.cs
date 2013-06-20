@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -50,6 +51,49 @@ namespace MangaEpsilon
                 else
                     e.Cancel = true;
             }
+
+            if (notifyIcon != null)
+                notifyIcon.Visible = false;
+        }
+
+        private System.Windows.Forms.NotifyIcon notifyIcon = null;
+
+        private void thisWindow_StateChanged(object sender, EventArgs e)
+        {
+            if (App.CanMinimizeToTray)
+            {
+                if (this.WindowState == WindowState.Minimized)
+                {
+                    if (notifyIcon == null)
+                    {
+                        notifyIcon = new System.Windows.Forms.NotifyIcon();
+                        notifyIcon.Text = this.Title;
+                        notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Assembly.GetEntryAssembly().Location);
+                    }
+
+                    notifyIcon.MouseDoubleClick += notifyIcon_MouseDoubleClick;
+
+                    notifyIcon.Visible = true;
+
+                    this.Hide();
+                }
+                else
+                    if (notifyIcon != null)
+                    {
+                        notifyIcon.MouseDoubleClick -= notifyIcon_MouseDoubleClick;
+                        notifyIcon.Visible = false;
+                    }
+            }
+        }
+
+        void notifyIcon_MouseDoubleClick(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            this.Show();
+            this.WindowState = WindowState.Normal;
+            this.Activate();
+            this.Topmost = true;  // important
+            this.Topmost = false; // important
+            this.Focus();         // important
         }
     }
 }
