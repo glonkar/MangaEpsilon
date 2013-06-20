@@ -104,8 +104,8 @@ namespace MangaEpsilon.ViewModel
                     {
                         await GetUpdatedInfo();
 
-                        await GetReviews();
-                        await GetRelatedManga();
+                        GetReviews();
+                        GetRelatedManga();
                     }
                 });
 
