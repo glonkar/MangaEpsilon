@@ -13,7 +13,7 @@
         xmlns:metrigs="clr-namespace:MangaEpsilon.Triggers"
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         Title="{i18n:CrystalLocalizedValueMarkup Key='MainApplicationTitle',NullValue='MangaEpsilon'}" Height="669" Width="756" ShowTitleBar="False" x:Name="thisWindow" SaveWindowPosition="True"
-                   utils:MainWindowSetterHelper.IsMainWindow="True" WindowState="Maximized" ShowActivated="True" Closing="thisWindow_Closing">
+                   utils:MainWindowSetterHelper.IsMainWindow="True" WindowState="Maximized" ShowActivated="True" Closing="thisWindow_Closing" Icon="/Resources/AxVXk48.png">
     <Window.DataContext>
         <vm:MainPageViewModel/>
     </Window.DataContext>
