@@ -10,7 +10,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid>
+    <Grid Background="Transparent">
         <Border BorderBrush="Blue" BorderThickness=".7" CornerRadius="2" Padding="2">
             <Grid>
                 <Label Content="{Binding Title,Mode=OneTime}" Height="40" Margin="67,2,12,0" Name="label1" VerticalAlignment="Top" FontSize="17" Opacity="1.0" />
