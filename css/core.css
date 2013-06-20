@@ -6,11 +6,11 @@ body {
 /* http://www.tizag.com/cssT/float.php */
 img.floatLeft { 
     float: left; 
-    margin: 6px; 
+    margin: 6px 20px 0 0; 
 }
 img.floatRight { 
     float: right; 
-    margin: 6px; 
+    margin: 6px 0 0 20px;
 }
 /* */
 
@@ -41,4 +41,8 @@ img.footer-icon {
 	height: 100px;
 	float: left;
 	margin: 10px;
+}
+
+div.featureDiv {
+	text-align: center;
 }
