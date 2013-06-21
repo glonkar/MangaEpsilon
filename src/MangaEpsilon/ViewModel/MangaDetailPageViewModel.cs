@@ -28,7 +28,7 @@ namespace MangaEpsilon.ViewModel
         {
             IsBusy = true;
 
-            var selectedManga = (Manga.Base.Manga)argument[0].Value;
+            MangaEpsilon.Manga.Base.Manga selectedManga = (Manga.Base.Manga)argument[0].Value;
 
             //create a copy since directly binding to the Chapters collection slows the app down if there is 500+ entries.
             Manga = new Manga.Base.Manga();
@@ -57,7 +57,12 @@ namespace MangaEpsilon.ViewModel
                     var chapter = ((ChapterEntry)o);
                     var manga = chapter.ParentManga;
 
-                    Messenger.PushMessage(this, "MangaChapterDownload", chapter);
+
+                    if (SelectedChapterItems.Length == 1 && SelectedChapterItems[0] == chapter)
+                        Messenger.PushMessage(this, "MangaChapterDownload", chapter);
+                    else
+                        foreach(ChapterEntry chap in SelectedChapterItems)
+                            Messenger.PushMessage(this, "MangaChapterDownload", chap);
                 }
             }, (o) =>
                 o != null && o is ChapterEntry && !LibraryService.Contains((ChapterEntry)o));
@@ -204,6 +209,16 @@ namespace MangaEpsilon.ViewModel
             set
             {
                 SetProperty(x => this.SelectedChapterItem, value);
+                System.Windows.Input.CommandManager.InvalidateRequerySuggested();
+            }
+        }
+
+        public ChapterEntry[] SelectedChapterItems
+        {
+            get { return (ChapterEntry[])GetProperty(x => this.SelectedChapterItems); }
+            set
+            {
+                SetProperty(x => this.SelectedChapterItems, value);
                 System.Windows.Input.CommandManager.InvalidateRequerySuggested();
             }
         }

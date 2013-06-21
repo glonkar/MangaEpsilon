@@ -32,5 +32,12 @@ namespace MangaEpsilon.View
         {
             ThemeManager.ChangeTheme(this, (Accent)App.CurrentThemeAccent, (Theme)App.CurrentTheme);
         }
+
+        private void chaptersGridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //hack because SelectedItems cannot be bound to.
+            if (chaptersGridView.SelectedItems != null)
+                ((MangaDetailPageViewModel)this.DataContext).SelectedChapterItems = (MangaEpsilon.Manga.Base.ChapterEntry[])chaptersGridView.SelectedItems.Cast<MangaEpsilon.Manga.Base.ChapterEntry>().ToArray();
+        }
     }
 }

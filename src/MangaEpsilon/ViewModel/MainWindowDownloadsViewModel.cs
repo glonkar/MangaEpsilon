@@ -72,7 +72,7 @@ namespace MangaEpsilon.ViewModel
 
             var chap = await App.MangaSource.GetChapterLight(chapter);
 
-            if (!LibraryService.Contains(chap))
+            if (!LibraryService.Contains(chap) && !Downloads.Any(x => x.Chapter.Name == chap.Name))
             {
                 Downloads.Enqueue(new MangaChapterDownload(chap) { MaxProgress = chap.PagesUrls.Count, Status = MangaChapterDownloadStatus.Queued });
 

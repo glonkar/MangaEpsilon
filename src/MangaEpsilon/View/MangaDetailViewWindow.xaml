@@ -141,7 +141,8 @@
                     </Grid>
                     <StackPanel Orientation="Vertical">
                         <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='AboutSection',NullValue='about'}" DataContext="{Binding Manga, UpdateSourceTrigger=PropertyChanged}">
-                            <TextBlock FontSize="17" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" Width="450" HorizontalAlignment="Center" x:Name="DescriptionTextBlock" />
+                            <TextBlock FontSize="17" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" TextWrapping="Wrap" 
+                                       TextTrimming="CharacterEllipsis" Width="450" HorizontalAlignment="Center" x:Name="DescriptionTextBlock" />
                         </GroupBox>
 
                         <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='ChaptersSection',NullValue='chapters'}">
@@ -149,7 +150,9 @@
                                 <ListBox ItemsSource="{Binding MangaChapters, UpdateSourceTrigger=PropertyChanged, Delay=1000}" Margin="20 20 0 0" Visibility="Visible" HorizontalAlignment="Left" 
 									x:Name="chaptersGridView" VerticalAlignment="Stretch" 
                                     Width="625" Height="Auto" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" 
-                                    SelectedItem="{Binding SelectedChapterItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ItemTemplateSelector="{StaticResource ChapterTemplateSelector}">
+                                    SelectedItem="{Binding SelectedChapterItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                    SelectionMode="Extended" SelectionChanged="chaptersGridView_SelectionChanged"
+                                    ItemTemplateSelector="{StaticResource ChapterTemplateSelector}">
                                     <ListBox.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <WrapPanel IsItemsHost="True" ItemHeight="50" Width="600" />
@@ -157,7 +160,8 @@
                                     </ListBox.ItemsPanel>
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseDoubleClick">
-                                            <i:InvokeCommandAction Command="{Binding DataContext.OpenMangaChapterCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" CommandParameter="{Binding SelectedChapterItem}"/>
+                                            <i:InvokeCommandAction Command="{Binding DataContext.OpenMangaChapterCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                                                                   CommandParameter="{Binding SelectedChapterItem}"/>
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                     <ListBox.ContextMenu>
