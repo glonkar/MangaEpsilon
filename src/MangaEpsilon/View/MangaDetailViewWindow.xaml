@@ -29,23 +29,45 @@
             <conv:ThumbnailImageCachingConverter x:Key="TImgCache"/>
 
             <DataTemplate x:Key="DefaultChapterTemplate">
-                <Grid Background="Gray" Width="50" Height="50" Margin="0 1 0 1" Cursor="Hand" ToolTip="{Binding Subtitle}">
-                    <TextBlock Text="{Binding VolumeNumber}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid Background="Gray" x:Name="SelfGrid" Width="50" Height="50" Margin="0 1 0 1" Cursor="Hand" ToolTip="{Binding Subtitle}">
+                    <TextBlock Text="{Binding VolumeNumber}" x:Name="InnerText" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <TextBlock.Foreground>
                             <SolidColorBrush Color="{StaticResource WhiteColor}" />
                         </TextBlock.Foreground>
                     </TextBlock>
                 </Grid>
+                <DataTemplate.Triggers>
+                    <DataTrigger
+                        Binding="{Binding
+                            RelativeSource={RelativeSource
+                                Mode=FindAncestor,
+                                AncestorType={x:Type ListBoxItem}},
+                                Path=IsSelected}" Value="True">
+                        <Setter TargetName="SelfGrid" Property="Background" Value="Gold"/>
+                        <Setter TargetName="InnerText" Property="Foreground" Value="Black"/>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
             </DataTemplate>
 
             <DataTemplate x:Key="DownloadedChapterTemplate">
-                <Grid Background="{DynamicResource AccentColorBrush}" Width="50" Height="50" Margin="0 1 0 1" Cursor="Hand" ToolTip="{Binding Subtitle}">
-                    <TextBlock Text="{Binding VolumeNumber}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid Background="{DynamicResource AccentColorBrush}" x:Name="SelfGrid" Width="50" Height="50" Margin="0 1 0 1" Cursor="Hand" ToolTip="{Binding Subtitle}">
+                    <TextBlock Text="{Binding VolumeNumber}" x:Name="InnerText" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <TextBlock.Foreground>
                             <SolidColorBrush Color="{StaticResource WhiteColor}" />
                         </TextBlock.Foreground>
                     </TextBlock>
                 </Grid>
+                <DataTemplate.Triggers>
+                    <DataTrigger
+                        Binding="{Binding
+                            RelativeSource={RelativeSource
+                                Mode=FindAncestor,
+                                AncestorType={x:Type ListBoxItem}},
+                                Path=IsSelected}" Value="True">
+                        <Setter TargetName="SelfGrid" Property="Background" Value="Gold"/>
+                        <Setter TargetName="InnerText" Property="Foreground" Value="Black"/>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
             </DataTemplate>
 
             <selectors:MangaDetailViewChapterTemplateSelector 
