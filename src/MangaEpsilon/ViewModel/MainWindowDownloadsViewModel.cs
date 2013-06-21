@@ -145,11 +145,10 @@ namespace MangaEpsilon.ViewModel
                             {
                                 Messenger.PushMessage(this, "UpdateMainWindowState", System.Windows.Shell.TaskbarItemProgressState.None);
                                 Notifications.NotificationsService.AddNotification("Download Failed!", download.Chapter.Name + " has failed to download.");
-                                return;
                             }
                         }
 
-                        if (download.Status == MangaChapterDownloadStatus.Downloading)
+                        if (download.Status == MangaChapterDownloadStatus.Downloading && !error)
                             download.Status = MangaChapterDownloadStatus.Completed;
                     }
 
