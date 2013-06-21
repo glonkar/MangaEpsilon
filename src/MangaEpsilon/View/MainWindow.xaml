@@ -443,7 +443,11 @@
                             <GridViewColumn Header="{i18n:CrystalLocalizedValueMarkup Key='MangaDownloadProgressColumn',NullValue='Progress'}" Width="300">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ProgressBar Value="{Binding Progress, UpdateSourceTrigger=PropertyChanged}" Maximum="{Binding MaxProgress, UpdateSourceTrigger=PropertyChanged}"/>
+                                        <metro:MetroProgressBar Value="{Binding Progress, UpdateSourceTrigger=PropertyChanged}" Maximum="{Binding MaxProgress, UpdateSourceTrigger=PropertyChanged}">
+                                            <ProgressBar.Foreground>
+                                                <SolidColorBrush Color="{DynamicResource AccentColor}"/>
+                                            </ProgressBar.Foreground>
+                                        </metro:MetroProgressBar>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
