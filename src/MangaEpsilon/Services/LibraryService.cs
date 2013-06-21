@@ -25,13 +25,14 @@ namespace MangaEpsilon.Services
                         Directory.CreateDirectory(LibraryDirectory);
 
                     if (!File.Exists(LibraryFile))
-                        LibraryCollection = new Collection<Tuple<Manga.Base.ChapterLight, string>>();
+                        LibraryCollection = new ObservableCollection<Tuple<Manga.Base.ChapterLight, string>>();
                     else
                         using (var sr = new StreamReader(LibraryFile))
                         {
                             using (var jtr = new JsonTextReader(sr))
                             {
-                                LibraryCollection = App.DefaultJsonSerializer.Deserialize<Collection<Tuple<Manga.Base.ChapterLight, string>>>(jtr);
+                                LibraryCollection = App.DefaultJsonSerializer.Deserialize<ObservableCollection<Tuple<Manga.Base.ChapterLight, string>>>(jtr);
+                                LibraryCollection = new ObservableCollection<Tuple<Manga.Base.ChapterLight, string>>(LibraryCollection.OrderBy(x => x.Item1.VolumeNumber));
                             }
                         }
                 });
@@ -60,7 +61,7 @@ namespace MangaEpsilon.Services
             }
         }
 
-        internal static Collection<Tuple<Manga.Base.ChapterLight, string>> LibraryCollection = null;
+        internal static ObservableCollection<Tuple<Manga.Base.ChapterLight, string>> LibraryCollection = null;
 
         public static string LibraryDirectory { get; private set; }
         internal static string LibraryFile { get; private set; }
