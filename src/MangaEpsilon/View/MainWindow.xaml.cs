@@ -28,7 +28,6 @@ namespace MangaEpsilon
         public MainWindow()
         {
             InitializeComponent();
-            Notifications.NotificationsService.AddNotification("moo", "moo");
         }
 
         private void itemListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
