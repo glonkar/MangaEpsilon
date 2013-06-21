@@ -11,6 +11,7 @@ namespace MangaEpsilon.Notifications
         public string Message { get; set; }
         public int Duration { get; set; }
         public bool IsUrgent { get; set; }
+        public object Image { get; set; }
         public NotificationType Type { get; set; }
         public Action<NotificationInfo> OnClickCallback { get; set; }
     }

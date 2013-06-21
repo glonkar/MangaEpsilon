@@ -159,7 +159,7 @@ namespace MangaEpsilon.ViewModel
                         {
                             LibraryService.AddLibraryItem(new Tuple<ChapterLight, string>(download.Chapter, downloadPath));
 
-                            Notifications.NotificationsService.AddNotification("Download Completed!", download.Chapter.Name + " Downloaded");
+                            Notifications.NotificationsService.AddNotification("Download Completed!", download.Chapter.Name + " Downloaded", download.Chapter.ParentManga.BookImageUrl);
                         }
                     }
 

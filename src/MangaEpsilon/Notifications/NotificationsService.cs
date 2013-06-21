@@ -43,7 +43,7 @@ namespace MangaEpsilon.Notifications
         }
 
 
-        public static void AddNotification(string title, string message = "", int duration = 3000, bool isUrgent = false, NotificationType type = NotificationType.Information, Action<NotificationInfo> onClickCallback = null)
+        public static void AddNotification(string title, string message = "", object image = null, int duration = 3000, bool isUrgent = false, NotificationType type = NotificationType.Information, Action<NotificationInfo> onClickCallback = null)
         {
             if (System.Windows.Application.Current == null)
                 return;
@@ -64,6 +64,7 @@ namespace MangaEpsilon.Notifications
                         Message = message,
                         Duration = duration,
                         IsUrgent = isUrgent,
+                        Image = image,
                         Type = type,
                         OnClickCallback = onClickCallback
                     });

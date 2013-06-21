@@ -13,6 +13,8 @@ using System.Windows.Shapes;
 using System.Windows.Media.Animation;
 using System.Timers;
 using System.Threading;
+using MahApps.Metro.Controls;
+using MahApps.Metro;
 
 namespace MangaEpsilon.Notifications
 {
@@ -20,7 +22,7 @@ namespace MangaEpsilon.Notifications
     /// Interaction logic for NotificationsWindow.xaml
     /// Based on code written by XAMPP (http://github.com/XAMPP) for Notifications in MangaEplision (http://github.com/Amrykid/MangaEplision)
     /// </summary>
-    public partial class NotificationsWindow : Window
+    public partial class NotificationsWindow : MetroWindow
     {
         private Storyboard aniStry;
         private DoubleAnimation heightAni;
@@ -30,6 +32,8 @@ namespace MangaEpsilon.Notifications
         public NotificationsWindow()
         {
             InitializeComponent();
+
+            ThemeManager.ChangeTheme(this, (Accent)App.CurrentThemeAccent, (Theme)App.CurrentTheme);
 
             this.Loaded += NotificationsWindow_Loaded;
             this.Unloaded += NotificationsWindow_Unloaded;
@@ -76,14 +80,6 @@ namespace MangaEpsilon.Notifications
         void NotificationsWindow_Loaded(object sender, RoutedEventArgs e)
         {
             var info = ((NotificationInfo)this.DataContext);
-
-            switch (info.Type)
-            {
-                case NotificationType.Information: iconRectBrush.Visual = (Visual)this.Resources["appbar_notification"];
-                    break;
-                case NotificationType.Error: iconRectBrush.Visual = (Visual)this.Resources["appbar_error"];
-                    break;
-            }
 
             if (info.OnClickCallback != null)
             {
