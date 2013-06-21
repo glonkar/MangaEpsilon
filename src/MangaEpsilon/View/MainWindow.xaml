@@ -448,6 +448,11 @@
                             </GridViewColumn>
                         </GridView>
                     </ListView.View>
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='CancelMangaDownloadItem',NullValue='Cancel Download'}"/>
+                        </ContextMenu>
+                    </ListView.ContextMenu>
                 </ListView>
             </metro:MetroTabItem>
         </metro:MetroAnimatedSingleRowTabControl>
@@ -475,10 +480,10 @@
                 </ObjectDataProvider>
             </metro:Flyout.Resources>
             <StackPanel>
-                <GroupBox Header="General" Height="Auto">
-                    <metro:ToggleSwitch IsChecked="{Binding CanMinimizeToTray, UpdateSourceTrigger=PropertyChanged}" Header="Can Minimize To Tray?"/>
+                <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='GeneralSettingsHeader',NullValue='General'}" Height="Auto">
+                    <metro:ToggleSwitch IsChecked="{Binding CanMinimizeToTray, UpdateSourceTrigger=PropertyChanged}" Header="{i18n:CrystalLocalizedValueMarkup Key='Can Minimize To Tray?',NullValue='Can Minimize To Tray?'}"/>
                 </GroupBox>
-                <GroupBox Header="Theme" Height="Auto">
+                <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='ThemeSettingsHeader',NullValue='Theme'}" Height="Auto">
                     <StackPanel Orientation="Horizontal">
                         <ComboBox ItemsSource="{Binding AvailableAccents, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedAccent, UpdateSourceTrigger=PropertyChanged}" Height="20" DisplayMemberPath="Name"/>
                         <ComboBox ItemsSource="{Binding Source={StaticResource
