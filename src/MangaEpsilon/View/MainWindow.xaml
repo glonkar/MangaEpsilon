@@ -433,7 +433,7 @@
                 <TabItem.DataContext>
                     <vm:MainWindowDownloadsViewModel/>
                 </TabItem.DataContext>
-                <ListView ItemsSource="{Binding Downloads, UpdateSourceTrigger=PropertyChanged}">
+                <ListView ItemsSource="{Binding Downloads, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" x:Name="downloadsListView">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="{i18n:CrystalLocalizedValueMarkup Key='MangaDownloadNameColumn',NullValue='Name'}" DisplayMemberBinding="{Binding Chapter.Name}" Width="Auto"/>
@@ -450,7 +450,7 @@
                     </ListView.View>
                     <ListView.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='CancelMangaDownloadItem',NullValue='Cancel Download'}"/>
+                            <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='CancelMangaDownloadItem',NullValue='Cancel Download'}" Command="{Binding CancelDownloadCommand}" CommandParameter="{Binding SelectedItem}"/>
                         </ContextMenu>
                     </ListView.ContextMenu>
                 </ListView>

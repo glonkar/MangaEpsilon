@@ -40,8 +40,10 @@ namespace MangaEpsilon.Model
     }
     public enum MangaChapterDownloadStatus
     {
+        Canceled = -1,
         None = 0,
         Queued = 1,
-        Downloading = 2
+        Downloading = 2,
+        Completed = 3
     }
 }

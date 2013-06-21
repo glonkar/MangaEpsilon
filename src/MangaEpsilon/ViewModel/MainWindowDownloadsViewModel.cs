@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Crystal.Command;
 using Crystal.Core;
 using Crystal.Messaging;
 using MangaEpsilon.Manga.Base;
@@ -18,8 +19,39 @@ namespace MangaEpsilon.ViewModel
     {
         public MainWindowDownloadsViewModel()
         {
+            if (IsDesignMode) return;
+
             Downloads = new ObservableQueue<MangaChapterDownload>();
             RegisterForMessages("MangaChapterDownload");
+
+            CancelDownloadCommand = CommandManager.CreateProperCommand((o) =>
+            {
+                var download = (MangaChapterDownload)o;
+
+                if (download.Status == MangaChapterDownloadStatus.Downloading && Downloads.Peek() == download)
+                {
+                    download = Downloads.Peek(); //set a reference.
+                    download.Status = MangaChapterDownloadStatus.Canceled;
+                }
+                else
+                {
+                    List<MangaChapterDownload> downloadsToRequeue = new List<MangaChapterDownload>();
+
+                    while (Downloads.Count > 0)
+                    {
+                        var mangaChapter = Downloads.Dequeue();
+                        if (mangaChapter != o)
+                            downloadsToRequeue.Add(mangaChapter);
+                    }
+
+                    foreach (var d in downloadsToRequeue)
+                        Downloads.Enqueue(d);
+                }
+            },
+            (o) =>
+            {
+                return o != null && o is MangaChapterDownload;
+            });
         }
 
         public override bool ReceiveMessage(object source, Crystal.Messaging.Message message)
@@ -80,6 +112,9 @@ namespace MangaEpsilon.ViewModel
 
                         foreach (var pageUrl in download.Chapter.PagesUrls)
                         {
+                            if (download.Status == MangaChapterDownloadStatus.Canceled)
+                                break;
+
                             var url = new Uri(pageUrl.ToString());
 
                             var filename = url.Segments.Last();
@@ -113,15 +148,21 @@ namespace MangaEpsilon.ViewModel
                                 return;
                             }
                         }
+
+                        if (download.Status == MangaChapterDownloadStatus.Downloading)
+                            download.Status = MangaChapterDownloadStatus.Completed;
                     }
 
-                    if (!error)
+                    if (download.Status == MangaChapterDownloadStatus.Completed)
                     {
-                        LibraryService.AddLibraryItem(new Tuple<ChapterLight, string>(download.Chapter, downloadPath));                    
+                        if (!error)
+                        {
+                            LibraryService.AddLibraryItem(new Tuple<ChapterLight, string>(download.Chapter, downloadPath));
 
-                        Notifications.NotificationsService.AddNotification("Download Completed!", download.Chapter.Name + " Downloaded");
+                            Notifications.NotificationsService.AddNotification("Download Completed!", download.Chapter.Name + " Downloaded");
+                        }
                     }
-                    
+
                     Downloads.Dequeue();
                 }
 
@@ -135,6 +176,18 @@ namespace MangaEpsilon.ViewModel
         {
             get { return GetPropertyOrDefaultType<ObservableQueue<MangaChapterDownload>>(x => this.Downloads); }
             set { SetProperty<ObservableQueue<MangaChapterDownload>>(x => this.Downloads, value); }
+        }
+
+        public MangaChapterDownload SelectedItem
+        {
+            get { return GetPropertyOrDefaultType<MangaChapterDownload>(x => this.SelectedItem); }
+            set { SetProperty(x => this.SelectedItem, value); System.Windows.Input.CommandManager.InvalidateRequerySuggested(); }
+        }
+
+        public CrystalProperCommand CancelDownloadCommand
+        {
+            get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.CancelDownloadCommand); }
+            set { SetProperty(x => this.CancelDownloadCommand, value); }
         }
 
     }
