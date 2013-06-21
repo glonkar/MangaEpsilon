@@ -11,6 +11,7 @@
         xmlns:i18n="clr-namespace:Crystal.Localization;assembly=Amrykid.Crystal"
         xmlns:conv="clr-namespace:MangaEpsilon.Converters"
         xmlns:metrigs="clr-namespace:MangaEpsilon.Triggers"
+        xmlns:meap="clr-namespace:MangaEpsilon.AttachedProperties"
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         Title="{i18n:CrystalLocalizedValueMarkup Key='MainApplicationTitle',NullValue='MangaEpsilon'}" Height="669" Width="756" ShowTitleBar="False" x:Name="thisWindow" SaveWindowPosition="True"
                    utils:MainWindowSetterHelper.IsMainWindow="True" WindowState="Maximized" ShowActivated="True" Closing="thisWindow_Closing" Icon="/Resources/AxVXk48.png" StateChanged="thisWindow_StateChanged">
@@ -40,7 +41,7 @@
             <BooleanToVisibilityConverter x:Key="BTV"/>
 
             <DataTemplate x:Key="MangaListBoxItemTemplate">
-                <Grid HorizontalAlignment="Left" Width="250" Height="250" Margin="6" Cursor="Hand">
+                <Grid HorizontalAlignment="Left" Width="250" Height="250" Margin="6" Cursor="Hand" meap:LoadedOnceHelper.HandleLoadedBefore="True">
                     <Grid.CacheMode>
                         <BitmapCache EnableClearType="True" RenderAtScale="1.0" />
                     </Grid.CacheMode>
@@ -83,7 +84,7 @@
                 </Setter>
                 <Setter Property="ContentTemplate" Value="{StaticResource MangaListBoxItemTemplate}"/>
                 <Style.Triggers>
-                    <EventTrigger RoutedEvent="Loaded">
+                    <EventTrigger RoutedEvent="meap:LoadedOnceHelper.FirstLoaded">
                         <EventTrigger.Actions>
                             <BeginStoryboard Name="LoadedStoryBoardBegin">
                                 <Storyboard  Timeline.DesiredFrameRate="60">
