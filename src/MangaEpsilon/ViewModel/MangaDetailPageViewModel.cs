@@ -135,21 +135,21 @@ namespace MangaEpsilon.ViewModel
                 IsBusy_RelatedManga = true;
 
                 await Task.Run(() =>
-                    {
-                        var results = Yukihyo.MAL.MyAnimeListAPI.Search(Manga.MangaName, Yukihyo.MAL.MALSearchType.manga);
-                        var results2 = results.Where(x =>
-                                x.Title.ToLower().Trim() != Manga.MangaName.ToLower().Trim() &&
-                                App.MangaSource.AvailableManga.Any(y =>
-                                    LevenshteinDistance.Compute(y.MangaName.ToLower().Trim(), x.Title.ToLower().Trim()) <= 2)).ToArray();
+                {
+                    var results = Yukihyo.MAL.MyAnimeListAPI.Search(Manga.MangaName, Yukihyo.MAL.MALSearchType.manga);
+                    var results2 = results.Where(x =>
+                            x.Title.ToLower().Trim() != Manga.MangaName.ToLower().Trim() &&
+                            App.MangaSource.AvailableManga.Any(y =>
+                                LevenshteinDistance.Compute(y.MangaName.ToLower().Trim(), x.Title.ToLower().Trim()) <= 2)).ToArray();
 
 
-                        RelatedManga = new ObservableCollection<Manga.Base.Manga>(
-                            results2.Select(x =>
-                                App.MangaSource.AvailableManga.Find(y =>
-                                    LevenshteinDistance.Compute(y.MangaName, x.Title) <= 2 && y.MangaName != Manga.MangaName))
-                                    .Where(x => x != null));
+                    RelatedManga = new ObservableCollection<Manga.Base.Manga>(
+                        results2.Select(x =>
+                            App.MangaSource.AvailableManga.Find(y =>
+                                LevenshteinDistance.Compute(y.MangaName, x.Title) <= 2 && y.MangaName != Manga.MangaName))
+                            .Where(x => x != null));
 
-                    });
+                });
                 IsBusy_RelatedManga = false;
             }
             catch (Exception)
