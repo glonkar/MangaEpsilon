@@ -99,5 +99,10 @@ namespace MangaEpsilon.View
             }
             return null;
         }
+
+        private void FlipViewer_MouseEnter(object sender, MouseEventArgs e)
+        {
+            FlipViewer.Focus();
+        }
     }
 }

@@ -32,7 +32,7 @@
     <Window.DataContext>
         <vm:MangaChapterViewPageViewModel/>
     </Window.DataContext>
-    <Grid x:Name="MainGrid">
+    <Grid x:Name="MainGrid" FocusVisualStyle="{x:Null}" Focusable="False">
         <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" 
                             HorizontalAlignment="Stretch" Width="40" Height="40" 
                             x:Name="MainProgressIndictator" IsActive="{Binding IsBusy, UpdateSourceTrigger=PropertyChanged}" Visibility="Visible"></metro:ProgressRing>
@@ -41,7 +41,7 @@
         </Grid>
         <metro:FlipView ItemsSource="{Binding Pages, UpdateSourceTrigger=PropertyChanged}" 
                         SelectedIndex="{Binding CurrentPageIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                        x:Name="FlipViewer" SelectionChanged="FlipViewer_SelectionChanged" IsBannerEnabled="False" Margin="0 30 0 30">
+                        x:Name="FlipViewer" SelectionChanged="FlipViewer_SelectionChanged" IsBannerEnabled="False" Margin="0 30 0 30" FocusVisualStyle="{x:Null}" MouseEnter="FlipViewer_MouseEnter">
             <metro:FlipView.ItemTemplate>
                 <DataTemplate>
                     <ScrollViewer HorizontalScrollBarVisibility="Visible" x:Name="Scroller">
