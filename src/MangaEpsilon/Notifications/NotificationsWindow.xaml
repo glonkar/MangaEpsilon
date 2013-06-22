@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:conv="clr-namespace:MangaEpsilon.Converters"
-        Title="Notifications Window" Height="100" Width="350" ResizeMode="NoResize" WindowStyle="None" ShowInTaskbar="False" ShowTitleBar="False" ShowActivated="True" Topmost="True" Opacity="0.8" AllowsTransparency="True">
+        Title="Notifications Window" Height="100" Width="350" ResizeMode="NoResize" WindowStyle="None" ShowInTaskbar="False" ShowTitleBar="False" ShowActivated="True" 
+                   Topmost="True" Opacity="0.8" AllowsTransparency="True" x:Name="thisWindow">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -19,13 +20,13 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid Background="Transparent">
-        <Border BorderBrush="Blue" BorderThickness=".7" CornerRadius="2" Padding="2">
+        <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness=".7" CornerRadius="4" Padding="3">
             <Grid>
                 <StackPanel Orientation="Horizontal">
                     <Image Source="{Binding Image, Mode=OneTime, Converter={StaticResource TImgCache}, ConverterParameter=100}" MaxWidth="100"/>
                     <StackPanel HorizontalAlignment="Stretch">
                         <Label Content="{Binding Title, Mode=OneTime}" Height="40" Name="label1" VerticalAlignment="Top" FontSize="17" Opacity="1.0" />
-                        <TextBlock Name="textBlock1" Margin="4 0 0 0" Text="{Binding Message, Mode=OneTime}" TextWrapping="Wrap" FontSize="15" />
+                        <TextBlock Name="textBlock1" Margin="4 0 0 0" Text="{Binding Message, Mode=OneTime}" TextWrapping="Wrap" FontSize="15" Width="Auto" MaxWidth="{Binding ElementName=thisWindow, Path=ActualWidth}" />
                     </StackPanel>
                 </StackPanel>
             </Grid>
