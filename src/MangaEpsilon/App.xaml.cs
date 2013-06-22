@@ -39,6 +39,9 @@ namespace MangaEpsilon
             if (!Directory.Exists(AppDataDir))
                 Directory.CreateDirectory(AppDataDir);
 
+            CatalogFile = App.AppDataDir + "Manga.jmc";
+            oldCatalogFile = App.AppDataDir + "Manga.json";
+
             ImageCacheDir = AppDataDir + "ImageCache\\";
 
             if (!Directory.Exists(ImageCacheDir))
@@ -76,9 +79,9 @@ namespace MangaEpsilon
         {
             App.MangaSource = new MangaEpsilon.Manga.Sources.MangaEden.MangaEdenSource();
 
-            if (File.Exists(App.AppDataDir + "Manga.json"))
+            if (File.Exists(CatalogFile))
             {
-                App.MangaSource.LoadAvilableMangaFromFile(App.AppDataDir + "Manga.json");
+                App.MangaSource.LoadAvilableMangaFromFile(CatalogFile);
 
                 if (App.MangaSource.AvailableManga == null)
                 {
@@ -87,9 +90,16 @@ namespace MangaEpsilon
             }
             else
             {
+                if (File.Exists(oldCatalogFile))
+                {
+                    // see LibraryService.cs, line 20 for reasoning as to why im converting...well...in this case..deleting things.
+                    File.Delete(oldCatalogFile);
+                }
+
                 await App.MangaSource.AcquireAvailableManga();
                 await SaveAvailableManga();
                 await Task.Delay(500);
+
             }
         }
 
@@ -97,7 +107,7 @@ namespace MangaEpsilon
         {
             var preloaded = App.MangaSource.AvailableManga;
 
-            using (var sw = new StreamWriter(App.AppDataDir + "Manga.json", false))
+            using (var sw = new StreamWriter(CatalogFile, false))
             {
                 using (var jtw = new Newtonsoft.Json.JsonTextWriter(sw))
                 {
@@ -112,6 +122,8 @@ namespace MangaEpsilon
         public static MangaEpsilon.Manga.Base.IMangaSource MangaSource { get; set; }
 
         public static readonly string AppDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\MangaEpsilon\\";
+        internal static string CatalogFile = null;
+        internal static string oldCatalogFile = null;
         public static string ImageCacheDir = null;
         internal static Task MangaSourceInitializationTask = null;
         internal static Task LibraryInitializationTask = null;

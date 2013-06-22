@@ -30,7 +30,7 @@
 
             <DataTemplate x:Key="DefaultChapterTemplate">
                 <Grid Background="Gray" x:Name="SelfGrid" Width="50" Height="50" Margin="0 1 0 1" Cursor="Hand" ToolTip="{Binding Subtitle}">
-                    <TextBlock Text="{Binding VolumeNumber}" x:Name="InnerText" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding ChapterNumber}" x:Name="InnerText" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <TextBlock.Foreground>
                             <SolidColorBrush Color="{StaticResource WhiteColor}" />
                         </TextBlock.Foreground>
@@ -51,7 +51,7 @@
 
             <DataTemplate x:Key="DownloadedChapterTemplate">
                 <Grid Background="{DynamicResource AccentColorBrush}" x:Name="SelfGrid" Width="50" Height="50" Margin="0 1 0 1" Cursor="Hand" ToolTip="{Binding Subtitle}">
-                    <TextBlock Text="{Binding VolumeNumber}" x:Name="InnerText" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding ChapterNumber}" x:Name="InnerText" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <TextBlock.Foreground>
                             <SolidColorBrush Color="{StaticResource WhiteColor}" />
                         </TextBlock.Foreground>

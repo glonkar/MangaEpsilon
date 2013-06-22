@@ -98,7 +98,7 @@ namespace MangaEpsilon.ViewModel
                     download.Status = MangaChapterDownloadStatus.Downloading;
 
 
-                    var downloadPath = LibraryService.LibraryDirectory + download.Chapter.ParentManga.MangaName + "\\" + download.Chapter.VolumeNumber.ToString() + "\\";
+                    var downloadPath = LibraryService.LibraryDirectory + download.Chapter.ParentManga.MangaName + "\\" + download.Chapter.ChapterNumber.ToString() + "\\";
 
                     if (!Directory.Exists(downloadPath))
                         Directory.CreateDirectory(downloadPath);

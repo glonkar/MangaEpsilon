@@ -22,6 +22,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
             ChapterLight light = new ChapterLight(chapter.ParentManga);
             light.Name = chapter.Name;
             light.ID = chapter.ID;
+            light.ChapterNumber = chapter.ChapterNumber;
             light.VolumeNumber = chapter.VolumeNumber;
             light.PagesUrls = new List<string>();
 
@@ -29,7 +30,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
             {
                 var updatedParentManga = await GetMangaInfo(chapter.ParentManga.MangaName, false);
 
-                var updatedChapter = updatedParentManga.Chapters.First(x => x.VolumeNumber == light.VolumeNumber);
+                var updatedChapter = updatedParentManga.Chapters.First(x => x.ChapterNumber == light.ChapterNumber);
 
                 light.ID = updatedChapter.ID;
             }
@@ -119,18 +120,18 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
 
                                 entry.ReleaseDate = time;
 
-                                entry.VolumeNumber = double.Parse(chapterNum.ToString());
+                                entry.ChapterNumber = double.Parse(chapterNum.ToString());
 
                                 entry.Subtitle = chapter[2];
 
                                 entry.ID = chapter[3] as string;
 
 
-                                if (!manga.Chapters.Any(x => x.VolumeNumber == entry.VolumeNumber))
+                                if (!manga.Chapters.Any(x => x.ChapterNumber == entry.ChapterNumber))
                                     manga.Chapters.Add(entry);
                             }
 
-                            manga.Chapters = new System.Collections.ObjectModel.ObservableCollection<ChapterEntry>(manga.Chapters.OrderByDescending(x => x.VolumeNumber));
+                            manga.Chapters = new System.Collections.ObjectModel.ObservableCollection<ChapterEntry>(manga.Chapters.OrderByDescending(x => x.ChapterNumber));
                         });
 
                     AvailableManga[index] = manga;
@@ -196,7 +197,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
 
                 entry.Name = string.Format("{0} #{1}",
                     name, chapterNum);
-                entry.VolumeNumber = double.Parse(chapterNum);
+                entry.ChapterNumber = double.Parse(chapterNum);
 
                 entry.ReleaseDate = DateTime.Parse(date);
 

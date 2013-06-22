@@ -16,7 +16,10 @@ namespace MangaEpsilon.Services
             if (IsInitialized) return;
 
             LibraryDirectory = App.AppDataDir + "Library\\";
-            LibraryFile = LibraryDirectory + "Library.json";
+            LibraryFile = LibraryDirectory + "Library.jml";
+            oldLibraryFile = LibraryDirectory + "Library.json"; /* got chapter number and volume number mixed up so I am changing the filename in order 
+                                                               * to have a way to check for 'old library format' and 'new library format' which is really just an excuse to rebuild the library.
+                                                               */
 
             await Task.Run(() =>
                 {
@@ -25,14 +28,39 @@ namespace MangaEpsilon.Services
                         Directory.CreateDirectory(LibraryDirectory);
 
                     if (!File.Exists(LibraryFile))
+                    {
                         LibraryCollection = new ObservableCollection<Tuple<Manga.Base.ChapterLight, string>>();
+
+                        if (File.Exists(oldLibraryFile))
+                        {
+                            //as stated above, convert the old format to the new format.
+                            using (var sr = new StreamReader(oldLibraryFile))
+                            {
+                                using (var jtr = new JsonTextReader(sr))
+                                {
+                                    ObservableCollection<Tuple<Manga.Base.ChapterLight, string>> oldLibraryItems = App.DefaultJsonSerializer.Deserialize<ObservableCollection<Tuple<Manga.Base.ChapterLight, string>>>(jtr);
+
+                                    foreach (Tuple<Manga.Base.ChapterLight, string> item in oldLibraryItems)
+                                    {
+                                        item.Item1.ChapterNumber = item.Item1.VolumeNumber;
+                                        item.Item1.VolumeNumber = 0.0;
+                                        LibraryCollection.Add(item);
+                                    }
+
+                                    oldLibraryItems.Clear();
+                                }
+                            }
+
+                            File.Delete(oldLibraryFile);
+                        }
+                    }
                     else
                         using (var sr = new StreamReader(LibraryFile))
                         {
                             using (var jtr = new JsonTextReader(sr))
                             {
                                 LibraryCollection = App.DefaultJsonSerializer.Deserialize<ObservableCollection<Tuple<Manga.Base.ChapterLight, string>>>(jtr);
-                                LibraryCollection = new ObservableCollection<Tuple<Manga.Base.ChapterLight, string>>(LibraryCollection.OrderBy(x => x.Item1.VolumeNumber));
+                                LibraryCollection = new ObservableCollection<Tuple<Manga.Base.ChapterLight, string>>(LibraryCollection.OrderBy(x => x.Item1.ChapterNumber));
                             }
                         }
                 });
@@ -65,6 +93,7 @@ namespace MangaEpsilon.Services
 
         public static string LibraryDirectory { get; private set; }
         internal static string LibraryFile { get; private set; }
+        private static string oldLibraryFile = null;
 
         public static bool IsInitialized { get; private set; }
 
@@ -73,7 +102,7 @@ namespace MangaEpsilon.Services
             if (!IsInitialized)
                 throw new InvalidOperationException();
 
-            return LibraryCollection.Any(x => x.Item1.Name == chapter.Name && x.Item1.VolumeNumber == chapter.VolumeNumber && x.Item1.ParentManga.MangaName == chapter.ParentManga.MangaName);
+            return LibraryCollection.Any(x => x.Item1.Name == chapter.Name && x.Item1.ChapterNumber == chapter.ChapterNumber && x.Item1.ParentManga.MangaName == chapter.ParentManga.MangaName);
         }
 
         internal static bool Contains(Manga.Base.ChapterLight chapter)
@@ -81,7 +110,7 @@ namespace MangaEpsilon.Services
             if (!IsInitialized)
                 throw new InvalidOperationException();
 
-            return LibraryCollection.Any(x => x.Item1.Name == chapter.Name && x.Item1.VolumeNumber == chapter.VolumeNumber && x.Item1.ParentManga.MangaName == chapter.ParentManga.MangaName);
+            return LibraryCollection.Any(x => x.Item1.Name == chapter.Name && x.Item1.ChapterNumber == chapter.ChapterNumber && x.Item1.ParentManga.MangaName == chapter.ParentManga.MangaName);
         }
 
         internal static async void AddLibraryItem(Tuple<Manga.Base.ChapterLight, string> tuple)
@@ -122,16 +151,16 @@ namespace MangaEpsilon.Services
 
         internal static Manga.Base.ChapterLight GetDownloadedChapterLightFromEntry(Manga.Base.ChapterEntry chapter)
         {
-            return LibraryCollection.First(x => x.Item1.Name == chapter.Name && x.Item1.VolumeNumber == chapter.VolumeNumber && x.Item1.ParentManga.MangaName == chapter.ParentManga.MangaName).Item1;
+            return LibraryCollection.First(x => x.Item1.Name == chapter.Name && x.Item1.ChapterNumber == chapter.ChapterNumber && x.Item1.ParentManga.MangaName == chapter.ParentManga.MangaName).Item1;
         }
         internal static string GetDownloadedChapterLightPathFromEntry(Manga.Base.ChapterEntry chapter)
         {
-            return LibraryCollection.First(x => x.Item1.Name == chapter.Name && x.Item1.VolumeNumber == chapter.VolumeNumber && x.Item1.ParentManga.MangaName == chapter.ParentManga.MangaName).Item2;
+            return LibraryCollection.First(x => x.Item1.Name == chapter.Name && x.Item1.ChapterNumber == chapter.ChapterNumber && x.Item1.ParentManga.MangaName == chapter.ParentManga.MangaName).Item2;
         }
 
         internal static string GetPath(Manga.Base.ChapterLight chapter)
         {
-            return LibraryCollection.First(x => x.Item1.Name == chapter.Name && x.Item1.VolumeNumber == chapter.VolumeNumber && x.Item1.ParentManga.MangaName == chapter.ParentManga.MangaName).Item2;
+            return LibraryCollection.First(x => x.Item1.Name == chapter.Name && x.Item1.ChapterNumber == chapter.ChapterNumber && x.Item1.ParentManga.MangaName == chapter.ParentManga.MangaName).Item2;
         }
 
         public delegate void LibraryItemAddedHandler(Tuple<Manga.Base.ChapterLight, string> tuple);

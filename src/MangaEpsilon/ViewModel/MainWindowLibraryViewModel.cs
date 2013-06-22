@@ -37,7 +37,7 @@ namespace MangaEpsilon.ViewModel
             var libraryItemsView = CollectionViewSource.GetDefaultView(LibraryItems);
             libraryItemsView.GroupDescriptions.Add(new PropertyGroupDescription("ParentManga.MangaName"));
             libraryItemsView.SortDescriptions.Add(new System.ComponentModel.SortDescription("ParentManga.MangaName", System.ComponentModel.ListSortDirection.Ascending));
-            libraryItemsView.SortDescriptions.Add(new System.ComponentModel.SortDescription("VolumeNumber", System.ComponentModel.ListSortDirection.Ascending));
+            libraryItemsView.SortDescriptions.Add(new System.ComponentModel.SortDescription("ChapterNumber", System.ComponentModel.ListSortDirection.Ascending));
 
             MangaClickCommand = CommandManager.CreateProperCommand((o) =>
             {

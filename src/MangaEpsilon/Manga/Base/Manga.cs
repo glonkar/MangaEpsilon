@@ -58,6 +58,7 @@ namespace MangaEpsilon.Manga.Base
         public Manga ParentManga { get; set; }
         public string ID { get; set; }
         public DateTime ReleaseDate { get; set; }
+        public double ChapterNumber { get; set; }
         public double VolumeNumber { get; set; }
     }
 
