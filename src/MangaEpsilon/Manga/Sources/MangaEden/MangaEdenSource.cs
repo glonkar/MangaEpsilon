@@ -83,6 +83,8 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                     if (manga.Author == null)
                         manga.Author = data["author"] as string;
 
+                    manga.OnlineWebpage = new Uri("http://www.mangaeden.com/en-manga/" + (string)data["alias"] + "/");
+
                     manga.Description = Regex.Replace(WebUtility.HtmlDecode(data["description"] as string), "<.+?>", "", RegexOptions.Singleline | RegexOptions.Compiled);
 
                     try
@@ -241,6 +243,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                     Manga.Base.Manga mangaObj = new Base.Manga();
                     mangaObj.MangaName = manga["t"] as string;
                     mangaObj.ID = manga["i"] as string;
+                    mangaObj.OnlineWebpage = new Uri("http://www.mangaeden.com/en-manga/" + (string)manga["a"] + "/");
 
                     if (manga["im"] != null)
                         mangaObj.BookImageUrl = "http://cdn.mangaeden.com/mangasimg/" + manga["im"] as string;

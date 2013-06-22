@@ -40,7 +40,8 @@ namespace MangaEpsilon.Manga.Base
         public ArrayList Categories { get { return (ArrayList)GetProperty("Categories"); } internal set { SetProperty("Categories", value); } }
         [DataMember]
         public MangaStatus Status { get { return GetPropertyOrDefaultType<MangaStatus>("Status"); } internal set { SetProperty("Status", value); } }
-
+        [DataMember]
+        public Uri OnlineWebpage { get; internal set; }
     }
 
     public enum MangaStatus

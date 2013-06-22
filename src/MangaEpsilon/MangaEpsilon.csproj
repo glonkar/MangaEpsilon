@@ -91,6 +91,7 @@
     <Compile Include="LevenshteinDistance.cs" />
     <Compile Include="MAL\MALReviewGrabber.cs" />
     <Compile Include="Manga\Sources\MangaEden\MangaEdenSource.cs" />
+    <Compile Include="Manga\Sources\MangaFox\MangaFoxSource.cs" />
     <Compile Include="Model\MangaChapterDownload.cs" />
     <Compile Include="Notifications\NotificationInfo.cs" />
     <Compile Include="Notifications\NotificationsService.cs" />
@@ -232,7 +233,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_ConfigurationName="Debug" BuildVersion_BuildAction="Build" />
+      <UserProperties BuildVersion_BuildAction="Build" BuildVersion_ConfigurationName="Debug" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

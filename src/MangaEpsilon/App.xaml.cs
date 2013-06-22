@@ -78,6 +78,7 @@ namespace MangaEpsilon
         private static async Task InitializeMangaComponents()
         {
             App.MangaSource = new MangaEpsilon.Manga.Sources.MangaEden.MangaEdenSource();
+            App.AggregateMangaSource = new MangaEpsilon.Manga.Sources.MangaFox.MangaFoxSource();
 
             if (File.Exists(CatalogFile))
             {
@@ -119,7 +120,8 @@ namespace MangaEpsilon
             }
         }
 
-        public static MangaEpsilon.Manga.Base.IMangaSource MangaSource { get; set; }
+        public static MangaEpsilon.Manga.Base.IMangaSource MangaSource { get; private set; }
+        public static MangaEpsilon.Manga.Base.IMangaSource AggregateMangaSource { get; private set; }
 
         public static readonly string AppDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\MangaEpsilon\\";
         internal static string CatalogFile = null;
