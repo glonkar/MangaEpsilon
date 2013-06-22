@@ -388,14 +388,14 @@
                                         <Label FontSize="18" Content="{Binding MangaName, UpdateSourceTrigger=PropertyChanged}"/>
                                         <TextBlock Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" TextTrimming="CharacterEllipsis" Margin="9 0 20 0" MaxWidth="1400" Height="Auto"/>
                                         <TextBlock Text="{Binding Status, UpdateSourceTrigger=PropertyChanged,StringFormat='Status: {0}'}" FontSize="16" Margin="9 0 0 0" Foreground="{DynamicResource AccentColorBrush}"/>
-                                        <ListBox ItemsSource="{Binding Categories, UpdateSourceTrigger=PropertyChanged}">
-                                            <ListBox.ItemsPanel>
+                                        <ItemsControl ItemsSource="{Binding Categories, UpdateSourceTrigger=PropertyChanged}">
+                                            <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
-                                                    <WrapPanel ItemHeight="60" ItemWidth="Auto" IsItemsHost="True" 
+                                                    <WrapPanel ItemHeight="30" ItemWidth="Auto" IsItemsHost="True" 
                                                                Width="{Binding (FrameworkElement.ActualWidth), RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}"/>
                                                 </ItemsPanelTemplate>
-                                            </ListBox.ItemsPanel>
-                                            <ListBox.ItemTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
                                                     <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="1" CornerRadius="4" Padding="1" Background="{DynamicResource AccentColorBrush}">
                                                         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{DynamicResource AccentColorBrush}">
@@ -407,8 +407,8 @@
                                                         </Grid>
                                                     </Border>
                                                 </DataTemplate>
-                                            </ListBox.ItemTemplate>
-                                            <ListBox.Resources>
+                                            </ItemsControl.ItemTemplate>
+                                            <ItemsControl.Resources>
                                                 <Style TargetType="{x:Type ListBoxItem}">
                                                     <Style.Resources>
                                                         <!-- Background of selected item when focussed -->
@@ -416,9 +416,10 @@
                                                         <!-- Background of selected item when not focussed -->
                                                         <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
                                                     </Style.Resources>
+                                                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                                                 </Style>
-                                            </ListBox.Resources>
-                                        </ListBox>
+                                            </ItemsControl.Resources>
+                                        </ItemsControl>
                                     </StackPanel>
                                 </StackPanel>
                             </DataTemplate>
