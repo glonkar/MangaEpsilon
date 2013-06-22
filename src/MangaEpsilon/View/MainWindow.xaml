@@ -386,7 +386,7 @@
                                     <Image Source="{Binding BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=100}" MaxWidth="100"/>
                                     <StackPanel Orientation="Vertical" Margin="2">
                                         <Label FontSize="18" Content="{Binding MangaName, UpdateSourceTrigger=PropertyChanged}"/>
-                                        <TextBlock Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" TextTrimming="CharacterEllipsis" Margin="9 0 20 0" MaxWidth="1400" Height="Auto"/>
+                                        <TextBlock Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" TextTrimming="CharacterEllipsis" Margin="9 0 20 0" MaxWidth="1400" Height="Auto" HorizontalAlignment="Left"/>
                                         <TextBlock Text="{Binding Status, UpdateSourceTrigger=PropertyChanged,StringFormat='Status: {0}'}" FontSize="16" Margin="9 0 0 0" Foreground="{DynamicResource AccentColorBrush}"/>
                                         <ItemsControl ItemsSource="{Binding Categories, UpdateSourceTrigger=PropertyChanged}">
                                             <ItemsControl.ItemsPanel>
