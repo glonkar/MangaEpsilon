@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using Crystal.Core;
+using Crystal.Localization;
 using Crystal.Navigation;
 using MahApps.Metro.Controls;
 using MangaEpsilon.Services;

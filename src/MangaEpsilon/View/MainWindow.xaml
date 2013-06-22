@@ -37,6 +37,7 @@
             </ResourceDictionary.MergedDictionaries>
             <conv:ImageCachingConverter x:Key="ImgCache"/>
             <conv:ThumbnailImageCachingConverter x:Key="TImgCache"/>
+            <i18n:DateTimeLocalizingConverter x:Key="LocalDateConv"/>
 
             <BooleanToVisibilityConverter x:Key="BTV"/>
 
@@ -61,7 +62,7 @@
                                 <SolidColorBrush Color="{DynamicResource WhiteColor}"/>
                             </TextBlock.Foreground>
                         </TextBlock>
-                        <TextBlock Text="{Binding ReleaseDate}" FontSize="15" TextWrapping="NoWrap" Margin="15,0,15,10">
+                        <TextBlock Text="{Binding ReleaseDate, Converter={StaticResource LocalDateConv}}" FontSize="15" TextWrapping="NoWrap" Margin="15,0,15,10">
                             <TextBlock.Foreground>
                                 <SolidColorBrush Color="{DynamicResource WhiteColor}"/>
                             </TextBlock.Foreground>
@@ -486,7 +487,7 @@
             </metro:Flyout.Resources>
             <StackPanel>
                 <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='GeneralSettingsHeader',NullValue='General'}" Height="Auto">
-                    <metro:ToggleSwitch IsChecked="{Binding CanMinimizeToTray, UpdateSourceTrigger=PropertyChanged}" Header="{i18n:CrystalLocalizedValueMarkup Key='Can Minimize To Tray?',NullValue='Can Minimize To Tray?'}"/>
+                    <metro:ToggleSwitch IsChecked="{Binding CanMinimizeToTray, UpdateSourceTrigger=PropertyChanged}" Header="{i18n:CrystalLocalizedValueMarkup Key='CanMinimizeToTrayHeader',NullValue='Can Minimize To Tray?'}"/>
                 </GroupBox>
                 <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='ThemeSettingsHeader',NullValue='Theme'}" Height="Auto">
                     <StackPanel Orientation="Horizontal">
