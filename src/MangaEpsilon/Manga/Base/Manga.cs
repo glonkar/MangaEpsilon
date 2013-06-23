@@ -42,6 +42,8 @@ namespace MangaEpsilon.Manga.Base
         public MangaStatus Status { get { return GetPropertyOrDefaultType<MangaStatus>("Status"); } internal set { SetProperty("Status", value); } }
         [DataMember]
         public Uri OnlineWebpage { get; internal set; }
+        [DataMember]
+        public string SourceName { get; internal set; }
     }
 
     public enum MangaStatus

@@ -85,7 +85,18 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
 
                     manga.OnlineWebpage = new Uri("http://www.mangaeden.com/en-manga/" + (string)data["alias"] + "/");
 
-                    manga.Description = Regex.Replace(WebUtility.HtmlDecode(data["description"] as string), "<.+?>", "", RegexOptions.Singleline | RegexOptions.Compiled);
+                    manga.Description = Regex.Replace(
+                        WebUtility.HtmlDecode(
+                            Regex.Replace(
+                                (data["description"] as string), 
+                                @"<br\s*(/)?>", 
+                                Environment.NewLine, 
+                                RegexOptions.Compiled | RegexOptions.Singleline)),
+                        "<.+?>", 
+                        "", 
+                        RegexOptions.Singleline | RegexOptions.Compiled);
+
+                    manga.SourceName = this.SourceName;
 
                     try
                     {
@@ -261,5 +272,8 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
             get;
             private set;
         }
+
+
+        public string SourceName { get { return "MangaEden"; } }
     }
 }

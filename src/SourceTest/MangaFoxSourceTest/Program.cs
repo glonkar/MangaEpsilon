@@ -21,6 +21,8 @@ namespace MangaFoxSourceTest
             await mangaFox.AcquireAvailableManga();
 
             var manga = mangaFox.AvailableManga;
+
+            await mangaFox.GetMangaInfo("Naruto", false);
         }
     }
 }
