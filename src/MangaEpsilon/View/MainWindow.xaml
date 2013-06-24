@@ -14,7 +14,8 @@
         xmlns:meap="clr-namespace:MangaEpsilon.AttachedProperties"
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         Title="{i18n:CrystalLocalizedValueMarkup Key='MainApplicationTitle',NullValue='MangaEpsilon'}" Height="669" Width="756" ShowTitleBar="False" x:Name="thisWindow" SaveWindowPosition="True"
-                   utils:MainWindowSetterHelper.IsMainWindow="True" WindowState="Maximized" ShowActivated="True" Closing="thisWindow_Closing" Icon="/Resources/AxVXk48.png" StateChanged="thisWindow_StateChanged">
+                   utils:MainWindowSetterHelper.IsMainWindow="True" WindowState="Maximized" ShowActivated="True" Closing="thisWindow_Closing" 
+                   Icon="/Resources/AxVXk48.png" StateChanged="thisWindow_StateChanged">
     <Window.DataContext>
         <vm:MainPageViewModel/>
     </Window.DataContext>
@@ -164,10 +165,12 @@
                         <Grid>
                             <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="40" Height="40" 
                                                 IsActive="{Binding IsBusy, UpdateSourceTrigger=PropertyChanged}" Visibility="Visible"></metro:ProgressRing>
-                            <Grid x:Name="todayReleasesErrorGrid" Visibility="{Binding IsError, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BTV}}" HorizontalAlignment="Center" VerticalAlignment="Center" Panel.ZIndex="5">
+                            <Grid x:Name="todayReleasesErrorGrid" Visibility="{Binding IsError, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BTV}}" 
+                                  HorizontalAlignment="Center" VerticalAlignment="Center" Panel.ZIndex="5">
                                 <StackPanel>
                                     <TextBlock Text="{i18n:CrystalLocalizedValueMarkup Key='ErrorRetrievingDataMsg', NullValue='Error retrieving data'}" FontSize="17"/>
-                                    <Button HorizontalAlignment="Center" Content="{i18n:CrystalLocalizedValueMarkup Key='RetryTxt',NullValue='Retry'}" Command="{Binding RetryCommand}" Margin="0 3 0 0"/>
+                                    <Button HorizontalAlignment="Center" Content="{i18n:CrystalLocalizedValueMarkup Key='RetryTxt',NullValue='Retry'}" 
+                                            Command="{Binding RetryCommand}" Margin="0 3 0 0"/>
                                 </StackPanel>
                             </Grid>
                             <ScrollViewer>
@@ -216,8 +219,10 @@
                                                 </ListBox.ItemsPanel>
                                                 <ListBox.ContextMenu>
                                                     <ContextMenu HasDropShadow="True">
-                                                        <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='ShowMangaMenuItem',NullValue='Show Manga Information...'}" Command="{Binding MangaInfoCommand}" CommandParameter="{Binding SelectedEntry}"/>
-                                                        <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='DownloadChapterMenuItem',NullValue='Download this chapter.'}" Command="{Binding MangaDownloadCommand}" CommandParameter="{Binding SelectedEntry}"/>
+                                                        <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='ShowMangaMenuItem',NullValue='Show Manga Information...'}" 
+                                                                  Command="{Binding MangaInfoCommand}" CommandParameter="{Binding SelectedEntry}"/>
+                                                        <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='DownloadChapterMenuItem',NullValue='Download this chapter.'}" 
+                                                                  Command="{Binding MangaDownloadCommand}" CommandParameter="{Binding SelectedEntry}"/>
                                                     </ContextMenu>
                                                 </ListBox.ContextMenu>
                                                 <i:Interaction.Triggers>
@@ -279,7 +284,8 @@
                                     <DataTemplate>
                                         <Grid HorizontalAlignment="Left" Width="250" Height="250" Cursor="Hand">
                                             <Border>
-                                                <Image Source="{Binding BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=250}" Stretch="UniformToFill" AutomationProperties.Name="{Binding MangaName}"/>
+                                                <Image Source="{Binding BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=250}" 
+                                                       Stretch="UniformToFill" AutomationProperties.Name="{Binding MangaName}"/>
                                             </Border>
                                             <StackPanel VerticalAlignment="Bottom" Background="Gray">
                                                 <TextBlock Text="{Binding MangaName, UpdateSourceTrigger=PropertyChanged}" Foreground="Black" FontSize="18" Height="60" Margin="15,0,15,0"/>
@@ -305,7 +311,8 @@
                 <Grid>
                     <!-- Group code from: http://karlshifflett.wordpress.com/2009/06/10/wpf-sample-series-listbox-grouping-sorting-subtotals-and-collapsible-regions/ -->
                     <!--<Grid.Resources>
-                        <CollectionViewSource x:Key="GroupedItems" Source="{Binding LibraryItems, UpdateSourceTrigger=PropertyChanged}" x:Name="LibraryCollectionViewSource" Filter="LibraryCollectionViewSource_Filter">
+                        <CollectionViewSource x:Key="GroupedItems" Source="{Binding LibraryItems, UpdateSourceTrigger=PropertyChanged}" x:Name="LibraryCollectionViewSource" 
+                    Filter="LibraryCollectionViewSource_Filter">
                             <CollectionViewSource.GroupDescriptions>
                                 <PropertyGroupDescription PropertyName="ParentManga.MangaName"/>
                             </CollectionViewSource.GroupDescriptions>
@@ -346,9 +353,11 @@
                             </ListBox.ItemTemplate>
                             <ListBox.ContextMenu>
                                 <ContextMenu HasDropShadow="True">
-                                    <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='ShowMangaMenuItem',NullValue='Show Manga Information...'}" Command="{Binding MangaInfoCommand}" CommandParameter="{Binding SelectedEntry}"/>
+                                    <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='ShowMangaMenuItem',NullValue='Show Manga Information...'}" Command="{Binding MangaInfoCommand}" 
+                                              CommandParameter="{Binding SelectedEntry}"/>
                                     <Separator />
-                                    <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='DeleteMangaMenuItem',NullValue='Delete'}" Command="{Binding DeleteMangaCommand}" CommandParameter="{Binding SelectedEntry}"/>
+                                    <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='DeleteMangaMenuItem',NullValue='Delete'}" Command="{Binding DeleteMangaCommand}" 
+                                              CommandParameter="{Binding SelectedEntry}"/>
                                 </ContextMenu>
                             </ListBox.ContextMenu>
                             <ListBox.InputBindings>
@@ -386,8 +395,10 @@
                                     <Image Source="{Binding BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=100}" MaxWidth="100"/>
                                     <StackPanel Orientation="Vertical" Margin="2">
                                         <Label FontSize="18" Content="{Binding MangaName, UpdateSourceTrigger=PropertyChanged}"/>
-                                        <TextBlock Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" TextTrimming="CharacterEllipsis" Margin="9 0 20 0" MaxWidth="1400" Height="Auto" HorizontalAlignment="Left"/>
-                                        <TextBlock Text="{Binding Status, UpdateSourceTrigger=PropertyChanged,StringFormat='Status: {0}'}" FontSize="16" Margin="9 0 0 0" Foreground="{DynamicResource AccentColorBrush}"/>
+                                        <TextBlock Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" TextTrimming="CharacterEllipsis" 
+                                                   Margin="9 0 20 0" MaxWidth="1400" Height="Auto" HorizontalAlignment="Left"/>
+                                        <TextBlock Text="{Binding Status, UpdateSourceTrigger=PropertyChanged,StringFormat='Status: {0}'}" 
+                                                   FontSize="16" Margin="9 0 0 0" Foreground="{DynamicResource AccentColorBrush}"/>
                                         <ItemsControl ItemsSource="{Binding Categories, UpdateSourceTrigger=PropertyChanged}">
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
@@ -436,11 +447,13 @@
                 <TabItem.DataContext>
                     <vm:MainWindowDownloadsViewModel/>
                 </TabItem.DataContext>
-                <ListView ItemsSource="{Binding Downloads, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" x:Name="downloadsListView">
+                <ListView ItemsSource="{Binding Downloads, UpdateSourceTrigger=PropertyChanged}" 
+                          SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" x:Name="downloadsListView">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="{i18n:CrystalLocalizedValueMarkup Key='MangaDownloadNameColumn',NullValue='Name'}" DisplayMemberBinding="{Binding Chapter.Name}" Width="Auto"/>
-                            <GridViewColumn Header="{i18n:CrystalLocalizedValueMarkup Key='MangaDownloadParentMangaColumn',NullValue='Manga'}" DisplayMemberBinding="{Binding Chapter.ParentManga.MangaName}" Width="Auto"/>
+                            <GridViewColumn Header="{i18n:CrystalLocalizedValueMarkup Key='MangaDownloadParentMangaColumn',NullValue='Manga'}" 
+                                            DisplayMemberBinding="{Binding Chapter.ParentManga.MangaName}" Width="Auto"/>
                             <GridViewColumn Header="{i18n:CrystalLocalizedValueMarkup Key='MangaDownloadStatusColumn',NullValue='Status'}" DisplayMemberBinding="{Binding Status}"/>
                             <GridViewColumn Header="{i18n:CrystalLocalizedValueMarkup Key='MangaDownloadProgressColumn',NullValue='Progress'}" Width="300">
                                 <GridViewColumn.CellTemplate>
@@ -457,14 +470,16 @@
                     </ListView.View>
                     <ListView.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='CancelMangaDownloadItem',NullValue='Cancel Download'}" Command="{Binding CancelDownloadCommand}" CommandParameter="{Binding SelectedItem}"/>
+                            <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='CancelMangaDownloadItem',NullValue='Cancel Download'}" Command="{Binding CancelDownloadCommand}" 
+                                      CommandParameter="{Binding SelectedItem}"/>
                         </ContextMenu>
                     </ListView.ContextMenu>
                 </ListView>
             </metro:MetroTabItem>
         </metro:MetroAnimatedSingleRowTabControl>
 
-        <Button Style="{DynamicResource MetroCircleButtonStyle}" Height="40" Width="40" Command="{Binding SettingsFlyoutCommand, UpdateSourceTrigger=PropertyChanged}" Cursor="Hand" Panel.ZIndex="100" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Height="40" Width="40" Command="{Binding SettingsFlyoutCommand, UpdateSourceTrigger=PropertyChanged}" 
+                Cursor="Hand" Panel.ZIndex="100" HorizontalAlignment="Right" VerticalAlignment="Bottom">
             <Rectangle Width="20" Height="20">
                 <Rectangle.Fill>
                     <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_settings}" />
@@ -473,7 +488,8 @@
         </Button>
     </Grid>
     <metro:MetroWindow.Flyouts>
-        <metro:Flyout Header="{i18n:CrystalLocalizedValueMarkup Key='SettingsFlyoutHeader',NullValue='settings'}" x:Name="SettingsFlyout" IsOpen="{Binding ElementName=thisWindow,Path=DataContext.SettingsFlyoutOpen, UpdateSourceTrigger=PropertyChanged}">
+        <metro:Flyout Header="{i18n:CrystalLocalizedValueMarkup Key='SettingsFlyoutHeader',NullValue='settings'}" x:Name="SettingsFlyout" 
+                      IsOpen="{Binding ElementName=thisWindow,Path=DataContext.SettingsFlyoutOpen, UpdateSourceTrigger=PropertyChanged}">
             <metro:Flyout.DataContext>
                 <vm:MainWindowSettingsViewModel />
             </metro:Flyout.DataContext>
@@ -488,11 +504,13 @@
             </metro:Flyout.Resources>
             <StackPanel>
                 <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='GeneralSettingsHeader',NullValue='General'}" Height="Auto">
-                    <metro:ToggleSwitch IsChecked="{Binding CanMinimizeToTray, UpdateSourceTrigger=PropertyChanged}" Header="{i18n:CrystalLocalizedValueMarkup Key='CanMinimizeToTrayHeader',NullValue='Can Minimize To Tray?'}"/>
+                    <metro:ToggleSwitch IsChecked="{Binding CanMinimizeToTray, UpdateSourceTrigger=PropertyChanged}" 
+                                        Header="{i18n:CrystalLocalizedValueMarkup Key='CanMinimizeToTrayHeader',NullValue='Can Minimize To Tray?'}"/>
                 </GroupBox>
                 <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='ThemeSettingsHeader',NullValue='Theme'}" Height="Auto">
                     <StackPanel Orientation="Horizontal">
-                        <ComboBox ItemsSource="{Binding AvailableAccents, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedAccent, UpdateSourceTrigger=PropertyChanged}" Height="20" DisplayMemberPath="Name"/>
+                        <ComboBox ItemsSource="{Binding AvailableAccents, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedAccent, UpdateSourceTrigger=PropertyChanged}" 
+                                  Height="20" DisplayMemberPath="Name"/>
                         <ComboBox ItemsSource="{Binding Source={StaticResource
                                              ThemeValues}}" SelectedItem="{Binding SelectedTheme, UpdateSourceTrigger=PropertyChanged}" Height="20">
                             <ComboBox.ItemTemplate>

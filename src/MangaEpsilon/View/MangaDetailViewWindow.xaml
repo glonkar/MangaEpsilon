@@ -98,13 +98,17 @@
 
                         <Grid Grid.Row="0">
                             <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='CoverSection',NullValue='cover'}" >
-                                <Image Height="550" Width="450" Margin="0 0 0 0" Source="{Binding BookImageUrl, Converter={StaticResource ImgCache}}" VerticalAlignment="Top" x:Name="CoverImage"/>
+                                <Image Height="550" Width="450" Margin="0 0 0 0" 
+                                       Source="{Binding BookImageUrl, Converter={StaticResource ImgCache}}" VerticalAlignment="Top" x:Name="CoverImage"/>
                             </GroupBox>
                         </Grid>
                         <Grid Grid.Row="1">
                             <StackPanel>
-                                <TextBlock Text="{Binding Author, UpdateSourceTrigger=PropertyChanged,StringFormat='Author: {0}'}" HorizontalAlignment="Center" FontSize="16"/>
-                                <TextBlock Text="{Binding Status, UpdateSourceTrigger=PropertyChanged,StringFormat='Status: {0}'}" HorizontalAlignment="Center" FontSize="16" Foreground="{DynamicResource AccentColorBrush}"/>
+                                <TextBlock Text="{Binding Author, UpdateSourceTrigger=PropertyChanged,StringFormat='Author: {0}'}" 
+                                           HorizontalAlignment="Center" FontSize="16"/>
+                                <TextBlock Text="{Binding Status, UpdateSourceTrigger=PropertyChanged,StringFormat='Status: {0}'}" 
+                                           HorizontalAlignment="Center" FontSize="16" 
+                                           Foreground="{DynamicResource AccentColorBrush}"/>
                                 <ItemsControl ItemsSource="{Binding Categories, UpdateSourceTrigger=PropertyChanged}">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
@@ -114,7 +118,8 @@
                                     </ItemsControl.ItemsPanel>
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="1" CornerRadius="4" Padding="1" Background="{DynamicResource AccentColorBrush}">
+                                            <Border BorderBrush="{DynamicResource AccentColorBrush}" 
+                                                    BorderThickness="1" CornerRadius="4" Padding="1" Background="{DynamicResource AccentColorBrush}">
                                                 <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{DynamicResource AccentColorBrush}">
                                                     <Label Content="{Binding .}" HorizontalAlignment="Center" VerticalAlignment="Center">
                                                         <Label.Foreground>
@@ -141,14 +146,17 @@
                         </Grid>
                     </Grid>
                     <StackPanel Orientation="Vertical">
-                        <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='AboutSection',NullValue='about'}" DataContext="{Binding Manga, UpdateSourceTrigger=PropertyChanged}">
-                            <TextBlock FontSize="17" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" TextWrapping="Wrap" 
+                        <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='AboutSection',NullValue='about'}" 
+                                  DataContext="{Binding Manga, UpdateSourceTrigger=PropertyChanged}">
+                            <TextBlock FontSize="17" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" 
+                                       TextAlignment="Left" TextWrapping="Wrap" 
                                        TextTrimming="CharacterEllipsis" Width="450" HorizontalAlignment="Center" x:Name="DescriptionTextBlock" />
                         </GroupBox>
 
                         <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='ChaptersSection',NullValue='chapters'}">
                             <StackPanel>
-                                <ListBox ItemsSource="{Binding MangaChapters, UpdateSourceTrigger=PropertyChanged, Delay=1000}" Margin="20 20 0 0" Visibility="Visible" HorizontalAlignment="Left" 
+                                <ListBox ItemsSource="{Binding MangaChapters, UpdateSourceTrigger=PropertyChanged, Delay=1000}" 
+                                         Margin="20 20 0 0" Visibility="Visible" HorizontalAlignment="Left" 
 									x:Name="chaptersGridView" VerticalAlignment="Stretch" 
                                     Width="625" Height="Auto" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" 
                                     SelectedItem="{Binding SelectedChapterItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
@@ -182,14 +190,18 @@
                                     </ListBox.Resources>
                                 </ListBox>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <Button Style="{DynamicResource MetroCircleButtonStyle}" Height="40" Width="40" Command="{Binding PreviousChapterPageCommand, UpdateSourceTrigger=PropertyChanged}" Cursor="Hand">
+                                    <Button Style="{DynamicResource MetroCircleButtonStyle}" Height="40" Width="40" 
+                                            Command="{Binding PreviousChapterPageCommand, UpdateSourceTrigger=PropertyChanged}" 
+                                            Cursor="Hand">
                                         <Rectangle Width="20" Height="20">
                                             <Rectangle.Fill>
                                                 <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_arrow_left}" />
                                             </Rectangle.Fill>
                                         </Rectangle>
                                     </Button>
-                                    <Button Style="{DynamicResource MetroCircleButtonStyle}" Height="40" Width="40" Command="{Binding NextChapterPageCommand, UpdateSourceTrigger=PropertyChanged}" Cursor="Hand">
+                                    <Button Style="{DynamicResource MetroCircleButtonStyle}" Height="40" Width="40" 
+                                            Command="{Binding NextChapterPageCommand, UpdateSourceTrigger=PropertyChanged}" 
+                                            Cursor="Hand">
                                         <Rectangle Width="20" Height="20">
                                             <Rectangle.Fill>
                                                 <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_arrow_right}" />
@@ -202,8 +214,10 @@
                         <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='RelatedMangaSection',NullValue='related manga'}">
                             <Grid>
                                 <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="40" Height="270" 
-                                                IsActive="{Binding IsBusy_RelatedManga, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding IsBusy_RelatedManga, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BTV}}"></metro:ProgressRing>
-                                <ListBox ItemsSource="{Binding RelatedManga, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{DynamicResource MangaListBoxItemStyle}" x:Name="RelatedMangaListView">
+                                                IsActive="{Binding IsBusy_RelatedManga, UpdateSourceTrigger=PropertyChanged}" 
+                                                    Visibility="{Binding IsBusy_RelatedManga, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BTV}}"></metro:ProgressRing>
+                                <ListBox ItemsSource="{Binding RelatedManga, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{DynamicResource MangaListBoxItemStyle}" 
+                                         x:Name="RelatedMangaListView">
                                     <ListBox.Resources>
                                         <DataTemplate x:Key="MangaListBoxItemTemplate">
                                             <Grid HorizontalAlignment="Left" Width="250" Height="250" Margin="6" Cursor="Hand">
@@ -211,7 +225,8 @@
                                                     <BitmapCache EnableClearType="True" RenderAtScale="1.0" />
                                                 </Grid.CacheMode>
                                                 <Border>
-                                                    <Image Source="{Binding BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=250}" Stretch="UniformToFill" AutomationProperties.Name="{Binding MangaName}"/>
+                                                    <Image Source="{Binding BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=250}" Stretch="UniformToFill" 
+                                                           AutomationProperties.Name="{Binding MangaName}"/>
                                                 </Border>
                                                 <StackPanel VerticalAlignment="Bottom">
                                                     <StackPanel.Background>
@@ -249,8 +264,10 @@
                                                             <Storyboard  Timeline.DesiredFrameRate="60">
                                                                 <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:.5" />
 
-                                                                <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.0" From="1.5" Duration="0:0:.5"/>
-                                                                <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.0" From="1.5" Duration="0:0:.5"/>
+                                                                <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleX)" 
+                                                                                 To="1.0" From="1.5" Duration="0:0:.5"/>
+                                                                <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleY)" 
+                                                                                 To="1.0" From="1.5" Duration="0:0:.5"/>
                                                             </Storyboard>
                                                         </BeginStoryboard>
                                                     </EventTrigger.Actions>
@@ -276,7 +293,8 @@
                         <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='ReviewSection',NullValue='reviews'}">
                             <Grid>
                                 <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="40" Height="40" 
-                                                IsActive="{Binding IsBusy_Reviews, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding IsBusy_Reviews, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BTV}}"></metro:ProgressRing>
+                                                IsActive="{Binding IsBusy_Reviews, UpdateSourceTrigger=PropertyChanged}"
+                                                    Visibility="{Binding IsBusy_Reviews, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BTV}}"></metro:ProgressRing>
                                 <ListBox ItemsSource="{Binding Reviews, UpdateSourceTrigger=PropertyChanged}">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>

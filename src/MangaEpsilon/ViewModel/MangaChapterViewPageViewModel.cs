@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using MangaEpsilon.Services;
 using Crystal.Localization;
 using Crystal.Messaging;
+using Crystal.Command;
 
 namespace MangaEpsilon.ViewModel
 {
@@ -36,6 +37,11 @@ namespace MangaEpsilon.ViewModel
         {
             IsBusy = true;
             Pages = new ObservableCollection<Uri>();
+
+            DownloadChapterCommand = CommandManager.CreateProperCommand((o) =>
+            {
+                Messenger.PushMessage(this, "MangaChapterDownload", (ChapterEntry)entry);
+            }, (o) => !LibraryService.Contains((dynamic)entry));
 
             if (LibraryService.Contains((dynamic)entry))
             {
@@ -163,6 +169,12 @@ namespace MangaEpsilon.ViewModel
         {
             get { return GetPropertyOrDefaultType<bool?>(x => this.SaveZoomPosition); }
             set { SetProperty<bool?>(x => this.SaveZoomPosition, value); Messenger.PushMessage(this, "MangaViewerSaveZoomPosition", SaveZoomPosition); }
+        }
+
+        public CrystalProperCommand DownloadChapterCommand
+        {
+            get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.DownloadChapterCommand); }
+            set { SetProperty(x => this.DownloadChapterCommand, value); }
         }
 
         public override void CloseViewModel()

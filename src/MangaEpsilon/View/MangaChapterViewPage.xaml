@@ -70,7 +70,19 @@
         />
         <StackPanel Margin="3" HorizontalAlignment="Left" VerticalAlignment="Bottom" Panel.ZIndex="5" Orientation="Horizontal">
             <Label Content="{Binding CurrentPageLabelString, UpdateSourceTrigger=PropertyChanged}" />
-            <CheckBox Content="{i18n:CrystalLocalizedValueMarkup Key='MangaSaveZoomPositionMsg',NullValue='Save Zoom Position'}" IsEnabled="True" IsChecked="{Binding SaveZoomPosition,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" x:Name="SaveZoomPosition" VerticalAlignment="Center" Margin="3 0 0 0"/>
+            <CheckBox Content="{i18n:CrystalLocalizedValueMarkup Key='MangaSaveZoomPositionMsg',NullValue='Save Zoom Position'}" IsEnabled="True" 
+                      IsChecked="{Binding SaveZoomPosition,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" 
+                      x:Name="SaveZoomPosition" VerticalAlignment="Center" Margin="3 0 0 0"/>
+            <Button Style="{DynamicResource MetroCircleButtonStyle}" Height="30" Width="30" 
+                Cursor="Hand" Panel.ZIndex="100" HorizontalAlignment="Right" VerticalAlignment="Bottom" 
+                ToolTip="{i18n:CrystalLocalizedValueMarkup Key='DownloadChapterMenuItem',NullValue='Download this chapter.'}" 
+                Command="{Binding DownloadChapterCommand, UpdateSourceTrigger=PropertyChanged}">
+                <Rectangle Width="15" Height="15">
+                    <Rectangle.Fill>
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_download}" />
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Button>
         </StackPanel>
     </Grid>
 </metro:MetroWindow>
