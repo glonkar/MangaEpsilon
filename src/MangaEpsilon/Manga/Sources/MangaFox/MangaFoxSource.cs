@@ -98,6 +98,8 @@ namespace MangaEpsilon.Manga.Sources.MangaFox
 
             manga.SourceName = this.SourceName;
 
+            manga.LanguageByIetfTag = this.LanguageByIetfTag;
+
             AvailableManga[index] = manga;
 
             if (local) return manga;
@@ -162,5 +164,8 @@ namespace MangaEpsilon.Manga.Sources.MangaFox
 
 
         public string SourceName { get { return "MangaFox"; } }
+
+
+        public string LanguageByIetfTag { get { return "en"; } }
     }
 }

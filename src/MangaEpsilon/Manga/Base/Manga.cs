@@ -44,6 +44,8 @@ namespace MangaEpsilon.Manga.Base
         public Uri OnlineWebpage { get; internal set; }
         [DataMember]
         public string SourceName { get; internal set; }
+        [DataMember]
+        public string LanguageByIetfTag { get; internal set; }
     }
 
     public enum MangaStatus

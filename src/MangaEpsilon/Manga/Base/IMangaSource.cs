@@ -15,5 +15,6 @@ namespace MangaEpsilon.Manga.Base
         Task<Manga> GetMangaInfoByUrl(string url);
         Task<ChapterEntry[]> GetNewReleasesOfToday(int amount = 5);
         string SourceName { get; }
+        string LanguageByIetfTag { get; }
     }
 }

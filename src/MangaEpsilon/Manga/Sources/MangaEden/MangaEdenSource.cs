@@ -96,6 +96,8 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                         "", 
                         RegexOptions.Singleline | RegexOptions.Compiled);
 
+                    manga.LanguageByIetfTag = this.LanguageByIetfTag;
+
                     manga.SourceName = this.SourceName;
 
                     try
@@ -275,5 +277,8 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
 
 
         public string SourceName { get { return "MangaEden"; } }
+
+
+        public string LanguageByIetfTag { get { return "en"; } }
     }
 }
