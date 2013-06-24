@@ -24,9 +24,32 @@
                 <ResourceDictionary Source="/Resources/Icons.xaml" />
                 <ResourceDictionary Source="/Resources/StandardStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            
-            <conv:ImageDownloadingConverter x:Key="ImgDl"/>
+
             <BooleanToVisibilityConverter x:Key="BTV"/>
+
+            <DataTemplate x:Shared="False" x:Key="MangaPageTemplate">
+                <ScrollViewer HorizontalScrollBarVisibility="Visible" x:Name="Scroller">
+                    <ScrollViewer.LayoutTransform>
+                        <ScaleTransform 
+                                    CenterX="0" CenterY="0"
+                                    ScaleX="{Binding ElementName=uiScaleSlider,Path=Value}"
+                                    ScaleY="{Binding ElementName=uiScaleSlider,Path=Value}"
+                                />
+                    </ScrollViewer.LayoutTransform>
+                    <Grid>
+                        <Grid.Resources>
+                            <ResourceDictionary>
+                                <conv:ImageDownloadingConverter x:Key="ImgDl"/>
+                            </ResourceDictionary>
+                        </Grid.Resources>
+                        <Grid VerticalAlignment="Center" Width="100" Visibility="{Binding Source={StaticResource ImgDl}, Path=IsDownloading, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BTV}}">
+                            <metro:MetroProgressBar Foreground="{DynamicResource AccentColorBrush}" Value="{Binding Source={StaticResource ImgDl},Path=DownloadProgress, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Grid>
+                        <Image Source="{Binding ., Converter={StaticResource ImgDl}}" Stretch="Uniform" Width="800" Height="800">
+                        </Image>
+                    </Grid>
+                </ScrollViewer>
+            </DataTemplate>
         </ResourceDictionary>
     </metro:MetroWindow.Resources>
     <Window.DataContext>
@@ -36,27 +59,10 @@
         <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" 
                             HorizontalAlignment="Stretch" Width="40" Height="40" 
                             x:Name="MainProgressIndictator" IsActive="{Binding IsBusy, UpdateSourceTrigger=PropertyChanged}" Visibility="Visible"></metro:ProgressRing>
-        <Grid x:Name="DownloadGrid" Panel.ZIndex="6" VerticalAlignment="Center" Width="100" Visibility="{Binding Source={StaticResource ImgDl}, Path=IsDownloading, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BTV}}">
-            <ProgressBar Value="{Binding Source={StaticResource ImgDl},Path=DownloadProgress, UpdateSourceTrigger=PropertyChanged}"/>
-        </Grid>
         <metro:FlipView ItemsSource="{Binding Pages, UpdateSourceTrigger=PropertyChanged}" 
                         SelectedIndex="{Binding CurrentPageIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                        x:Name="FlipViewer" SelectionChanged="FlipViewer_SelectionChanged" IsBannerEnabled="False" Margin="0 30 0 30" FocusVisualStyle="{x:Null}" MouseEnter="FlipViewer_MouseEnter">
-            <metro:FlipView.ItemTemplate>
-                <DataTemplate>
-                    <ScrollViewer HorizontalScrollBarVisibility="Visible" x:Name="Scroller">
-                        <ScrollViewer.LayoutTransform>
-                            <ScaleTransform 
-                                    CenterX="0" CenterY="0"
-                                    ScaleX="{Binding ElementName=uiScaleSlider,Path=Value}"
-                                    ScaleY="{Binding ElementName=uiScaleSlider,Path=Value}"
-                                />
-                        </ScrollViewer.LayoutTransform>
-                        <Image Source="{Binding ., Converter={StaticResource ImgDl}}" Stretch="Uniform" Width="800" Height="800">
-                        </Image>
-                    </ScrollViewer>
-                </DataTemplate>
-            </metro:FlipView.ItemTemplate>
+                        x:Name="FlipViewer" SelectionChanged="FlipViewer_SelectionChanged" IsBannerEnabled="False" 
+                        Margin="0 30 0 30" FocusVisualStyle="{x:Null}" MouseEnter="FlipViewer_MouseEnter" ItemTemplate="{StaticResource MangaPageTemplate}">
         </metro:FlipView>
         <Slider x:Name="uiScaleSlider" Width="100" Height="20" HorizontalAlignment="Right" VerticalAlignment="Bottom" Panel.ZIndex="5" Margin="3"
             ToolTip="{Binding Path=Value, StringFormat='Zoom: {0}'}" ToolTipService.Placement="Mouse"

@@ -12,12 +12,15 @@ namespace MangaEpsilon.Converters
 {
     public class ImageDownloadingConverter : IValueConverter, INotifyPropertyChanged
     {
-        private static BitmapImage image = null;
-        private static EventHandler<DownloadProgressEventArgs> progressHandler = null;
-        private static EventHandler<System.Windows.Media.ExceptionEventArgs> errorHandler = null;
-        private static EventHandler doneHandler = null;
+        private BitmapImage image = null;
+        private EventHandler<DownloadProgressEventArgs> progressHandler = null;
+        private EventHandler<System.Windows.Media.ExceptionEventArgs> errorHandler = null;
+        private EventHandler doneHandler = null;
         private List<Tuple<Uri, BitmapImage>> cachedImages = new List<Tuple<Uri, BitmapImage>>();
 
+        public ImageDownloadingConverter()
+        {
+        }
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
@@ -29,26 +32,6 @@ namespace MangaEpsilon.Converters
                 url = new Uri((string)value);
             else if (value is Uri)
                 url = (Uri)value;
-
-            if (image != null)
-            {
-                if (image.UriSource == url) return null;
-
-                if (IsDownloading)
-                {
-                    image.DownloadProgress -= progressHandler;
-                    image.DownloadFailed -= errorHandler;
-                    image.DownloadCompleted -= doneHandler;
-                }
-
-
-                IsDownloading = false;
-                IsError = false;
-                DownloadProgress = 0;
-                DownloadProgressMax = 100;
-
-                image = null;
-            }
 
             if (cachedImages.Any(x => x.Item1 == url))
             {
@@ -65,6 +48,13 @@ namespace MangaEpsilon.Converters
                 return value;
             }
 
+            if (image != null)
+            {
+                image.DownloadProgress -= progressHandler;
+                image.DownloadFailed -= errorHandler;
+                image.DownloadCompleted -= doneHandler;
+            }
+
             image = new BitmapImage();
 
             progressHandler = new EventHandler<DownloadProgressEventArgs>(image_DownloadProgress);
@@ -75,10 +65,10 @@ namespace MangaEpsilon.Converters
             image.DownloadFailed += errorHandler;
             image.DownloadCompleted += doneHandler;
 
-            System.Windows.Threading.Dispatcher.CurrentDispatcher.InvokeAsync(() =>
-                {
+            //System.Windows.Threading.Dispatcher.CurrentDispatcher.InvokeAsync(() =>
+              //  {
                     IsDownloading = true;
-                });
+               //});
 
             image.BeginInit();
             image.CacheOption = BitmapCacheOption.OnDemand;
@@ -92,29 +82,43 @@ namespace MangaEpsilon.Converters
 
         void image_DownloadCompleted(object sender, EventArgs e)
         {
-            System.Windows.Threading.Dispatcher.CurrentDispatcher.InvokeAsync(() =>
-                {
+            //System.Windows.Threading.Dispatcher.CurrentDispatcher.InvokeAsync(() =>
+            //    {
                     IsDownloading = false;
-                });
+            //    });
+
+
+            image.DownloadProgress -= progressHandler;
+            image.DownloadFailed -= errorHandler;
+            image.DownloadCompleted -= doneHandler;
+
+            image = null;
         }
 
         void image_DownloadFailed(object sender, System.Windows.Media.ExceptionEventArgs e)
         {
-            System.Windows.Threading.Dispatcher.CurrentDispatcher.InvokeAsync(() =>
-                {
+            //System.Windows.Threading.Dispatcher.CurrentDispatcher.InvokeAsync(() =>
+            //    {
                     IsDownloading = false;
                     IsError = true;
-                });
+            //    });
+
+
+            image.DownloadProgress -= progressHandler;
+            image.DownloadFailed -= errorHandler;
+            image.DownloadCompleted -= doneHandler;
+
+            image = null;
         }
 
         void image_DownloadProgress(object sender, DownloadProgressEventArgs e)
         {
-            System.Windows.Threading.Dispatcher.CurrentDispatcher.InvokeAsync(() =>
-                {
+           // System.Windows.Threading.Dispatcher.CurrentDispatcher.InvokeAsync(() =>
+               // {
                     IsDownloading = true;
                     DownloadProgress = e.Progress;
                     DownloadProgressMax = 100;
-                });
+               // }, System.Windows.Threading.DispatcherPriority.Send);
         }
 
         private bool _downloading;
