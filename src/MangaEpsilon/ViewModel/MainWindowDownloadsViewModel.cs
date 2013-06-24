@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Crystal.Command;
 using Crystal.Core;
 using Crystal.Messaging;
+using Crystal.Navigation;
 using MangaEpsilon.Manga.Base;
 using MangaEpsilon.Model;
 using MangaEpsilon.Services;
@@ -109,7 +110,7 @@ namespace MangaEpsilon.ViewModel
 
                     using (WebClient wc = new WebClient())
                     {
-
+                        download.TotalFilesToDownload = download.Chapter.PagesUrls.Count;
                         foreach (var pageUrl in download.Chapter.PagesUrls)
                         {
                             if (download.Status == MangaChapterDownloadStatus.Canceled)
@@ -135,11 +136,15 @@ namespace MangaEpsilon.ViewModel
                             }
                             if (!error)
                             {
-                                await Task.Delay(500);
-
                                 download.Progress++;
+                                download.TotalFilesDownloaded++;
 
                                 Messenger.PushMessage(this, "UpdateMainWindowProgress", (Convert.ToDouble(download.Progress) / Convert.ToDouble(download.MaxProgress)));
+
+                                download.ProgressStr = Math.Round(((Convert.ToDouble(download.Progress) / Convert.ToDouble(download.MaxProgress)) * 100.0), 2).ToString() + "%";
+
+
+                                await Task.Delay((download.Chapter.PagesUrls.Count - download.Progress) * 2 + 500);
                             }
                             else
                             {
@@ -157,12 +162,12 @@ namespace MangaEpsilon.ViewModel
                         if (!error)
                         {
                             LibraryService.AddLibraryItem(new Tuple<ChapterLight, string>(download.Chapter, downloadPath));
-
-                            Notifications.NotificationsService.AddNotification("Download Completed!", download.Chapter.Name + " Downloaded", download.Chapter.ParentManga.BookImageUrl);
                         }
                     }
 
                     Downloads.Dequeue();
+
+                    await Task.Delay(1000);
                 }
 
                 Messenger.PushMessage(this, "UpdateMainWindowState", System.Windows.Shell.TaskbarItemProgressState.None);

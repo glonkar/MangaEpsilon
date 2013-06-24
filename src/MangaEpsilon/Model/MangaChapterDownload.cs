@@ -7,7 +7,7 @@ using MangaEpsilon.Manga.Base;
 
 namespace MangaEpsilon.Model
 {
-    public class MangaChapterDownload: BaseModel
+    public class MangaChapterDownload : BaseModel
     {
         internal MangaChapterDownload(ChapterLight entry)
         {
@@ -37,6 +37,12 @@ namespace MangaEpsilon.Model
             get { return GetPropertyOrDefaultType<int>(x => this.Progress); }
             set { SetProperty(x => this.Progress, value); }
         }
+
+        public string ProgressStr { get { return GetPropertyOrDefaultType<string>(x => this.ProgressStr); } set { SetProperty(x => this.ProgressStr, value); } }
+
+        public int TotalFilesToDownload { get { return GetPropertyOrDefaultType<int>(x => this.TotalFilesToDownload); } set { SetProperty(x => this.TotalFilesToDownload, value); } }
+
+        public int TotalFilesDownloaded { get { return GetPropertyOrDefaultType<int>(x => this.TotalFilesDownloaded); } set { SetProperty(x => this.TotalFilesDownloaded, value); } }
     }
     public enum MangaChapterDownloadStatus
     {
