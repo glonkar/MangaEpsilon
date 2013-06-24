@@ -21,6 +21,20 @@ namespace MangaEpsilon.ViewModel
             App.Current.Exit += Current_Exit;
 
             LoadSettings();
+
+            RegisterForMessages("MangaViewerSaveZoomPosition");
+        }
+
+        public override bool ReceiveMessage(object source, Crystal.Messaging.Message message)
+        {
+            switch (message.MessageString.ToLower())
+            {
+                case "mangaviewersavezoomposition":
+                    SaveZoomPosition = (bool)message.Data;
+                    return true;
+                default:
+                    return base.ReceiveMessage(source, message);
+            }
         }
 
         private static string SettingsFile = App.AppDataDir + "Settings.json";
@@ -45,6 +59,7 @@ namespace MangaEpsilon.ViewModel
                 settings.CurrentTheme = Theme.Light;
                 settings.CurrentThemeAccent = "Blue";
                 settings.MinimizeToTray = false;
+                settings.SaveZoomPosition = false;
             }
 
             #region Theme stuff
@@ -54,6 +69,7 @@ namespace MangaEpsilon.ViewModel
             #endregion
 
             App.CanMinimizeToTray = settings.MinimizeToTray;
+            App.SaveZoomPosition = settings.SaveZoomPosition;
         }
         private void SaveSettings()
         {
@@ -61,6 +77,7 @@ namespace MangaEpsilon.ViewModel
             settings.CurrentTheme = SelectedTheme;
             settings.CurrentThemeAccent = SelectedAccent.Name;
             settings.MinimizeToTray = App.CanMinimizeToTray;
+            settings.SaveZoomPosition = App.SaveZoomPosition;
 
             using (var sw = new StreamWriter(SettingsFile))
             {
@@ -110,6 +127,16 @@ namespace MangaEpsilon.ViewModel
             {
                 SetProperty(x => this.CanMinimizeToTray, value);
                 App.CanMinimizeToTray = value;
+            }
+        }
+
+        public bool SaveZoomPosition
+        {
+            get { return GetPropertyOrDefaultType<bool>(x => this.SaveZoomPosition); }
+            set
+            {
+                SetProperty(x => this.SaveZoomPosition, value);
+                App.SaveZoomPosition = value;
             }
         }
     }

@@ -12,6 +12,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using MangaEpsilon.Services;
 using Crystal.Localization;
+using Crystal.Messaging;
 
 namespace MangaEpsilon.ViewModel
 {
@@ -22,6 +23,8 @@ namespace MangaEpsilon.ViewModel
             ChapterBase entry = (ChapterBase)argument[0].Value;
 
             ChapterName = entry.Name;
+
+            SaveZoomPosition = App.SaveZoomPosition;
 
             GetMangaPages(entry);
 
@@ -154,6 +157,17 @@ namespace MangaEpsilon.ViewModel
         {
             get{ return GetPropertyOrDefaultType<string>(x => this.CurrentPageLabelString);}
             set { SetProperty(x => this.CurrentPageLabelString, value);}
+        }
+
+        public bool? SaveZoomPosition
+        {
+            get { return GetPropertyOrDefaultType<bool?>(x => this.SaveZoomPosition); }
+            set { SetProperty<bool?>(x => this.SaveZoomPosition, value); Messenger.PushMessage(this, "MangaViewerSaveZoomPosition", SaveZoomPosition); }
+        }
+
+        public override void CloseViewModel()
+        {
+            base.CloseViewModel();
         }
 
         private async Task<BitmapImage> LoadImgUrl(string url, bool block = false)

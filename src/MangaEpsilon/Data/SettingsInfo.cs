@@ -16,5 +16,7 @@ namespace MangaEpsilon.Data
         public string CurrentThemeAccent { get; set; }
         [DataMember]
         public bool MinimizeToTray { get; set; }
+        [DataMember]
+        public bool SaveZoomPosition { get; set; }
     }
 }
