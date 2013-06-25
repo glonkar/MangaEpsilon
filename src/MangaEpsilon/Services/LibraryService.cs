@@ -68,14 +68,17 @@ namespace MangaEpsilon.Services
             IsInitialized = true;
         }
 
-        public static async void Deinitialize()
+        public static async Task Deinitialize(bool async = false)
         {
             if (!IsInitialized) return;
 
-            await SaveLibrary();
+            if (async)
+                await SaveLibrary(async);
+            else
+                SaveLibrary(async).Wait();
         }
 
-        private static async Task SaveLibrary()
+        private static async Task SaveLibrary(bool async = false)
         {
             using (var sw = new StreamWriter(LibraryFile, false))
             {
@@ -84,7 +87,11 @@ namespace MangaEpsilon.Services
                     jtw.Formatting = Formatting.Indented;
 
                     App.DefaultJsonSerializer.Serialize(jtw, LibraryCollection);
-                    await sw.FlushAsync();
+
+                    if (async)
+                        await sw.FlushAsync();
+                    else
+                        sw.Flush();
                 }
             }
         }

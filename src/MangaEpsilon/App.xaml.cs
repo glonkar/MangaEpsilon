@@ -64,6 +64,7 @@ namespace MangaEpsilon
             SoundManager.Initialize();
 
             LibraryInitializationTask = LibraryService.Initialize();
+            FavoritesInitializationTask = FavoritesService.Initialize();
 
             base.PostStartup();
         }
@@ -71,7 +72,8 @@ namespace MangaEpsilon
         protected override void PreShutdown()
         {
             SaveAvailableManga();
-            LibraryService.Deinitialize();
+            FavoritesService.Deinitialize().Wait();
+            LibraryService.Deinitialize(false).Wait();
             base.PreShutdown();
         }
 
@@ -98,13 +100,13 @@ namespace MangaEpsilon
                 }
 
                 await App.MangaSource.AcquireAvailableManga();
-                await SaveAvailableManga();
+                await SaveAvailableManga(true);
                 await Task.Delay(500);
 
             }
         }
 
-        private static async Task SaveAvailableManga()
+        private static async Task SaveAvailableManga(bool async = false)
         {
             var preloaded = App.MangaSource.AvailableManga;
 
@@ -115,7 +117,11 @@ namespace MangaEpsilon
                     jtw.Formatting = Formatting.Indented;
 
                     DefaultJsonSerializer.Serialize(jtw, preloaded);
-                    await sw.FlushAsync();
+
+                    if (async)
+                        await sw.FlushAsync();
+                    else
+                        sw.Flush();
                 }
             }
         }
@@ -129,6 +135,7 @@ namespace MangaEpsilon
         public static string ImageCacheDir = null;
         internal static Task MangaSourceInitializationTask = null;
         internal static Task LibraryInitializationTask = null;
+        internal static Task FavoritesInitializationTask = null;
         internal static JsonSerializer DefaultJsonSerializer = null;
 
         public static volatile bool DownloadsRunning = false;
