@@ -192,6 +192,15 @@
                                 </ListBox>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                     <Button Style="{DynamicResource MetroCircleButtonStyle}" Height="40" Width="40" 
+                                            Command="{Binding BeginningChapterPageCommand, UpdateSourceTrigger=PropertyChanged}" 
+                                            Cursor="Hand">
+                                        <Rectangle Width="20" Height="20">
+                                            <Rectangle.Fill>
+                                                <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_sidebar_expand_left}" />
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+                                    </Button>
+                                    <Button Style="{DynamicResource MetroCircleButtonStyle}" Height="40" Width="40" 
                                             Command="{Binding PreviousChapterPageCommand, UpdateSourceTrigger=PropertyChanged}" 
                                             Cursor="Hand">
                                         <Rectangle Width="20" Height="20">
@@ -206,6 +215,15 @@
                                         <Rectangle Width="20" Height="20">
                                             <Rectangle.Fill>
                                                 <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_arrow_right}" />
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+                                    </Button>
+                                    <Button Style="{DynamicResource MetroCircleButtonStyle}" Height="40" Width="40" 
+                                            Command="{Binding EndingChapterPageCommand, UpdateSourceTrigger=PropertyChanged}" 
+                                            Cursor="Hand">
+                                        <Rectangle Width="20" Height="20">
+                                            <Rectangle.Fill>
+                                                <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_sidebar_expand_right}" />
                                             </Rectangle.Fill>
                                         </Rectangle>
                                     </Button>

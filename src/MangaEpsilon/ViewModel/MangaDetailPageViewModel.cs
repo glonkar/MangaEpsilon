@@ -70,6 +70,24 @@ namespace MangaEpsilon.ViewModel
             MangaChapters = new PaginatedObservableCollection<ChapterEntry>(selectedManga.Chapters);
             MangaChapters.PageSize = 40;
 
+            BeginningChapterPageCommand = CommandManager.CreateProperCommand((o) =>
+            {
+                while(this.MangaChapters.CanPageDown)
+                    MangaChapters.CurrentPage--;
+                System.Windows.Input.CommandManager.InvalidateRequerySuggested();
+            }, (o) =>
+            {
+                return this.MangaChapters.CanPageDown;
+            });
+            EndingChapterPageCommand = CommandManager.CreateProperCommand((o) =>
+            {
+                while(this.MangaChapters.CanPageUp)
+                    MangaChapters.CurrentPage++;
+                System.Windows.Input.CommandManager.InvalidateRequerySuggested();
+            }, (o) =>
+            {
+                return this.MangaChapters.CanPageUp;
+            });
             NextChapterPageCommand = CommandManager.CreateProperCommand((o) =>
             {
                 MangaChapters.CurrentPage++;
@@ -194,6 +212,8 @@ namespace MangaEpsilon.ViewModel
             set { SetProperty(x => this.MangaClickCommand, value); }
         }
 
+        public CrystalProperCommand BeginningChapterPageCommand { get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.BeginningChapterPageCommand); } set { SetProperty<CrystalProperCommand>(x => this.BeginningChapterPageCommand, value); } }
+        public CrystalProperCommand EndingChapterPageCommand { get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.EndingChapterPageCommand); } set { SetProperty<CrystalProperCommand>(x => this.EndingChapterPageCommand, value); } }
         public CrystalProperCommand PreviousChapterPageCommand { get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.PreviousChapterPageCommand); } set { SetProperty<CrystalProperCommand>(x => this.PreviousChapterPageCommand, value); } }
         public CrystalProperCommand NextChapterPageCommand { get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.NextChapterPageCommand); } set { SetProperty<CrystalProperCommand>(x => this.NextChapterPageCommand, value); } }
         public CrystalCommand OpenMangaChapterCommand { get; set; }
