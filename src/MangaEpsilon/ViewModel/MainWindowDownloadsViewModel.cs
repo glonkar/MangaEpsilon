@@ -162,6 +162,12 @@ namespace MangaEpsilon.ViewModel
                         if (!error)
                         {
                             LibraryService.AddLibraryItem(new Tuple<ChapterLight, string>(download.Chapter, downloadPath));
+
+                            Notifications.NotificationsService.AddNotification("Download Completed!", download.Chapter.Name + " Downloaded", download.Chapter.ParentManga.BookImageUrl, 3000, false, Notifications.NotificationType.Information, (x) =>
+                                {
+                                    var chapter = ((ChapterLight)download.Chapter);
+                                    NavigationService.ShowWindow<MangaChapterViewPageViewModel>(new KeyValuePair<string, object>("chapter", chapter));
+                                });
                         }
                     }
 

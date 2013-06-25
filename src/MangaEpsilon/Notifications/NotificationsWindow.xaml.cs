@@ -60,7 +60,7 @@ namespace MangaEpsilon.Notifications
 
         void NotificationsWindow_Unloaded(object sender, RoutedEventArgs e)
         {
-            this.MouseLeftButtonUp -= NotificationsWindow_MouseLeftButtonUp;
+            //this.PreviewMouseLeftButtonUp -= NotificationsWindow_PreviewMouseLeftButtonUp;
             this.Loaded -= NotificationsWindow_Loaded;
             this.Unloaded -= NotificationsWindow_Unloaded;
             this.MouseDoubleClick -= NotificationsWindow_MouseDoubleClick;
@@ -87,15 +87,16 @@ namespace MangaEpsilon.Notifications
                 this.ForceCursor = true;
             }
 
-            this.MouseLeftButtonUp += NotificationsWindow_MouseLeftButtonUp;
+            //this.PreviewMouseLeftButtonUp += NotificationsWindow_PreviewMouseLeftButtonUp;
 
             tm.Interval = info.Duration;
             this.Show();
             aniStry.Begin(this);
         }
 
-        void NotificationsWindow_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
         {
+            base.OnPreviewMouseLeftButtonUp(e);
             Action<NotificationInfo> act = ((NotificationInfo)this.DataContext).OnClickCallback;
 
             if (act != null)
@@ -105,10 +106,19 @@ namespace MangaEpsilon.Notifications
                         Dispatcher.Invoke(new MangaEpsilon.Notifications.NotificationsService.EmptyDelegate(() =>
                             {
                                 act((NotificationInfo)this.DataContext);
+
+                                ((NotificationInfo)this.DataContext).OnClickCallback = null;
+
                             }));
 
                     }));
             }
+        }
+
+
+        private void thisWindow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            OnPreviewMouseLeftButtonUp(e);
         }
 
         void NotificationsWindow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
