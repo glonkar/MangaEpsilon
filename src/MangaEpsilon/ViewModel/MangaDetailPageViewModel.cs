@@ -43,6 +43,19 @@ namespace MangaEpsilon.ViewModel
 
             //var firstEntry = Yukihyo.MAL.MyAnimeListAPI.Search(Manga.MangaName, Yukihyo.MAL.MALSearchType.manga).First(x => x.Title.ToLower() == Manga.MangaName.ToLower());
 
+            MangaIsFavorited = FavoritesService.IsMangaFavorited(Manga);
+
+            MangaAddFavoriteCommand = CommandManager.CreateProperCommand((o) =>
+            {
+                FavoritesService.AddManga(Manga);
+                MangaIsFavorited = true;
+            }, (o) => !FavoritesService.IsMangaFavorited(Manga));
+            MangaRemoveFavoriteCommand = CommandManager.CreateProperCommand((o) =>
+            {
+                FavoritesService.RemoveManga(Manga);
+                MangaIsFavorited = false;
+            }, (o) => FavoritesService.IsMangaFavorited(Manga));
+
             OpenMangaChapterCommand = CommandManager.CreateCommand(x =>
             {
                 ChapterEntry selectedChapter = x as ChapterEntry;
@@ -61,7 +74,7 @@ namespace MangaEpsilon.ViewModel
                     if (SelectedChapterItems.Length == 1 && SelectedChapterItems[0] == chapter)
                         Messenger.PushMessage(this, "MangaChapterDownload", chapter);
                     else
-                        foreach(ChapterEntry chap in SelectedChapterItems)
+                        foreach (ChapterEntry chap in SelectedChapterItems)
                             Messenger.PushMessage(this, "MangaChapterDownload", chap);
                 }
             }, (o) =>
@@ -72,7 +85,7 @@ namespace MangaEpsilon.ViewModel
 
             BeginningChapterPageCommand = CommandManager.CreateProperCommand((o) =>
             {
-                while(this.MangaChapters.CanPageDown)
+                while (this.MangaChapters.CanPageDown)
                     MangaChapters.CurrentPage--;
                 System.Windows.Input.CommandManager.InvalidateRequerySuggested();
             }, (o) =>
@@ -81,7 +94,7 @@ namespace MangaEpsilon.ViewModel
             });
             EndingChapterPageCommand = CommandManager.CreateProperCommand((o) =>
             {
-                while(this.MangaChapters.CanPageUp)
+                while (this.MangaChapters.CanPageUp)
                     MangaChapters.CurrentPage++;
                 System.Windows.Input.CommandManager.InvalidateRequerySuggested();
             }, (o) =>
@@ -287,6 +300,22 @@ namespace MangaEpsilon.ViewModel
         {
             get { return GetPropertyOrDefaultType<ObservableCollection<Manga.Base.Manga>>(x => this.RelatedManga); }
             set { SetProperty(x => this.RelatedManga, value); }
+        }
+
+        public bool MangaIsFavorited
+        {
+            get { return GetPropertyOrDefaultType<bool>(x => this.MangaIsFavorited); }
+            set { SetProperty<bool>(x => this.MangaIsFavorited, value); }
+        }
+        public CrystalProperCommand MangaAddFavoriteCommand
+        {
+            get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.MangaAddFavoriteCommand); }
+            set { SetProperty<CrystalProperCommand>(x => this.MangaAddFavoriteCommand, value); }
+        }
+        public CrystalProperCommand MangaRemoveFavoriteCommand
+        {
+            get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.MangaRemoveFavoriteCommand); }
+            set { SetProperty<CrystalProperCommand>(x => this.MangaRemoveFavoriteCommand, value); }
         }
     }
 }

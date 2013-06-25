@@ -308,6 +308,9 @@
                 <TabItem.DataContext>
                     <vm:MainWindowLibraryViewModel/>
                 </TabItem.DataContext>
+                <TabItem.Resources>
+                    <conv:MangaIsFavoritedBooleanToVisibilityConverter x:Key="FavConv"/>
+                </TabItem.Resources>
                 <Grid>
                     <!-- Group code from: http://karlshifflett.wordpress.com/2009/06/10/wpf-sample-series-listbox-grouping-sorting-subtotals-and-collapsible-regions/ -->
                     <!--<Grid.Resources>
@@ -337,7 +340,11 @@
                                     <GroupStyle.HeaderTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">
-                                                <!--<Image Height="100" Source="{Binding Items[0].ParentManga.BookImageUrl, Converter={StaticResource ImgCache}}"/>-->
+                                                <Rectangle Width="20" Height="20" Visibility="{Binding Items[0].ParentManga, Converter={StaticResource FavConv}, UpdateSourceTrigger=PropertyChanged}">
+                                                    <Rectangle.Fill>
+                                                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_star}" />
+                                                    </Rectangle.Fill>
+                                                </Rectangle>
                                                 <TextBlock Text="{Binding Name}" FontSize="17" FontWeight="bold" Margin="5 0 0 0" />
                                             </StackPanel>
                                         </DataTemplate>

@@ -188,6 +188,8 @@ namespace MangaEpsilon.ViewModel
 
                 Messenger.PushMessage(this, "UpdateMainWindowState", System.Windows.Shell.TaskbarItemProgressState.None);
 
+                DownloadsService.Downloads = Downloads;
+
                 App.DownloadsRunning = false;
             });
         }
@@ -195,7 +197,7 @@ namespace MangaEpsilon.ViewModel
         public ObservableQueue<MangaChapterDownload> Downloads
         {
             get { return GetPropertyOrDefaultType<ObservableQueue<MangaChapterDownload>>(x => this.Downloads); }
-            set { SetProperty<ObservableQueue<MangaChapterDownload>>(x => this.Downloads, value); }
+            set { SetProperty<ObservableQueue<MangaChapterDownload>>(x => this.Downloads, value); DownloadsService.Downloads = Downloads; }
         }
 
         public MangaChapterDownload SelectedItem

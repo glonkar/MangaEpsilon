@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using Crystal.Command;
 using Crystal.Core;
 using Crystal.Messaging;
@@ -22,8 +23,13 @@ namespace MangaEpsilon.ViewModel
             Initialize();
         }
 
+        private Timer refreshTimer = new Timer();
+
         private async void Initialize()
         {
+            refreshTimer.Interval = TimeSpan.FromMinutes(10).TotalMilliseconds;
+            refreshTimer.Elapsed += refreshTimer_Elapsed;
+
             IsBusy = true;
             await Task.WhenAll(App.MangaSourceInitializationTask); //Checks (and waits if needed) for the Manga Source's initialization.
 
@@ -67,10 +73,28 @@ namespace MangaEpsilon.ViewModel
                 }
             }, (o) => o != null && o is ChapterEntry && !LibraryService.Contains((ChapterEntry)o));
 
-            RetryCommand = CommandManager.CreateProperCommand(async (o) => await GetNewReleases(), (o) => IsError);
+            RetryCommand = CommandManager.CreateProperCommand(async (o) =>
+                {
+                    await GetNewReleases();
+
+                    if (IsError == false)
+                        if (!refreshTimer.Enabled)
+                            refreshTimer.Start();
+                }, (o) => IsError);
 
             await GetNewReleases();
 
+            if (IsError == false)
+                if (!refreshTimer.Enabled)
+                    refreshTimer.Start();
+        }
+
+        async void refreshTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            await Dispatcher.InvokeAsync(async () =>
+            {
+                await GetNewReleases();
+            });
         }
 
         private async Task GetNewReleases()
@@ -91,6 +115,11 @@ namespace MangaEpsilon.ViewModel
                     //simulate real-time adding of items
                     await Task.Delay(100);
                     NewReleasesToday.Add(manga);
+
+                    //If the manga is subscribed too (favorited), download the latest manga.
+                    if (FavoritesService.IsMangaFavorited(manga.ParentManga))
+                        if (!LibraryService.Contains(manga) && !DownloadsService.IsDownloading(manga))
+                            DownloadsService.AddDownload(manga);
                 }
 
                 IsError = false;

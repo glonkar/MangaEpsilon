@@ -134,15 +134,54 @@
                                     <ItemsControl.Resources>
                                         <Style TargetType="{x:Type ListBoxItem}">
                                             <Style.Resources>
-                                                <!-- Background of selected item when focussed -->
+                                                <!-- Background of selected item when focused -->
                                                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
-                                                <!-- Background of selected item when not focussed -->
+                                                <!-- Background of selected item when not focused -->
                                                 <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
                                             </Style.Resources>
                                             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                                         </Style>
                                     </ItemsControl.Resources>
                                 </ItemsControl>
+                                <StackPanel Orientation="Horizontal">
+                                    <ContentPresenter Height="40" Width="40">
+                                        <ContentPresenter.Resources>
+                                            <ControlTemplate x:Key="AddFavoriteTemplate">
+                                                <Rectangle Width="20" Height="20">
+                                                    <Rectangle.Fill>
+                                                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_star_add}" />
+                                                    </Rectangle.Fill>
+                                                </Rectangle>
+                                            </ControlTemplate>
+                                            <ControlTemplate x:Key="RemoveFavoriteTemplate">
+                                                <Rectangle Width="20" Height="20">
+                                                    <Rectangle.Fill>
+                                                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_star_delete}" />
+                                                    </Rectangle.Fill>
+                                                </Rectangle>
+                                            </ControlTemplate>
+                                        </ContentPresenter.Resources>
+                                        <ContentPresenter.ContentTemplate>
+                                            <DataTemplate>
+                                                <Button x:Name="control" Template="{StaticResource AddFavoriteTemplate}" Style="{DynamicResource MetroCircleButtonStyle}"
+                                                Command="{Binding ElementName=thisWindow,Path=DataContext.MangaAddFavoriteCommand, UpdateSourceTrigger=PropertyChanged}" 
+                                                Cursor="Hand"/>
+                                                <DataTemplate.Triggers>
+                                                    <DataTrigger Binding="{Binding ElementName=thisWindow,Path=DataContext.MangaIsFavorited, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                                        <Setter TargetName="control" Property="Template" Value="{StaticResource RemoveFavoriteTemplate}"/>
+                                                        <Setter TargetName="control" Property="Button.Command" 
+                                                                Value="{Binding ElementName=thisWindow,Path=DataContext.MangaRemoveFavoriteCommand, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding ElementName=thisWindow,Path=DataContext.MangaIsFavorited, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                                        <Setter TargetName="control" Property="Template" Value="{StaticResource AddFavoriteTemplate}"/>
+                                                        <Setter TargetName="control" Property="Button.Command" 
+                                                                Value="{Binding ElementName=thisWindow,Path=DataContext.MangaAddFavoriteCommand, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    </DataTrigger>
+                                                </DataTemplate.Triggers>
+                                            </DataTemplate>
+                                        </ContentPresenter.ContentTemplate>
+                                    </ContentPresenter>
+                                </StackPanel>
                             </StackPanel>
                         </Grid>
                     </Grid>

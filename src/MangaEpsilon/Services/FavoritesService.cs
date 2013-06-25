@@ -36,7 +36,7 @@ namespace MangaEpsilon.Services
                 {
                     if (!File.Exists(FavoritesFile))
                     {
-                       FavoritesCollection = new ObservableCollection<string>();
+                        FavoritesCollection = new ObservableCollection<string>();
                     }
                     else
                         using (var sr = new StreamReader(FavoritesFile))
@@ -71,5 +71,25 @@ namespace MangaEpsilon.Services
         internal static string FavoritesFile { get; private set; }
 
         public static bool IsInitialized { get; private set; }
+
+        internal static bool IsMangaFavorited(Manga.Base.Manga Manga)
+        {
+            return FavoritesCollection.Contains(Manga.MangaName);
+        }
+
+        internal static async void AddManga(Manga.Base.Manga Manga)
+        {
+            FavoritesCollection.Add(Manga.MangaName);
+            await SaveFavorites(true);
+        }
+
+        internal static async void RemoveManga(Manga.Base.Manga Manga)
+        {
+            if (FavoritesCollection.Contains(Manga.MangaName))
+            {
+                FavoritesCollection.Remove(Manga.MangaName);
+                await SaveFavorites(true);
+            }
+        }
     }
 }
