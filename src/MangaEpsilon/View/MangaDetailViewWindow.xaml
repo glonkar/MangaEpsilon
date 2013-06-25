@@ -109,11 +109,12 @@
                                 <TextBlock Text="{Binding Status, UpdateSourceTrigger=PropertyChanged,StringFormat='Status: {0}'}" 
                                            HorizontalAlignment="Center" FontSize="16" 
                                            Foreground="{DynamicResource AccentColorBrush}"/>
-                                <ItemsControl ItemsSource="{Binding Categories, UpdateSourceTrigger=PropertyChanged}">
+                                <ItemsControl ItemsSource="{Binding Categories, UpdateSourceTrigger=PropertyChanged}" Width="400" Margin="2 0 2 0" Height="80">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <WrapPanel ItemHeight="30" ItemWidth="Auto" IsItemsHost="True" 
-                                                               Width="{Binding (FrameworkElement.ActualWidth), RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}"/>
+                                                               Width="420"
+                                                       Height="{Binding (FrameworkElement.ActualHeight), RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}"/>
                                         </ItemsPanelTemplate>
                                     </ItemsControl.ItemsPanel>
                                     <ItemsControl.ItemTemplate>
