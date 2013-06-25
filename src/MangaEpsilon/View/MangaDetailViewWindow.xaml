@@ -113,7 +113,7 @@
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <WrapPanel ItemHeight="30" ItemWidth="Auto" IsItemsHost="True" 
-                                                               Width="420"
+                                                       Width="420"
                                                        Height="{Binding (FrameworkElement.ActualHeight), RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}"/>
                                         </ItemsPanelTemplate>
                                     </ItemsControl.ItemsPanel>

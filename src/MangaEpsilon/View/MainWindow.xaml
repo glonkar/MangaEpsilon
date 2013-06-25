@@ -399,7 +399,7 @@
                                                    Margin="9 0 20 0" MaxWidth="1400" Height="Auto" HorizontalAlignment="Left"/>
                                         <TextBlock Text="{Binding Status, UpdateSourceTrigger=PropertyChanged,StringFormat='Status: {0}'}" 
                                                    FontSize="16" Margin="9 0 0 0" Foreground="{DynamicResource AccentColorBrush}"/>
-                                        <ItemsControl ItemsSource="{Binding Categories, UpdateSourceTrigger=PropertyChanged}">
+                                        <ItemsControl ItemsSource="{Binding Categories, UpdateSourceTrigger=PropertyChanged}" Margin="9 0 0 0">
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
                                                     <WrapPanel ItemHeight="30" ItemWidth="Auto" IsItemsHost="True" 
@@ -460,7 +460,7 @@
                                     <DataTemplate>
                                         <Grid>
                                             <Label VerticalAlignment="Center" HorizontalAlignment="Center" Panel.ZIndex="1" Content="{Binding ProgressStr, UpdateSourceTrigger=PropertyChanged}"/>
-                                            <metro:MetroProgressBar Value="{Binding Progress, UpdateSourceTrigger=PropertyChanged}" Maximum="{Binding MaxProgress, UpdateSourceTrigger=PropertyChanged}">
+                                            <metro:MetroProgressBar Value="{Binding Progress, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Maximum="{Binding MaxProgress, UpdateSourceTrigger=PropertyChanged}">
                                                 <ProgressBar.Foreground>
                                                     <SolidColorBrush Color="{DynamicResource AccentColor}"/>
                                                 </ProgressBar.Foreground>
