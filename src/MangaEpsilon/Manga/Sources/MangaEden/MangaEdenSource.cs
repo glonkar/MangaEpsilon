@@ -80,6 +80,8 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                     //Updates the existing entry for the manga for later.
                     var index = AvailableManga.IndexOf(manga);
 
+                    //manga.MangaName = ((string)data["title"]).Trim();
+
                     if (manga.Author == null)
                         manga.Author = data["author"] as string;
 
