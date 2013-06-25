@@ -80,7 +80,7 @@ namespace MangaEpsilon.Services
         internal static async void AddManga(Manga.Base.Manga Manga)
         {
             FavoritesCollection.Add(Manga.MangaName);
-            await SaveFavorites(true);
+            await SaveFavorites(false);
         }
 
         internal static async void RemoveManga(Manga.Base.Manga Manga)
@@ -88,7 +88,7 @@ namespace MangaEpsilon.Services
             if (FavoritesCollection.Contains(Manga.MangaName))
             {
                 FavoritesCollection.Remove(Manga.MangaName);
-                await SaveFavorites(true);
+                await SaveFavorites(false);
             }
         }
     }

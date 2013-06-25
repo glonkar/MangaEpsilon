@@ -145,37 +145,42 @@
                                 </ItemsControl>
                                 <StackPanel Orientation="Horizontal">
                                     <ContentPresenter Height="40" Width="40">
-                                        <ContentPresenter.Resources>
-                                            <ControlTemplate x:Key="AddFavoriteTemplate">
-                                                <Rectangle Width="20" Height="20">
-                                                    <Rectangle.Fill>
-                                                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_star_add}" />
-                                                    </Rectangle.Fill>
-                                                </Rectangle>
-                                            </ControlTemplate>
-                                            <ControlTemplate x:Key="RemoveFavoriteTemplate">
-                                                <Rectangle Width="20" Height="20">
-                                                    <Rectangle.Fill>
-                                                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_star_delete}" />
-                                                    </Rectangle.Fill>
-                                                </Rectangle>
-                                            </ControlTemplate>
-                                        </ContentPresenter.Resources>
                                         <ContentPresenter.ContentTemplate>
                                             <DataTemplate>
-                                                <Button x:Name="control" Template="{StaticResource AddFavoriteTemplate}" Style="{DynamicResource MetroCircleButtonStyle}"
-                                                Command="{Binding ElementName=thisWindow,Path=DataContext.MangaAddFavoriteCommand, UpdateSourceTrigger=PropertyChanged}" 
-                                                Cursor="Hand"/>
+                                                <Button x:Name="control">
+                                                    <Rectangle Width="20" Height="20" x:Name="brush">
+                                                    </Rectangle>
+                                                </Button>
                                                 <DataTemplate.Triggers>
                                                     <DataTrigger Binding="{Binding ElementName=thisWindow,Path=DataContext.MangaIsFavorited, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                                        <Setter TargetName="control" Property="Template" Value="{StaticResource RemoveFavoriteTemplate}"/>
+                                                        <Setter TargetName="control" Property="Content">
+                                                            <Setter.Value>
+                                                                <Rectangle Width="20" Height="20">
+                                                                    <Rectangle.Fill>
+                                                                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_star_delete}"/>
+                                                                    </Rectangle.Fill>
+                                                                </Rectangle>
+                                                            </Setter.Value>
+                                                        </Setter>
                                                         <Setter TargetName="control" Property="Button.Command" 
                                                                 Value="{Binding ElementName=thisWindow,Path=DataContext.MangaRemoveFavoriteCommand, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <Setter TargetName="control" Property="ToolTip" Value="{i18n:CrystalLocalizedValueMarkup Key='RemoveFromFavoritesMsg',NullValue='Remove from Favorites'}"/>
+                                                        <Setter TargetName="control" Property="Style" Value="{DynamicResource MetroCircleButtonStyle}"/>
                                                     </DataTrigger>
                                                     <DataTrigger Binding="{Binding ElementName=thisWindow,Path=DataContext.MangaIsFavorited, UpdateSourceTrigger=PropertyChanged}" Value="False">
-                                                        <Setter TargetName="control" Property="Template" Value="{StaticResource AddFavoriteTemplate}"/>
+                                                        <Setter TargetName="control" Property="Content">
+                                                            <Setter.Value>
+                                                                <Rectangle Width="20" Height="20">
+                                                                    <Rectangle.Fill>
+                                                                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_star_add}"/>
+                                                                    </Rectangle.Fill>
+                                                                </Rectangle>
+                                                            </Setter.Value>
+                                                        </Setter>
                                                         <Setter TargetName="control" Property="Button.Command" 
                                                                 Value="{Binding ElementName=thisWindow,Path=DataContext.MangaAddFavoriteCommand, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <Setter TargetName="control" Property="ToolTip" Value="{i18n:CrystalLocalizedValueMarkup Key='AddToFavoritesMsg',NullValue='Add to Favorites'}"/>
+                                                        <Setter TargetName="control" Property="Style" Value="{DynamicResource MetroCircleButtonStyle}"/>
                                                     </DataTrigger>
                                                 </DataTemplate.Triggers>
                                             </DataTemplate>
