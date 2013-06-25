@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Crystal.Command;
 using Crystal.Core;
+using Crystal.Localization;
 using Crystal.Messaging;
 using Crystal.Navigation;
 using MangaEpsilon.Manga.Base;
@@ -163,7 +164,16 @@ namespace MangaEpsilon.ViewModel
                         {
                             LibraryService.AddLibraryItem(new Tuple<ChapterLight, string>(download.Chapter, downloadPath));
 
-                            Notifications.NotificationsService.AddNotification("Download Completed!", download.Chapter.Name + " Downloaded", download.Chapter.ParentManga.BookImageUrl, 3000, false, Notifications.NotificationType.Information, (x) =>
+                            Notifications.NotificationsService.AddNotification(
+                                LocalizationManager.GetLocalizedValue("DownloadCompletedTitle"), 
+                                string.Format(
+                                    LocalizationManager.GetLocalizedValue("DownloadCompletedMsg"),
+                                    download.Chapter.Name), 
+                                download.Chapter.ParentManga.BookImageUrl, 
+                                3000, 
+                                false, 
+                                Notifications.NotificationType.Information, 
+                                (x) =>
                                 {
                                     var chapter = ((ChapterLight)download.Chapter);
                                     NavigationService.ShowWindow<MangaChapterViewPageViewModel>(new KeyValuePair<string, object>("chapter", chapter));
