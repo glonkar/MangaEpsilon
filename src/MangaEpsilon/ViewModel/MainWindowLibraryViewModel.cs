@@ -35,6 +35,9 @@ namespace MangaEpsilon.ViewModel
             LibraryService.LibraryItemAdded += LibraryService_LibraryItemAdded;
             LibraryService.LibraryItemRemoved += LibraryService_LibraryItemRemoved;
 
+            FavoritesService.ItemFavorited += FavoritesService_ItemFavorited;
+            FavoritesService.ItemUnfavorited += FavoritesService_ItemUnfavorited;
+
             LibraryItems = new ObservableCollection<Manga.Base.ChapterLight>(LibraryService.LibraryCollection.Select(x => x.Item1));
 
             var libraryItemsView = CollectionViewSource.GetDefaultView(LibraryItems);
@@ -43,6 +46,32 @@ namespace MangaEpsilon.ViewModel
             libraryItemsView.SortDescriptions.Add(new System.ComponentModel.SortDescription("ChapterNumber", System.ComponentModel.ListSortDirection.Ascending));
 
             InitializeCommands();
+        }
+
+        async void FavoritesService_ItemUnfavorited(Manga.Base.Manga manga)
+        {
+            await Dispatcher.InvokeAsync(() =>
+            {
+                //flush the queue
+                Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.SystemIdle, new Action(() => { }));
+
+                var libraryItemsView = CollectionViewSource.GetDefaultView(LibraryItems);
+
+                libraryItemsView.Refresh();
+            });
+        }
+
+        async void FavoritesService_ItemFavorited(Manga.Base.Manga manga)
+        {
+            await Dispatcher.InvokeAsync(() =>
+                {
+                    //flush the queue
+                    Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.SystemIdle, new Action(() => { }));
+
+                    var libraryItemsView = CollectionViewSource.GetDefaultView(LibraryItems);
+
+                    libraryItemsView.Refresh();
+                });
         }
 
         private void InitializeCommands()

@@ -18,16 +18,21 @@ namespace MangaEpsilon.Services
             FavoritesFile = App.AppDataDir + "Favorites.json";
 
             await LoadFavorites();
+
+            IsInitialized = true;
         }
 
-        public static async Task Deinitialize(bool async = false)
+        public static void Deinitialize()
         {
             if (!IsInitialized) return;
 
-            if (async)
-                await SaveFavorites(async);
-            else
-                SaveFavorites(async).Wait();
+            SaveFavorites();
+        }
+        public static async Task DeinitializeAsync()
+        {
+            if (!IsInitialized) return;
+
+            await SaveFavoritesAsync();
         }
 
         private static async Task LoadFavorites()
@@ -49,7 +54,7 @@ namespace MangaEpsilon.Services
                 });
         }
 
-        private static async Task SaveFavorites(bool async = false)
+        private static void SaveFavorites()
         {
             using (var sw = new StreamWriter(FavoritesFile, false))
             {
@@ -58,10 +63,22 @@ namespace MangaEpsilon.Services
                     jtw.Formatting = Formatting.Indented;
 
                     App.DefaultJsonSerializer.Serialize(jtw, FavoritesCollection);
-                    if (async)
-                        await sw.FlushAsync();
-                    else
-                        sw.Flush();
+
+                    sw.Flush();
+                }
+            }
+        }
+        private static async Task SaveFavoritesAsync()
+        {
+            using (var sw = new StreamWriter(FavoritesFile, false))
+            {
+                using (var jtw = new Newtonsoft.Json.JsonTextWriter(sw))
+                {
+                    jtw.Formatting = Formatting.Indented;
+
+                    App.DefaultJsonSerializer.Serialize(jtw, FavoritesCollection);
+
+                    await sw.FlushAsync();
                 }
             }
         }
@@ -79,8 +96,14 @@ namespace MangaEpsilon.Services
 
         internal static async void AddManga(Manga.Base.Manga Manga)
         {
-            FavoritesCollection.Add(Manga.MangaName);
-            await SaveFavorites(false);
+            if (!FavoritesCollection.Contains(Manga.MangaName))
+            {
+                FavoritesCollection.Add(Manga.MangaName);
+                //await SaveFavorites(false);
+
+                if (ItemFavorited != null)
+                    ItemFavorited(Manga);
+            }
         }
 
         internal static async void RemoveManga(Manga.Base.Manga Manga)
@@ -88,8 +111,17 @@ namespace MangaEpsilon.Services
             if (FavoritesCollection.Contains(Manga.MangaName))
             {
                 FavoritesCollection.Remove(Manga.MangaName);
-                await SaveFavorites(false);
+                //await SaveFavorites(true);
+
+                if (ItemUnfavorited != null)
+                    ItemUnfavorited(Manga);
             }
         }
+
+        public delegate void ItemFavoritedHandler(Manga.Base.Manga manga);
+        public static event ItemFavoritedHandler ItemFavorited;
+
+        public delegate void ItemUnfavoritedHandler(Manga.Base.Manga manga);
+        public static event ItemUnfavoritedHandler ItemUnfavorited;
     }
 }

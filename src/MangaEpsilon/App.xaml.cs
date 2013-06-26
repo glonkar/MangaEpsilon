@@ -71,8 +71,8 @@ namespace MangaEpsilon
 
         protected override void PreShutdown()
         {
-            SaveAvailableManga();
-            FavoritesService.Deinitialize().Wait();
+            SaveAvailableManga(false).Wait();
+            FavoritesService.Deinitialize();
             LibraryService.Deinitialize(false).Wait();
             base.PreShutdown();
         }

@@ -42,6 +42,8 @@
 
             <BooleanToVisibilityConverter x:Key="BTV"/>
 
+            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_star}" x:Key="LibraryItemStarBrush" />
+            
             <DataTemplate x:Key="MangaListBoxItemTemplate">
                 <Grid HorizontalAlignment="Left" Width="250" Height="250" Margin="6" Cursor="Hand" meap:LoadedOnceHelper.HandleLoadedBefore="True">
                     <Grid.CacheMode>
@@ -340,11 +342,7 @@
                                     <GroupStyle.HeaderTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">
-                                                <Rectangle Width="20" Height="20" Visibility="{Binding Items[0].ParentManga, Converter={StaticResource FavConv}, UpdateSourceTrigger=PropertyChanged}">
-                                                    <Rectangle.Fill>
-                                                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_star}" />
-                                                    </Rectangle.Fill>
-                                                </Rectangle>
+                                                <Rectangle Width="20" Height="20" Visibility="{Binding Items[0].ParentManga, Converter={StaticResource FavConv}, UpdateSourceTrigger=PropertyChanged}" Fill="{StaticResource LibraryItemStarBrush}"/>
                                                 <TextBlock Text="{Binding Name}" FontSize="17" FontWeight="bold" Margin="5 0 0 0" />
                                             </StackPanel>
                                         </DataTemplate>
