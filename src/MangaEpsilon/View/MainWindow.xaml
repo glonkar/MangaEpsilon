@@ -284,7 +284,7 @@
                                     <DataTemplate>
                                         <Grid HorizontalAlignment="Left" Width="250" Height="250" Cursor="Hand" meap:LoadedOnceHelper.HandleLoadedBefore="True">
                                             <Border>
-                                                <Image Source="{Binding BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=250}" 
+                                                <Image Source="{Binding BookImageUrl, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TImgCache}, ConverterParameter=250}" 
                                                        Stretch="UniformToFill" AutomationProperties.Name="{Binding MangaName}"/>
                                             </Border>
                                             <StackPanel VerticalAlignment="Bottom" Background="Gray">
