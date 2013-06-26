@@ -1,0 +1,35 @@
+﻿<metro:MetroWindow x:Class="MangaEpsilon.Dialogs.ProgressDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:metro2="clr-namespace:MahApps.Metro;assembly=MahApps.Metro"
+        xmlns:i18n="clr-namespace:Crystal.Localization;assembly=Amrykid.Crystal"
+        Title="ProgressDialog" Height="139" Width="420" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" Topmost="True">
+    <metro:MetroWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+                <ResourceDictionary Source="/Resources/Icons.xaml" />
+                <ResourceDictionary Source="/Resources/StandardStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </metro:MetroWindow.Resources>
+    <Grid>
+        <metro:MetroProgressBar HorizontalAlignment="Stretch" Margin="30 0 30 0" Height="13" x:Name="PBar"/>
+        <Label HorizontalAlignment="Left" Margin="30,9,0,0" Content="Some Task" FontSize="18" VerticalAlignment="Top" Height="34" Width="354" x:Name="NameLabel"/>
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Height="40" Width="40" 
+                Cursor="Hand" HorizontalAlignment="Center" VerticalAlignment="Bottom" 
+                ToolTip="{i18n:CrystalLocalizedValueMarkup Key='DownloadChapterMenuItem',NullValue='Cancel'}" 
+                x:Name="CancelButton" Click="CancelButton_Click">
+            <Rectangle Width="25" Height="25">
+                <Rectangle.Fill>
+                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_cancel}" />
+                </Rectangle.Fill>
+            </Rectangle>
+        </Button>
+    </Grid>
+</metro:MetroWindow>

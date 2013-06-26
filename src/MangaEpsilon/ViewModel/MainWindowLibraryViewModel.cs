@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using Crystal.Command;
 using Crystal.Core;
+using Crystal.Localization;
 using Crystal.Navigation;
+using Ionic.Zip;
+using MangaEpsilon.Dialogs;
 using MangaEpsilon.Manga.Base;
 using MangaEpsilon.Services;
 
@@ -39,6 +42,11 @@ namespace MangaEpsilon.ViewModel
             libraryItemsView.SortDescriptions.Add(new System.ComponentModel.SortDescription("ParentManga.MangaName", System.ComponentModel.ListSortDirection.Ascending));
             libraryItemsView.SortDescriptions.Add(new System.ComponentModel.SortDescription("ChapterNumber", System.ComponentModel.ListSortDirection.Ascending));
 
+            InitializeCommands();
+        }
+
+        private void InitializeCommands()
+        {
             MangaClickCommand = CommandManager.CreateProperCommand((o) =>
             {
                 if (o is ChapterLight)
@@ -67,6 +75,58 @@ namespace MangaEpsilon.ViewModel
                 {
                     var chapter = ((ChapterLight)o);
                     LibraryService.RemoveLibraryItem(new Tuple<ChapterLight, string>(chapter, LibraryService.GetPath(chapter)), true);
+                }
+            }, (o) =>
+                o != null && o is ChapterLight);
+
+            CreateCBZCommand = CommandManager.CreateProperCommand(async (o) =>
+            {
+                var results = Crystal.Services.ServiceManager.Resolve<Crystal.Services.IFileSaveDialogService>().ShowDialog("Comic Book Archive (.cbz)|*.cbz", 0);
+
+                if (results.Item1)
+                {
+                    ChapterLight chapter = ((ChapterLight)o);
+
+                    ProgressDialog pd = new ProgressDialog();
+
+                    pd.Owner = App.Current.MainWindow;
+
+                    pd.UpdateText(LocalizationManager.GetLocalizedValue("CreatingCBATitle"), LocalizationManager.GetLocalizedValue("CompressingImgMsg"));
+
+                    pd.Show();
+
+                    await Task.Delay(1000); //wait a second to get the window open.
+
+                    ZipFile zip = new Ionic.Zip.ZipFile();
+
+                    int imgcount = chapter.PagesUrls.Count;
+                    int i = 1;
+                    foreach(var image in chapter.PagesUrls)
+                    {
+                        await Task.Run(() =>
+                            {
+                                Uri url = new Uri(image);
+                                var fileName = LibraryService.GetPath(chapter) + url.Segments.Last();
+                                zip.AddFile(fileName).FileName = i.ToString().PadLeft(3, '0') + fileName.Substring(fileName.IndexOf('.'));
+                            });
+
+                        if (pd.IsCancel) break;
+
+                        await Dispatcher.InvokeAsync(() =>
+                            {
+                                pd.UpdateText(LocalizationManager.GetLocalizedValue("CreatingCBATitle"),
+                                    string.Format(LocalizationManager.GetLocalizedValue("CompressingImgFormatMsg"), i.ToString(), imgcount.ToString()));
+                            });
+
+                        i++;
+                    }
+
+                    if (!pd.IsCancel)
+                        zip.Save(results.Item2[0]);
+
+                    zip.Dispose();
+
+                    pd.Close();
                 }
             }, (o) =>
                 o != null && o is ChapterLight);
@@ -117,6 +177,11 @@ namespace MangaEpsilon.ViewModel
         {
             get { return (CrystalProperCommand)GetProperty(x => this.DeleteMangaCommand); }
             set { SetProperty(x => this.DeleteMangaCommand, value); }
+        }
+        public CrystalProperCommand CreateCBZCommand
+        {
+            get { return (CrystalProperCommand)GetProperty(x => this.CreateCBZCommand); }
+            set { SetProperty(x => this.CreateCBZCommand, value); }
         }
 
         public ChapterLight SelectedEntry

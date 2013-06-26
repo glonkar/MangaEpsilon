@@ -362,6 +362,8 @@
                                 <ContextMenu HasDropShadow="True">
                                     <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='ShowMangaMenuItem',NullValue='Show Manga Information...'}" Command="{Binding MangaInfoCommand}" 
                                               CommandParameter="{Binding SelectedEntry}"/>
+                                    <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='CreateComicBookArchiveItem',NullValue='Create Comic Book Archive (.cbz)'}" Command="{Binding CreateCBZCommand}"
+                                              CommandParameter="{Binding SelectedEntry}"/>
                                     <Separator />
                                     <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='DeleteMangaMenuItem',NullValue='Delete'}" Command="{Binding DeleteMangaCommand}" 
                                               CommandParameter="{Binding SelectedEntry}"/>
