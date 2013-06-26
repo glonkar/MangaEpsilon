@@ -86,6 +86,9 @@ namespace MangaEpsilon
             CanPageUp = originalCollection.Count >= (_currentPageIndex + 1) * _itemCountPerPage;
             CanPageDown = startIndex >= _itemCountPerPage;
 
+            if (_itemCountPerPage > 0)
+                MaxPageIndex = originalCollection.Count / _itemCountPerPage;
+
             if (originalCollection.Count <= startIndex)
                 return; //prevents it from navigating to a page with no items.
 
@@ -145,5 +148,7 @@ namespace MangaEpsilon
 
         public bool CanPageUp { get; private set; }
         public bool CanPageDown { get; private set; }
+
+        public int MaxPageIndex { get; private set; }
     }
 }

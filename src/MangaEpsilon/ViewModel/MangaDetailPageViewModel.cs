@@ -91,8 +91,7 @@ namespace MangaEpsilon.ViewModel
 
             BeginningChapterPageCommand = CommandManager.CreateProperCommand((o) =>
             {
-                while (this.MangaChapters.CanPageDown)
-                    MangaChapters.CurrentPage--;
+                MangaChapters.CurrentPage = 0;
                 System.Windows.Input.CommandManager.InvalidateRequerySuggested();
             }, (o) =>
             {
@@ -100,8 +99,7 @@ namespace MangaEpsilon.ViewModel
             });
             EndingChapterPageCommand = CommandManager.CreateProperCommand((o) =>
             {
-                while (this.MangaChapters.CanPageUp)
-                    MangaChapters.CurrentPage++;
+                MangaChapters.CurrentPage = MangaChapters.MaxPageIndex;
                 System.Windows.Input.CommandManager.InvalidateRequerySuggested();
             }, (o) =>
             {
