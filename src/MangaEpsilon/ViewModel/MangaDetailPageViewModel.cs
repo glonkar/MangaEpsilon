@@ -45,14 +45,20 @@ namespace MangaEpsilon.ViewModel
 
             MangaIsFavorited = FavoritesService.IsMangaFavorited(Manga);
 
-            MangaAddFavoriteCommand = CommandManager.CreateProperCommand((o) =>
+            MangaAddFavoriteCommand = CommandManager.CreateProperCommand(async (o) =>
             {
-                FavoritesService.AddManga(Manga);
+                await Task.Run(() =>
+                    {
+                        FavoritesService.AddManga(Manga);
+                    });
                 MangaIsFavorited = true;
             }, (o) => !FavoritesService.IsMangaFavorited(Manga));
-            MangaRemoveFavoriteCommand = CommandManager.CreateProperCommand((o) =>
+            MangaRemoveFavoriteCommand = CommandManager.CreateProperCommand(async (o) =>
             {
-                FavoritesService.RemoveManga(Manga);
+                await Task.Run(() =>
+                    {
+                        FavoritesService.RemoveManga(Manga);
+                    });
                 MangaIsFavorited = false;
             }, (o) => FavoritesService.IsMangaFavorited(Manga));
 
