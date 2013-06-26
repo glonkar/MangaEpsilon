@@ -395,7 +395,7 @@
 
                     <ListBox Grid.Row="1" ItemsSource="{Binding AvailableMangas, IsAsync=True}" x:Name="CatalogListView" 
                              VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.IsContainerVirtualizable="True" VirtualizingPanel.IsVirtualizing="True"
-                             HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                             HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" ScrollViewer.CanContentScroll="True">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Cursor="Hand">
