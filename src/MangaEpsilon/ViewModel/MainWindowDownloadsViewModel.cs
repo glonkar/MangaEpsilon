@@ -150,7 +150,7 @@ namespace MangaEpsilon.ViewModel
                             else
                             {
                                 Messenger.PushMessage(this, "UpdateMainWindowState", System.Windows.Shell.TaskbarItemProgressState.None);
-                                Notifications.NotificationsService.AddNotification("Download Failed!", download.Chapter.Name + " has failed to download.");
+                                Notifications.NotificationsService.AddNotification(LocalizationManager.GetLocalizedValue("DownloadFailedTitle"), string.Format(LocalizationManager.GetLocalizedValue("DownloadFailedMsg"), download.Chapter.Name));
                             }
                         }
 
@@ -165,14 +165,14 @@ namespace MangaEpsilon.ViewModel
                             LibraryService.AddLibraryItem(new Tuple<ChapterLight, string>(download.Chapter, downloadPath));
 
                             Notifications.NotificationsService.AddNotification(
-                                LocalizationManager.GetLocalizedValue("DownloadCompletedTitle"), 
+                                LocalizationManager.GetLocalizedValue("DownloadCompletedTitle"),
                                 string.Format(
                                     LocalizationManager.GetLocalizedValue("DownloadCompletedMsg"),
-                                    download.Chapter.Name), 
-                                download.Chapter.ParentManga.BookImageUrl, 
-                                3000, 
-                                false, 
-                                Notifications.NotificationType.Information, 
+                                    download.Chapter.Name),
+                                download.Chapter.ParentManga.BookImageUrl,
+                                3000,
+                                false,
+                                Notifications.NotificationType.Information,
                                 (x) =>
                                 {
                                     var chapter = ((ChapterLight)download.Chapter);
