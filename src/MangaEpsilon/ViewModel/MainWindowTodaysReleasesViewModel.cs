@@ -71,7 +71,7 @@ namespace MangaEpsilon.ViewModel
 
                     Messenger.PushMessage(this, "MangaChapterDownload", chapter);
                 }
-            }, (o) => o != null && o is ChapterEntry && !LibraryService.Contains((ChapterEntry)o));
+            }, (o) => o != null && o is ChapterEntry && !LibraryService.Contains((ChapterEntry)o) && Yukihyo.MAL.Utils.NetworkUtils.IsConnectedToInternet());
 
             RetryCommand = CommandManager.CreateProperCommand(async (o) =>
                 {

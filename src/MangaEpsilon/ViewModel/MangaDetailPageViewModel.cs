@@ -78,7 +78,7 @@ namespace MangaEpsilon.ViewModel
                             Messenger.PushMessage(this, "MangaChapterDownload", chap);
                 }
             }, (o) =>
-                o != null && o is ChapterEntry && !LibraryService.Contains((ChapterEntry)o) && SelectedChapterItems != null);
+                o != null && o is ChapterEntry && !LibraryService.Contains((ChapterEntry)o) && SelectedChapterItems != null && Yukihyo.MAL.Utils.NetworkUtils.IsConnectedToInternet());
 
             MangaChapters = new PaginatedObservableCollection<ChapterEntry>(selectedManga.Chapters);
             MangaChapters.PageSize = 40;
