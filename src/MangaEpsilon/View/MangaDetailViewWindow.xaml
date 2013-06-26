@@ -124,7 +124,7 @@
                                                 <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{DynamicResource AccentColorBrush}">
                                                     <Label Content="{Binding .}" HorizontalAlignment="Center" VerticalAlignment="Center">
                                                         <Label.Foreground>
-                                                            <SolidColorBrush Color="{DynamicResource WhiteColor}"/>
+                                                            <SolidColorBrush Color="{DynamicResource BlackColor}"/>
                                                         </Label.Foreground>
                                                     </Label>
                                                 </Grid>
