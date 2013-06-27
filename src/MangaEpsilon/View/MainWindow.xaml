@@ -301,14 +301,38 @@
                                 </ListBox.ItemContainerStyle>
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid HorizontalAlignment="Left" Width="250" Height="250" Cursor="Hand" meap:LoadedOnceHelper.HandleLoadedBefore="True">
+                                        <Grid HorizontalAlignment="Left" Width="250" Height="250" Margin="6" Cursor="Hand" meap:LoadedOnceHelper.HandleLoadedBefore="True">
+                                            <Grid.CacheMode>
+                                                <BitmapCache EnableClearType="True" RenderAtScale="1.0" />
+                                            </Grid.CacheMode>
                                             <Border>
-                                                <Image Source="{Binding BookImageUrl, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TImgCache}, ConverterParameter=250}" 
-                                                       Stretch="UniformToFill" AutomationProperties.Name="{Binding MangaName}"/>
+                                                <Image Source="{Binding BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=250}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Name}"/>
                                             </Border>
-                                            <StackPanel VerticalAlignment="Bottom" Background="Gray">
-                                                <TextBlock Text="{Binding MangaName, UpdateSourceTrigger=PropertyChanged}" Foreground="Black" FontSize="18" Height="60" Margin="15,0,15,0"/>
-                                                <TextBlock Text="{Binding Author, UpdateSourceTrigger=PropertyChanged}" Foreground="White" FontSize="15" TextWrapping="NoWrap" Margin="15,0,15,10"/>
+                                            <StackPanel VerticalAlignment="Bottom">
+                                                <StackPanel.Background>
+                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                        <GradientStop Color="Transparent" Offset="-1"/>
+                                                        <!--<GradientStop Color="{DynamicResource WhiteColor}" Offset="1"/> Produces a nice effect-->
+                                                        <GradientStop Color="{DynamicResource BlackColor}" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </StackPanel.Background>
+                                                <StackPanel Height="70">
+                                                    <TextBlock Text="{Binding MangaName}" FontSize="18" Height="Auto">
+                                                        <TextBlock.Foreground>
+                                                            <SolidColorBrush Color="{DynamicResource WhiteColor}"/>
+                                                        </TextBlock.Foreground>
+                                                    </TextBlock>
+                                                    <TextBlock Text="{Binding Author}" FontSize="15" TextWrapping="NoWrap">
+                                                        <TextBlock.Foreground>
+                                                            <SolidColorBrush Color="{DynamicResource WhiteColor}"/>
+                                                        </TextBlock.Foreground>
+                                                    </TextBlock>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Rectangle Width="20" Height="20" Visibility="{Binding ., Converter={StaticResource FavConv}, UpdateSourceTrigger=PropertyChanged}" 
+                                           Fill="{StaticResource LibraryItemStarInverseBrush}"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+
                                             </StackPanel>
                                         </Grid>
                                     </DataTemplate>
