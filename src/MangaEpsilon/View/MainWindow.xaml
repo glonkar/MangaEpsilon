@@ -42,8 +42,18 @@
 
             <BooleanToVisibilityConverter x:Key="BTV"/>
 
+            <conv:MangaIsFavoritedBooleanToVisibilityConverter x:Key="FavConv"/>
+
             <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_star}" x:Key="LibraryItemStarBrush" />
-            
+            <VisualBrush Stretch="Fill" x:Key="LibraryItemStarInverseBrush">
+                <VisualBrush.Visual>
+                    <Canvas Width="48" Height="48" Clip="F1 M 0,0L 48,0L 48,48L 0,48L 0,0" UseLayoutRounding="False">
+                        <Path Width="26" Height="24" Canvas.Left="11" Canvas.Top="12" Stretch="Fill" Fill="{DynamicResource WhiteColorBrush}" 
+                              Data="F1 M 11,21L 20.7857,21L 24,12L 27.2143,21L 37,21L 28.8504,26.8386L 32.5,36L 24,31L 16.5,36L 19.325,26.975L 11,21 Z " />
+                    </Canvas>
+                </VisualBrush.Visual>
+            </VisualBrush>
+
             <DataTemplate x:Key="MangaListBoxItemTemplate">
                 <Grid HorizontalAlignment="Left" Width="250" Height="250" Margin="6" Cursor="Hand" meap:LoadedOnceHelper.HandleLoadedBefore="True">
                     <Grid.CacheMode>
@@ -60,16 +70,23 @@
                                 <GradientStop Color="{DynamicResource BlackColor}" Offset="1"/>
                             </LinearGradientBrush>
                         </StackPanel.Background>
-                        <TextBlock Text="{Binding Name}" FontSize="18" Height="60" Margin="15,0,15,0">
-                            <TextBlock.Foreground>
-                                <SolidColorBrush Color="{DynamicResource WhiteColor}"/>
-                            </TextBlock.Foreground>
-                        </TextBlock>
-                        <TextBlock Text="{Binding ReleaseDate, Converter={StaticResource LocalDateConv}}" FontSize="15" TextWrapping="NoWrap" Margin="15,0,15,10">
-                            <TextBlock.Foreground>
-                                <SolidColorBrush Color="{DynamicResource WhiteColor}"/>
-                            </TextBlock.Foreground>
-                        </TextBlock>
+                        <StackPanel Height="80">
+                            <TextBlock Text="{Binding Name}" FontSize="18" Height="Auto">
+                                <TextBlock.Foreground>
+                                    <SolidColorBrush Color="{DynamicResource WhiteColor}"/>
+                                </TextBlock.Foreground>
+                            </TextBlock>
+                            <TextBlock Text="{Binding ReleaseDate, Converter={StaticResource LocalDateConv}}" FontSize="15" TextWrapping="NoWrap">
+                                <TextBlock.Foreground>
+                                    <SolidColorBrush Color="{DynamicResource WhiteColor}"/>
+                                </TextBlock.Foreground>
+                            </TextBlock>
+                            <StackPanel Orientation="Horizontal">
+                                <Rectangle Width="20" Height="20" Visibility="{Binding ParentManga, Converter={StaticResource FavConv}, UpdateSourceTrigger=PropertyChanged}" 
+                                           Fill="{StaticResource LibraryItemStarInverseBrush}"/>
+                            </StackPanel>
+                        </StackPanel>
+
                     </StackPanel>
                 </Grid>
             </DataTemplate>
@@ -310,9 +327,6 @@
                 <TabItem.DataContext>
                     <vm:MainWindowLibraryViewModel/>
                 </TabItem.DataContext>
-                <TabItem.Resources>
-                    <conv:MangaIsFavoritedBooleanToVisibilityConverter x:Key="FavConv"/>
-                </TabItem.Resources>
                 <Grid>
                     <!-- Group code from: http://karlshifflett.wordpress.com/2009/06/10/wpf-sample-series-listbox-grouping-sorting-subtotals-and-collapsible-regions/ -->
                     <!--<Grid.Resources>
@@ -342,7 +356,8 @@
                                     <GroupStyle.HeaderTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">
-                                                <Rectangle Width="20" Height="20" Visibility="{Binding Items[0].ParentManga, Converter={StaticResource FavConv}, UpdateSourceTrigger=PropertyChanged}" Fill="{StaticResource LibraryItemStarBrush}"/>
+                                                <Rectangle Width="20" Height="20" Visibility="{Binding Items[0].ParentManga, Converter={StaticResource FavConv}, UpdateSourceTrigger=PropertyChanged}" 
+                                                           Fill="{StaticResource LibraryItemStarBrush}"/>
                                                 <TextBlock Text="{Binding Name}" FontSize="17" FontWeight="bold" Margin="5 0 0 0" />
                                             </StackPanel>
                                         </DataTemplate>
