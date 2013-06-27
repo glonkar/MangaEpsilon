@@ -180,8 +180,15 @@ namespace MangaEpsilon.ViewModel
                                 });
                         }
                     }
+                    else if (download.Status == MangaChapterDownloadStatus.Canceled)
+                    {
+                        if (Directory.Exists(downloadPath))
+                            Directory.Delete(downloadPath, true);
+                    }
 
                     Downloads.Dequeue();
+
+                    DownloadsService.Downloads = Downloads;
 
                     await Task.Delay(1000);
                 }
