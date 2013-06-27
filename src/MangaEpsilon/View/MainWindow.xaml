@@ -60,7 +60,7 @@
                         <BitmapCache EnableClearType="True" RenderAtScale="1.0" />
                     </Grid.CacheMode>
                     <Border>
-                        <Image Source="{Binding ParentManga.BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=250}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Name}"/>
+                        <Image Source="{Binding ParentManga.BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=250, TargetNullValue='pack://application:,,,/MangaEpsilon;component/Resources/no-photo.png'}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Name}"/>
                     </Border>
                     <StackPanel VerticalAlignment="Bottom">
                         <StackPanel.Background>
@@ -306,7 +306,7 @@
                                                 <BitmapCache EnableClearType="True" RenderAtScale="1.0" />
                                             </Grid.CacheMode>
                                             <Border>
-                                                <Image Source="{Binding BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=250}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Name}"/>
+                                                <Image Source="{Binding BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=250, TargetNullValue='pack://application:,,,/MangaEpsilon;component/Resources/no-photo.png'}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Name}"/>
                                             </Border>
                                             <StackPanel VerticalAlignment="Bottom">
                                                 <StackPanel.Background>
@@ -329,7 +329,7 @@
                                                     </TextBlock>
                                                     <StackPanel Orientation="Horizontal">
                                                         <Rectangle Width="20" Height="20" Visibility="{Binding ., Converter={StaticResource FavConv}, UpdateSourceTrigger=PropertyChanged}" 
-                                           Fill="{StaticResource LibraryItemStarInverseBrush}"/>
+                                                            Fill="{StaticResource LibraryItemStarInverseBrush}"/>
                                                     </StackPanel>
                                                 </StackPanel>
 
@@ -438,7 +438,7 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Cursor="Hand">
-                                    <Image Source="{Binding BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=100}" MaxWidth="100"/>
+                                    <Image Source="{Binding BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=100,TargetNullValue='pack://application:,,,/MangaEpsilon;component/Resources/no-photo.png'}" MaxWidth="100"/>
                                     <StackPanel Orientation="Vertical" Margin="2">
                                         <Label FontSize="18" Content="{Binding MangaName, UpdateSourceTrigger=PropertyChanged}"/>
                                         <TextBlock Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" TextTrimming="CharacterEllipsis" 
