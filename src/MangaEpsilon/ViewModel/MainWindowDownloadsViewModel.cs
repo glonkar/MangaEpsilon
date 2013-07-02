@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -31,26 +32,32 @@ namespace MangaEpsilon.ViewModel
 
             CancelDownloadCommand = CommandManager.CreateProperCommand(async (o) =>
             {
-                var download = (MangaChapterDownload)o;
+                MangaChapterDownload[] downloads = ((IList)o).OfType<MangaChapterDownload>().ToArray();
 
-                if (download.Status == MangaChapterDownloadStatus.Downloading && Downloads.Peek() == download)
+                for (int i = 0; i < downloads.Length; ++i)
                 {
-                    download = Downloads.Peek(); //set a reference.
-                    download.Status = MangaChapterDownloadStatus.Canceled;
-                }
-                else
-                {
-                    List<MangaChapterDownload> downloadsToRequeue = new List<MangaChapterDownload>();
+                    MangaChapterDownload download = downloads[i];
 
-                    while (Downloads.Count > 0)
+                    if (download.Status == MangaChapterDownloadStatus.Downloading && Downloads.Peek() == download)
                     {
-                        var mangaChapter = Downloads.Dequeue();
-                        if (mangaChapter != o)
-                            downloadsToRequeue.Add(mangaChapter);
+                        download = Downloads.Peek(); //set a reference.
+                        download.Status = MangaChapterDownloadStatus.Canceled;
+                        Downloads.Dequeue();
                     }
+                    else
+                    {
+                        List<MangaChapterDownload> downloadsToRequeue = new List<MangaChapterDownload>();
 
-                    foreach (var d in downloadsToRequeue)
-                        Downloads.Enqueue(d);
+                        while (Downloads.Count > 0)
+                        {
+                            var mangaChapter = Downloads.Dequeue();
+                            if (mangaChapter != download)
+                                downloadsToRequeue.Add(mangaChapter);
+                        }
+
+                        foreach (var d in downloadsToRequeue)
+                            Downloads.Enqueue(d);
+                    }
                 }
 
                 await Dispatcher.InvokeAsync(() =>
@@ -60,7 +67,7 @@ namespace MangaEpsilon.ViewModel
             },
             (o) =>
             {
-                return o != null && o is MangaChapterDownload;
+                return o != null && o is IList;
             });
         }
 
@@ -209,7 +216,9 @@ namespace MangaEpsilon.ViewModel
                             Directory.Delete(downloadPath, true);
                     }
 
-                    Downloads.Dequeue();
+                    if (Downloads.Count > 0)
+                        if (Downloads.Peek() == download)
+                            Downloads.Dequeue();
 
                     DownloadsService.Downloads = Downloads;
 
@@ -234,6 +243,16 @@ namespace MangaEpsilon.ViewModel
         {
             get { return GetPropertyOrDefaultType<MangaChapterDownload>(x => this.SelectedItem); }
             set { SetProperty(x => this.SelectedItem, value); System.Windows.Input.CommandManager.InvalidateRequerySuggested(); }
+        }
+        public IList SelectedItems
+        {
+            get { return GetPropertyOrDefaultType<IList>(x => this.SelectedItems); }
+            set
+            {
+                SetProperty(x => this.SelectedItems, value);
+                if (value.Count > 1)
+                    System.Windows.Input.CommandManager.InvalidateRequerySuggested();
+            }
         }
 
         public CrystalProperCommand CancelDownloadCommand

@@ -496,7 +496,8 @@
                     <vm:MainWindowDownloadsViewModel/>
                 </TabItem.DataContext>
                 <ListView ItemsSource="{Binding Downloads, UpdateSourceTrigger=PropertyChanged}" 
-                          SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" x:Name="downloadsListView">
+                          SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                          SelectionChanged="downloadsListView_SelectionChanged" x:Name="downloadsListView">
                     <ListView.GroupStyle>
                         <GroupStyle>
                             <GroupStyle.HeaderTemplate>
@@ -548,7 +549,7 @@
                     <ListView.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='CancelMangaDownloadItem',NullValue='Cancel Download'}" Command="{Binding CancelDownloadCommand}" 
-                                      CommandParameter="{Binding SelectedItem}"/>
+                                      CommandParameter="{Binding SelectedItems}"/>
                         </ContextMenu>
                     </ListView.ContextMenu>
                 </ListView>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -16,6 +17,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Crystal.Localization;
 using MahApps.Metro.Controls;
+using MangaEpsilon.Model;
 using MangaEpsilon.ViewModel;
 
 namespace MangaEpsilon
@@ -100,6 +102,14 @@ namespace MangaEpsilon
         private void Hyperlink_Click(object sender, RoutedEventArgs e)
         {
             Process.Start(((Hyperlink)sender).NavigateUri.ToString());
+        }
+
+        private void downloadsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (((ListView)sender).SelectedItems == null)
+                ((MainWindowDownloadsViewModel)downloadsListView.DataContext).SelectedItems = null;
+            else
+                ((MainWindowDownloadsViewModel)downloadsListView.DataContext).SelectedItems = (IList)((ListView)sender).SelectedItems;
         }
     }
 }
