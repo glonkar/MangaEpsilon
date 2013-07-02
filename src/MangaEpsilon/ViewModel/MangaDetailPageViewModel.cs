@@ -56,7 +56,7 @@ namespace MangaEpsilon.ViewModel
             //var firstEntry = Yukihyo.MAL.MyAnimeListAPI.Search(Manga.MangaName, Yukihyo.MAL.MALSearchType.manga).First(x => x.Title.ToLower() == Manga.MangaName.ToLower());
 
             MangaChapters = new PaginatedObservableCollection<ChapterEntry>(selectedManga.Chapters);
-            MangaChapters.PageSize = 40;
+            MangaChapters.PageSize = 30;
 
             MangaIsFavorited = await FavoritesService.IsMangaFavoritedAsync(Manga);
 
@@ -72,10 +72,10 @@ namespace MangaEpsilon.ViewModel
 
                 await GetUpdatedInfo();
 
-                
-                var reviews = GetReviews();  
-                var related =  GetRelatedManga();
-                    
+
+                var reviews = GetReviews();
+                var related = GetRelatedManga();
+
                 await reviews.ConfigureAwait(false);
                 await related.ConfigureAwait(false);
             }
@@ -86,29 +86,37 @@ namespace MangaEpsilon.ViewModel
         {
             MangaAddFavoriteCommand = CommandManager.CreateProperCommand(async (o) =>
             {
-                await Task.Run(() =>
+                if (MangaFavoritedCommandIsBusy) return;
+                Task.Run(() =>
                 {
+                    MangaFavoritedCommandIsBusy = true;
                     FavoritesService.AddManga(Manga);
+
+                    MangaIsFavorited = true;
+                    MangaFavoritedCommandIsBusy = false;
                 });
-                MangaIsFavorited = true;
             }, (o) =>
             {
                 if (Manga != null)
-                    return !FavoritesService.IsMangaFavorited(Manga);
+                    return !FavoritesService.IsMangaFavorited(Manga) && !MangaFavoritedCommandIsBusy;
                 else
                     return false;
             });
-            MangaRemoveFavoriteCommand = CommandManager.CreateProperCommand(async (o) =>
+            MangaRemoveFavoriteCommand = CommandManager.CreateProperCommand((o) =>
             {
-                await Task.Run(() =>
-                {
-                    FavoritesService.RemoveManga(Manga);
-                });
-                MangaIsFavorited = false;
+                if (MangaFavoritedCommandIsBusy) return;
+                Task.Run(() =>
+                    {
+                        MangaFavoritedCommandIsBusy = true;
+                        FavoritesService.RemoveManga(Manga);
+
+                        MangaIsFavorited = false;
+                        MangaFavoritedCommandIsBusy = false;
+                    });
             }, (o) =>
             {
                 if (Manga != null)
-                    return FavoritesService.IsMangaFavorited(Manga);
+                    return FavoritesService.IsMangaFavorited(Manga) && !MangaFavoritedCommandIsBusy;
                 else
                     return false;
             });
@@ -221,7 +229,7 @@ namespace MangaEpsilon.ViewModel
             {
                 IsError_Reviews = false;
                 IsBusy_Reviews = true;
-                Reviews = await MAL.MALReviewGrabber.GetReviews(Manga.MangaName);
+                Reviews = await MAL.MALReviewGrabber.GetReviews(Manga.MangaName).ConfigureAwait(false);
                 IsBusy_Reviews = false;
             }
             catch (Exception)
@@ -265,7 +273,7 @@ namespace MangaEpsilon.ViewModel
 
         private async Task GetUpdatedInfo()
         {
-            var newManga = await App.MangaSource.GetMangaInfo(Manga.MangaName, false); //Get fresh, updated information.
+            var newManga = await App.MangaSource.GetMangaInfo(Manga.MangaName, false) //Get fresh, updated information.
 
             if (Manga == null) return;
 
@@ -274,8 +282,11 @@ namespace MangaEpsilon.ViewModel
             Manga.Status = newManga.Status;
             Manga.Categories = newManga.Categories;
 
-            if (MangaChapters.Count <= newManga.Chapters.Count)
-                MangaChapters = new PaginatedObservableCollection<ChapterEntry>(newManga.Chapters, 40);
+            await Dispatcher.InvokeAsync(() =>
+                {
+                    if (MangaChapters.Count <= newManga.Chapters.Count)
+                        MangaChapters = new PaginatedObservableCollection<ChapterEntry>(newManga.Chapters, 40);
+                }, System.Windows.Threading.DispatcherPriority.ApplicationIdle);
         }
 
         public Manga.Base.Manga Manga
@@ -313,7 +324,9 @@ namespace MangaEpsilon.ViewModel
             set
             {
                 SetProperty(x => this.SelectedChapterItem, value);
-                System.Windows.Input.CommandManager.InvalidateRequerySuggested();
+
+                if (value != null)
+                    System.Windows.Input.CommandManager.InvalidateRequerySuggested();
             }
         }
 
@@ -323,7 +336,9 @@ namespace MangaEpsilon.ViewModel
             set
             {
                 SetProperty(x => this.SelectedChapterItems, value);
-                System.Windows.Input.CommandManager.InvalidateRequerySuggested();
+
+                if (value != null)
+                    System.Windows.Input.CommandManager.InvalidateRequerySuggested();
             }
         }
 
@@ -377,6 +392,11 @@ namespace MangaEpsilon.ViewModel
         {
             get { return GetPropertyOrDefaultType<bool>(x => this.MangaIsFavorited); }
             set { SetProperty<bool>(x => this.MangaIsFavorited, value); System.Windows.Input.CommandManager.InvalidateRequerySuggested(); }
+        }
+        public bool MangaFavoritedCommandIsBusy
+        {
+            get { return GetPropertyOrDefaultType<bool>(x => this.MangaFavoritedCommandIsBusy); }
+            set { SetProperty<bool>(x => this.MangaFavoritedCommandIsBusy, value); }
         }
         public CrystalProperCommand MangaAddFavoriteCommand
         {
