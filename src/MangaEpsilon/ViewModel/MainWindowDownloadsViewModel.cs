@@ -83,7 +83,15 @@ namespace MangaEpsilon.ViewModel
                 if (!App.DownloadsRunning)
                     DownloadAllQueuedChapters();
             }
+
+            if (Downloads.Count == 1 && !firstSwitchTab)
+            {
+                Messenger.PushMessage(this, "SwitchTab", 3);
+                firstSwitchTab = true;
+            }
         }
+        private bool firstSwitchTab = false;
+
 
         private async void DownloadAllQueuedChapters()
         {

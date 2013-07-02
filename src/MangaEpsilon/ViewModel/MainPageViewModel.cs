@@ -24,8 +24,11 @@ namespace MangaEpsilon.ViewModel
         {
             if (IsDesignMode) return;
 
+            SelectedTabIndex = 0;
+
             RegisterForMessages("UpdateMainWindowState");
             RegisterForMessages("UpdateMainWindowProgress");
+            RegisterForMessages("SwitchTab");
 
             SettingsFlyoutCommand = CommandManager.CreateCommand((o) =>
                 {
@@ -42,6 +45,9 @@ namespace MangaEpsilon.ViewModel
                     return true;
                 case "UpdateMainWindowProgress":
                     MainWindowProgressValue = (double)message.Data;
+                    return true;
+                case "SwitchTab":
+                    SelectedTabIndex = (int)message.Data;
                     return true;
                 default:
                     return base.ReceiveMessage(source, message);
@@ -70,6 +76,12 @@ namespace MangaEpsilon.ViewModel
         {
             get { return GetPropertyOrDefaultType<CrystalCommand>(x => this.SettingsFlyoutCommand); }
             set { SetProperty(x => this.SettingsFlyoutCommand, value); }
+        }
+
+        public int SelectedTabIndex
+        {
+            get { return GetPropertyOrDefaultType<int>(x => this.SelectedTabIndex); }
+            set { SetProperty(x => this.SelectedTabIndex, value); }
         }
     }
 }
