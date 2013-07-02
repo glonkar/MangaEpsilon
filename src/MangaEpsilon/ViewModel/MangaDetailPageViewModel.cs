@@ -273,7 +273,7 @@ namespace MangaEpsilon.ViewModel
 
         private async Task GetUpdatedInfo()
         {
-            var newManga = await App.MangaSource.GetMangaInfo(Manga.MangaName, false) //Get fresh, updated information.
+            var newManga = await App.MangaSource.GetMangaInfo(Manga.MangaName, false); //Get fresh, updated information.
 
             if (Manga == null) return;
 
