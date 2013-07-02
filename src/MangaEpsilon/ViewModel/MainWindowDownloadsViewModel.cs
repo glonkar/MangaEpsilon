@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using Crystal.Command;
 using Crystal.Core;
 using Crystal.Localization;
@@ -26,7 +27,9 @@ namespace MangaEpsilon.ViewModel
             Downloads = new ObservableQueue<MangaChapterDownload>();
             RegisterForMessages("MangaChapterDownload");
 
-            CancelDownloadCommand = CommandManager.CreateProperCommand((o) =>
+            CollectionViewSource.GetDefaultView(Downloads).GroupDescriptions.Add(new PropertyGroupDescription("Status"));
+
+            CancelDownloadCommand = CommandManager.CreateProperCommand(async (o) =>
             {
                 var download = (MangaChapterDownload)o;
 
@@ -49,6 +52,11 @@ namespace MangaEpsilon.ViewModel
                     foreach (var d in downloadsToRequeue)
                         Downloads.Enqueue(d);
                 }
+
+                await Dispatcher.InvokeAsync(() =>
+                    {
+                        CollectionViewSource.GetDefaultView(Downloads).Refresh();
+                    });
             },
             (o) =>
             {
@@ -79,6 +87,11 @@ namespace MangaEpsilon.ViewModel
                 Downloads.Enqueue(new MangaChapterDownload(chap) { MaxProgress = chap.PagesUrls.Count, Status = MangaChapterDownloadStatus.Queued });
 
                 RaisePropertyChanged(x => this.Downloads);
+
+                await Dispatcher.InvokeAsync(() =>
+                {
+                    CollectionViewSource.GetDefaultView(Downloads).Refresh();
+                });
 
                 if (!App.DownloadsRunning)
                     DownloadAllQueuedChapters();
@@ -159,6 +172,7 @@ namespace MangaEpsilon.ViewModel
                             {
                                 Messenger.PushMessage(this, "UpdateMainWindowState", System.Windows.Shell.TaskbarItemProgressState.None);
                                 Notifications.NotificationsService.AddNotification(LocalizationManager.GetLocalizedValue("DownloadFailedTitle"), string.Format(LocalizationManager.GetLocalizedValue("DownloadFailedMsg"), download.Chapter.Name));
+                                break;
                             }
                         }
 

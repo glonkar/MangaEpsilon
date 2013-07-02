@@ -64,7 +64,13 @@ namespace MangaEpsilon.ViewModel
                         FavoritesService.AddManga(Manga);
                     });
                 MangaIsFavorited = true;
-            }, (o) => !FavoritesService.IsMangaFavorited(Manga));
+            }, (o) =>
+            {
+                if (Manga != null)
+                    return FavoritesService.IsMangaFavorited(Manga);
+                else
+                    return false;
+            });
             MangaRemoveFavoriteCommand = CommandManager.CreateProperCommand(async (o) =>
             {
                 await Task.Run(() =>
@@ -73,12 +79,12 @@ namespace MangaEpsilon.ViewModel
                     });
                 MangaIsFavorited = false;
             }, (o) =>
-                {
-                    if (Manga != null)
-                        return FavoritesService.IsMangaFavorited(Manga);
-                    else
-                        return false;
-                });
+            {
+                if (Manga != null)
+                    return FavoritesService.IsMangaFavorited(Manga);
+                else
+                    return false;
+            });
 
             OpenMangaChapterCommand = CommandManager.CreateCommand(x =>
             {

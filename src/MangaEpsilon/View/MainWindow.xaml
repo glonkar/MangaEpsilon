@@ -495,6 +495,17 @@
                 </TabItem.DataContext>
                 <ListView ItemsSource="{Binding Downloads, UpdateSourceTrigger=PropertyChanged}" 
                           SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" x:Name="downloadsListView">
+                    <ListView.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Items[0].Status}" FontSize="17" FontWeight="bold" Margin="5 0 0 0" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                        </GroupStyle>
+                    </ListView.GroupStyle>
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="{i18n:CrystalLocalizedValueMarkup Key='MangaDownloadNameColumn',NullValue='Name'}" DisplayMemberBinding="{Binding Chapter.Name}" Width="Auto"/>
