@@ -276,10 +276,15 @@
                                 AutomationProperties.Name="Grouped Items"
                                 Grid.RowSpan="2"
                                 Padding="116,137,40,46"
+                                ScrollViewer.VerticalScrollBarVisibility="Visible"
                                 ItemsSource="{Binding AmrykidsFavorites, UpdateSourceTrigger=PropertyChanged}">
                                     <ListBox.ItemsPanel>
                                         <ItemsPanelTemplate>
-                                            <WrapPanel IsItemsHost="True">
+                                            <WrapPanel IsItemsHost="True" Width="{Binding (FrameworkElement.ActualWidth), RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}"
+    				                                       ItemWidth="250"
+    				                                       MinWidth="{Binding ItemWidth, RelativeSource={RelativeSource Self}}"
+                                                           MinHeight="700"
+    				                                       ItemHeight="270">
                                             </WrapPanel>
                                         </ItemsPanelTemplate>
                                     </ListBox.ItemsPanel>
