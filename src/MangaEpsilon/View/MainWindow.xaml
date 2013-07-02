@@ -13,14 +13,16 @@
         xmlns:metrigs="clr-namespace:MangaEpsilon.Triggers"
         xmlns:meap="clr-namespace:MangaEpsilon.AttachedProperties"
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
-        Title="{i18n:CrystalLocalizedValueMarkup Key='MainApplicationTitle',NullValue='MangaEpsilon'}" Height="669" Width="756" ShowTitleBar="False" x:Name="thisWindow" SaveWindowPosition="True"
+        Title="{i18n:CrystalLocalizedValueMarkup Key='MainApplicationTitle',NullValue='MangaEpsilon'}" 
+                   Height="669" Width="756" ShowTitleBar="False" x:Name="thisWindow" SaveWindowPosition="True"
                    utils:MainWindowSetterHelper.IsMainWindow="True" WindowState="Maximized" ShowActivated="True" Closing="thisWindow_Closing" 
                    Icon="/Resources/AxVXk48.png" StateChanged="thisWindow_StateChanged">
     <Window.DataContext>
         <vm:MainPageViewModel/>
     </Window.DataContext>
     <Window.TaskbarItemInfo>
-        <TaskbarItemInfo ProgressState="{Binding MainWindowProgressState, UpdateSourceTrigger=PropertyChanged}" ProgressValue="{Binding MainWindowProgressValue, UpdateSourceTrigger=PropertyChanged}"/>
+        <TaskbarItemInfo ProgressState="{Binding MainWindowProgressState, UpdateSourceTrigger=PropertyChanged}" 
+                         ProgressValue="{Binding MainWindowProgressValue, UpdateSourceTrigger=PropertyChanged}"/>
     </Window.TaskbarItemInfo>
     <i:Interaction.Behaviors>
         <Behaviours:BorderlessWindowBehavior ResizeWithGrip="True" EnableDWMDropShadow="True" />
@@ -60,7 +62,10 @@
                         <BitmapCache EnableClearType="True" RenderAtScale="1.0" />
                     </Grid.CacheMode>
                     <Border>
-                        <Image Source="{Binding ParentManga.BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=250, TargetNullValue='pack://application:,,,/MangaEpsilon;component/Resources/no-photo.png'}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Name}"/>
+                        <Image Source="{Binding ParentManga.BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=250, 
+                            TargetNullValue='pack://application:,,,/MangaEpsilon;component/Resources/no-photo.png',
+                            FallbackValue='pack://application:,,,/MangaEpsilon;component/Resources/no-photo.png'}" 
+                               Stretch="UniformToFill" AutomationProperties.Name="{Binding Name}"/>
                     </Border>
                     <StackPanel VerticalAlignment="Bottom">
                         <StackPanel.Background>
@@ -176,7 +181,7 @@
 
         <metro:MetroAnimatedSingleRowTabControl Margin="5 25 40 5" SelectedIndex="{Binding SelectedTabIndex, UpdateSourceTrigger=PropertyChanged}">
             <metro:MetroTabItem Header="{i18n:CrystalLocalizedValueMarkup Key='HomeTabHeader',NullValue='home'}" HeaderFontSize="15">
-                <metro:MetroTabControl Margin="0 -7 0 0" TabStripMargin="0 -7 0 0">
+                <metro:MetroTabControl Margin="0 -4 0 0" TabStripMargin="0 -4 0 0">
                     <metro:MetroTabItem x:Name="todayReleasesTabItem" Header="{i18n:CrystalLocalizedValueMarkup Key='NewReleasesTabHeader', NullValue='today&quot;s releases'}">
                         <TabItem.DataContext>
                             <vm:MainWindowTodaysReleasesViewModel/>
