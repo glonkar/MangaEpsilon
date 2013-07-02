@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -94,6 +95,11 @@ namespace MangaEpsilon
             this.Topmost = true;  // important
             this.Topmost = false; // important
             this.Focus();         // important
+        }
+
+        private void Hyperlink_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(((Hyperlink)sender).NavigateUri.ToString());
         }
     }
 }
