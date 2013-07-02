@@ -457,7 +457,7 @@
                                                    Margin="9 0 20 0" MaxWidth="1400" Height="Auto" HorizontalAlignment="Left"/>
                                         <TextBlock Text="{Binding Status, UpdateSourceTrigger=PropertyChanged,StringFormat='Status: {0}'}" 
                                                    FontSize="16" Margin="9 0 0 0" Foreground="{DynamicResource AccentColorBrush}"/>
-                                        <ItemsControl ItemsSource="{Binding Categories, UpdateSourceTrigger=PropertyChanged}" Margin="9 0 0 0">
+                                        <ItemsControl ItemsSource="{Binding Categories, UpdateSourceTrigger=PropertyChanged}" Margin="9 0 0 0" HorizontalAlignment="Left">
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
                                                     <WrapPanel ItemHeight="30" ItemWidth="Auto" IsItemsHost="True" 
