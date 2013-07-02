@@ -26,7 +26,7 @@
                     <Image Source="{Binding Image, Mode=OneTime, Converter={StaticResource TImgCache}, ConverterParameter=100}" MaxWidth="100"/>
                     <StackPanel HorizontalAlignment="Stretch" MaxWidth="250">
                         <Label Content="{Binding Title, Mode=OneTime}" Height="40" Name="label1" VerticalAlignment="Top" FontSize="17" Opacity="1.0" />
-                        <TextBlock Name="textBlock1" Margin="4 0 0 0" Text="{Binding Message, Mode=OneTime}" TextWrapping="Wrap" FontSize="15" Width="240" Height="Auto" />
+                        <TextBlock Name="textBlock1" Margin="4 0 0 0" Text="{Binding Message, Mode=OneTime}" TextWrapping="Wrap" FontSize="15" Width="240" Height="50" TextTrimming="CharacterEllipsis" />
                     </StackPanel>
                 </StackPanel>
             </Grid>
