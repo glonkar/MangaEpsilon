@@ -263,86 +263,88 @@
                         <Grid>
                             <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="40" Height="40" 
                                                 IsActive="{Binding IsBusy, UpdateSourceTrigger=PropertyChanged}" Visibility="Visible"></metro:ProgressRing>
-
-                            <ListBox x:Name="amrykidsFavoritesListView"
+                            <StackPanel>
+                                <TextBlock  Margin="4 0 0 0" TextWrapping="Wrap" Text="{i18n:CrystalLocalizedValueMarkup Key='AmrykidsFavoritesExplainationMsg',NullValue='If you are unsure of what mangas to start with, why not give one of my personal favorites a try? Double click one to take a look at it.' }"/>
+                                <ListBox x:Name="amrykidsFavoritesListView"
                                 Background="Transparent"
                                 AutomationProperties.AutomationId="ItemListView"
                                 AutomationProperties.Name="Grouped Items"
                                 Grid.RowSpan="2"
                                 Padding="116,137,40,46"
                                 ItemsSource="{Binding AmrykidsFavorites, UpdateSourceTrigger=PropertyChanged}">
-                                <ListBox.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel IsItemsHost="True">
-                                        </WrapPanel>
-                                    </ItemsPanelTemplate>
-                                </ListBox.ItemsPanel>
-                                <ListBox.ItemContainerStyle>
-                                    <!-- http://stackoverflow.com/questions/13035766/listbox-slide-animation-on-new-item-added -->
-                                    <Style TargetType="{x:Type ListBoxItem}">
-                                        <Setter Property="LayoutTransform">
-                                            <Setter.Value>
-                                                <ScaleTransform x:Name="transform" />
-                                            </Setter.Value>
-                                        </Setter>
-                                        <Style.Triggers>
-                                            <EventTrigger RoutedEvent="meap:LoadedOnceHelper.FirstLoaded">
-                                                <EventTrigger.Actions>
-                                                    <BeginStoryboard>
-                                                        <Storyboard>
-                                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:1" />
-                                                            <DoubleAnimation Storyboard.TargetProperty="LayoutTransform.ScaleY" From="0" Duration="0:0:.2"/>
-                                                        </Storyboard>
-                                                    </BeginStoryboard>
-                                                </EventTrigger.Actions>
-                                            </EventTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </ListBox.ItemContainerStyle>
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid HorizontalAlignment="Left" Width="250" Height="250" Margin="6" Cursor="Hand" meap:LoadedOnceHelper.HandleLoadedBefore="True">
-                                            <Grid.CacheMode>
-                                                <BitmapCache EnableClearType="True" RenderAtScale="1.0" />
-                                            </Grid.CacheMode>
-                                            <Border>
-                                                <Image Source="{Binding BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=250, TargetNullValue='pack://application:,,,/MangaEpsilon;component/Resources/no-photo.png'}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Name}"/>
-                                            </Border>
-                                            <StackPanel VerticalAlignment="Bottom">
-                                                <StackPanel.Background>
-                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                                        <GradientStop Color="Transparent" Offset="-1"/>
-                                                        <!--<GradientStop Color="{DynamicResource WhiteColor}" Offset="1"/> Produces a nice effect-->
-                                                        <GradientStop Color="{DynamicResource BlackColor}" Offset="1"/>
-                                                    </LinearGradientBrush>
-                                                </StackPanel.Background>
-                                                <StackPanel Height="70">
-                                                    <TextBlock Text="{Binding MangaName}" FontSize="18" Height="Auto">
-                                                        <TextBlock.Foreground>
-                                                            <SolidColorBrush Color="{DynamicResource WhiteColor}"/>
-                                                        </TextBlock.Foreground>
-                                                    </TextBlock>
-                                                    <TextBlock Text="{Binding Author}" FontSize="15" TextWrapping="NoWrap">
-                                                        <TextBlock.Foreground>
-                                                            <SolidColorBrush Color="{DynamicResource WhiteColor}"/>
-                                                        </TextBlock.Foreground>
-                                                    </TextBlock>
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <Rectangle Width="20" Height="20" Visibility="{Binding ., Converter={StaticResource FavConv}, UpdateSourceTrigger=PropertyChanged}" 
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel IsItemsHost="True">
+                                            </WrapPanel>
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                    <ListBox.ItemContainerStyle>
+                                        <!-- http://stackoverflow.com/questions/13035766/listbox-slide-animation-on-new-item-added -->
+                                        <Style TargetType="{x:Type ListBoxItem}">
+                                            <Setter Property="LayoutTransform">
+                                                <Setter.Value>
+                                                    <ScaleTransform x:Name="transform" />
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
+                                                <EventTrigger RoutedEvent="meap:LoadedOnceHelper.FirstLoaded">
+                                                    <EventTrigger.Actions>
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:1" />
+                                                                <DoubleAnimation Storyboard.TargetProperty="LayoutTransform.ScaleY" From="0" Duration="0:0:.2"/>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger.Actions>
+                                                </EventTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid HorizontalAlignment="Left" Width="250" Height="250" Margin="6" Cursor="Hand" meap:LoadedOnceHelper.HandleLoadedBefore="True">
+                                                <Grid.CacheMode>
+                                                    <BitmapCache EnableClearType="True" RenderAtScale="1.0" />
+                                                </Grid.CacheMode>
+                                                <Border>
+                                                    <Image Source="{Binding BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=250, TargetNullValue='pack://application:,,,/MangaEpsilon;component/Resources/no-photo.png'}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Name}"/>
+                                                </Border>
+                                                <StackPanel VerticalAlignment="Bottom">
+                                                    <StackPanel.Background>
+                                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                            <GradientStop Color="Transparent" Offset="-1"/>
+                                                            <!--<GradientStop Color="{DynamicResource WhiteColor}" Offset="1"/> Produces a nice effect-->
+                                                            <GradientStop Color="{DynamicResource BlackColor}" Offset="1"/>
+                                                        </LinearGradientBrush>
+                                                    </StackPanel.Background>
+                                                    <StackPanel Height="70">
+                                                        <TextBlock Text="{Binding MangaName}" FontSize="18" Height="Auto">
+                                                            <TextBlock.Foreground>
+                                                                <SolidColorBrush Color="{DynamicResource WhiteColor}"/>
+                                                            </TextBlock.Foreground>
+                                                        </TextBlock>
+                                                        <TextBlock Text="{Binding Author}" FontSize="15" TextWrapping="NoWrap">
+                                                            <TextBlock.Foreground>
+                                                                <SolidColorBrush Color="{DynamicResource WhiteColor}"/>
+                                                            </TextBlock.Foreground>
+                                                        </TextBlock>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Rectangle Width="20" Height="20" Visibility="{Binding ., Converter={StaticResource FavConv}, UpdateSourceTrigger=PropertyChanged}" 
                                                             Fill="{StaticResource LibraryItemStarInverseBrush}"/>
+                                                        </StackPanel>
                                                     </StackPanel>
-                                                </StackPanel>
 
-                                            </StackPanel>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="MouseDoubleClick">
-                                        <i:InvokeCommandAction Command="{Binding MangaClickCommand}" CommandParameter="{Binding ElementName=amrykidsFavoritesListView,Path=SelectedItem}"/>
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                            </ListBox>
+                                                </StackPanel>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseDoubleClick">
+                                            <i:InvokeCommandAction Command="{Binding MangaClickCommand}" CommandParameter="{Binding ElementName=amrykidsFavoritesListView,Path=SelectedItem}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </ListBox>
+                            </StackPanel>
                         </Grid>
                     </metro:MetroTabItem>
                 </metro:MetroTabControl>
