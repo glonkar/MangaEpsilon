@@ -99,7 +99,7 @@
                         <Grid Grid.Row="0">
                             <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='CoverSection',NullValue='cover'}" >
                                 <Image Height="550" Width="450" Margin="0 0 0 0" 
-                                       Source="{Binding BookImageUrl, Converter={StaticResource ImgCache}}" VerticalAlignment="Top" x:Name="CoverImage"/>
+                                       Source="{Binding BookImageUrl, Converter={StaticResource ImgCache}, TargetNullValue='pack://application:,,,/MangaEpsilon;component/Resources/no-photo.png'}" VerticalAlignment="Top" x:Name="CoverImage"/>
                             </GroupBox>
                         </Grid>
                         <Grid Grid.Row="1">
