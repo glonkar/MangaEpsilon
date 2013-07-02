@@ -153,7 +153,7 @@ namespace MangaEpsilon.ViewModel
                                 download.ProgressStr = Math.Round(((Convert.ToDouble(download.Progress) / Convert.ToDouble(download.MaxProgress)) * 100.0), 2).ToString() + "%";
 
 
-                                await Task.Delay((download.Chapter.PagesUrls.Count - download.Progress) * 2 + 500);
+                                await Task.Delay((download.Chapter.PagesUrls.Count - download.Progress) * 2 + 200);
                             }
                             else
                             {
