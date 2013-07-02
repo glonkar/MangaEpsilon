@@ -150,5 +150,10 @@ namespace MangaEpsilon
         public bool CanPageDown { get; private set; }
 
         public int MaxPageIndex { get; private set; }
+
+        internal void Refresh()
+        {
+            RecalculateThePageItems();
+        }
     }
 }

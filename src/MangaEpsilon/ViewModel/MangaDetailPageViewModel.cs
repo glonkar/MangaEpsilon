@@ -185,11 +185,18 @@ namespace MangaEpsilon.ViewModel
 
         }
 
-        void DownloadsService_DownloadCompleted(ChapterLight download)
+        async void DownloadsService_DownloadCompleted(ChapterLight download)
         {
             if (download.ParentManga.MangaName == Manga.MangaName)
             {
-                CollectionViewSource.GetDefaultView(MangaChapters).Refresh();
+                var selected = SelectedChapterItem;
+                await Dispatcher.InvokeAsync(() =>
+                    {
+                        MangaChapters.Refresh();
+                        //CollectionViewSource.GetDefaultView(MangaChapters).Refresh();
+
+                        SelectedChapterItem = selected; //just to be safe, do this on the dispatcher thread
+                    });
             }
         }
 
