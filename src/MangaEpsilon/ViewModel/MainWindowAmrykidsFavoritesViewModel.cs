@@ -7,6 +7,7 @@ using Crystal.Command;
 using Crystal.Core;
 using Crystal.Localization;
 using Crystal.Navigation;
+using Crystal.Services;
 
 namespace MangaEpsilon.ViewModel
 {
@@ -29,7 +30,8 @@ namespace MangaEpsilon.ViewModel
             {
                 //until I implement the IMessageBoxService, this will do.
 
-                System.Windows.MessageBox.Show(LocalizationManager.GetLocalizedValue("RareTaskInitializationInternetSpeedBug"));
+                ServiceManager.Resolve<IMessageBoxService>().ShowMessage(LocalizationManager.GetLocalizedValue("GenericErrorTitle"), 
+                    LocalizationManager.GetLocalizedValue("RareTaskInitializationInternetSpeedBugMsg"));
             }
             else
             {
