@@ -67,7 +67,7 @@ namespace MangaEpsilon.ViewModel
             }, (o) =>
             {
                 if (Manga != null)
-                    return FavoritesService.IsMangaFavorited(Manga);
+                    return !FavoritesService.IsMangaFavorited(Manga);
                 else
                     return false;
             });
@@ -364,7 +364,7 @@ namespace MangaEpsilon.ViewModel
         public bool MangaIsFavorited
         {
             get { return GetPropertyOrDefaultType<bool>(x => this.MangaIsFavorited); }
-            set { SetProperty<bool>(x => this.MangaIsFavorited, value); }
+            set { SetProperty<bool>(x => this.MangaIsFavorited, value); System.Windows.Input.CommandManager.InvalidateRequerySuggested(); }
         }
         public CrystalProperCommand MangaAddFavoriteCommand
         {
