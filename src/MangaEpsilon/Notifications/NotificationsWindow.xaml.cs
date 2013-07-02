@@ -94,24 +94,25 @@ namespace MangaEpsilon.Notifications
             aniStry.Begin(this);
         }
 
-        protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
-            base.OnPreviewMouseLeftButtonUp(e);
+            base.OnMouseLeftButtonDown(e);
+
             Action<NotificationInfo> act = ((NotificationInfo)this.DataContext).OnClickCallback;
 
             if (act != null)
             {
                 ThreadPool.QueueUserWorkItem(new WaitCallback(t =>
+                {
+                    Dispatcher.Invoke(new MangaEpsilon.Notifications.NotificationsService.EmptyDelegate(() =>
                     {
-                        Dispatcher.Invoke(new MangaEpsilon.Notifications.NotificationsService.EmptyDelegate(() =>
-                            {
-                                act((NotificationInfo)this.DataContext);
+                        act((NotificationInfo)this.DataContext);
 
-                                ((NotificationInfo)this.DataContext).OnClickCallback = null;
-
-                            }));
+                        ((NotificationInfo)this.DataContext).OnClickCallback = null;
 
                     }));
+
+                }));
             }
         }
 
