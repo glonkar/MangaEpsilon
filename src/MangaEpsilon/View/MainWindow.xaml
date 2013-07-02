@@ -181,7 +181,7 @@
 
         <metro:MetroAnimatedSingleRowTabControl Margin="5 25 40 5" SelectedIndex="{Binding SelectedTabIndex, UpdateSourceTrigger=PropertyChanged}">
             <metro:MetroTabItem Header="{i18n:CrystalLocalizedValueMarkup Key='HomeTabHeader',NullValue='home'}" HeaderFontSize="15">
-                <metro:MetroTabControl Margin="0 -4 0 0" TabStripMargin="0 -4 0 0">
+                <metro:MetroTabControl Margin="0 -4 0 0" TabStripMargin="0 -6 0 0">
                     <metro:MetroTabItem x:Name="todayReleasesTabItem" Header="{i18n:CrystalLocalizedValueMarkup Key='NewReleasesTabHeader', NullValue='today&quot;s releases'}">
                         <TabItem.DataContext>
                             <vm:MainWindowTodaysReleasesViewModel/>
