@@ -186,6 +186,7 @@ namespace MangaEpsilon.ViewModel
                                     var chapter = ((ChapterLight)download.Chapter);
                                     NavigationService.ShowWindow<MangaChapterViewPageViewModel>(new KeyValuePair<string, object>("chapter", chapter));
                                 });
+                            DownloadsService.RaiseDownloadCompleted(download.Chapter, this);
                         }
                     }
                     else if (download.Status == MangaChapterDownloadStatus.Canceled)

@@ -14,11 +14,19 @@ using MangaEpsilon.Services;
 using System.Collections.ObjectModel;
 using Crystal.Services;
 using Crystal.Localization;
+using System.Windows.Data;
 
 namespace MangaEpsilon.ViewModel
 {
     public class MangaDetailPageViewModel : BaseViewModel
     {
+        public override void CloseViewModel()
+        {
+            DownloadsService.DownloadCompleted -= DownloadsService_DownloadCompleted;
+
+            base.CloseViewModel();
+        }
+
         public override void OnNavigatedTo(KeyValuePair<string, object>[] argument = null)
         {
             if (IsDesignMode) return;
@@ -31,6 +39,8 @@ namespace MangaEpsilon.ViewModel
             IsBusy = true;
 
             MangaEpsilon.Manga.Base.Manga selectedManga = (Manga.Base.Manga)argument[0].Value;
+
+            DownloadsService.DownloadCompleted += DownloadsService_DownloadCompleted;
 
             //create a copy since directly binding to the Chapters collection slows the app down if there is 500+ entries.
             Manga = new Manga.Base.Manga();
@@ -62,7 +72,13 @@ namespace MangaEpsilon.ViewModel
                         FavoritesService.RemoveManga(Manga);
                     });
                 MangaIsFavorited = false;
-            }, (o) => FavoritesService.IsMangaFavorited(Manga));
+            }, (o) =>
+                {
+                    if (Manga != null)
+                        return FavoritesService.IsMangaFavorited(Manga);
+                    else
+                        return false;
+                });
 
             OpenMangaChapterCommand = CommandManager.CreateCommand(x =>
             {
@@ -101,7 +117,10 @@ namespace MangaEpsilon.ViewModel
                 System.Windows.Input.CommandManager.InvalidateRequerySuggested();
             }, (o) =>
             {
-                return this.MangaChapters.CanPageDown;
+                if (MangaChapters != null)
+                    return this.MangaChapters.CanPageDown;
+                else 
+                    return false;
             });
             EndingChapterPageCommand = CommandManager.CreateProperCommand((o) =>
             {
@@ -109,7 +128,10 @@ namespace MangaEpsilon.ViewModel
                 System.Windows.Input.CommandManager.InvalidateRequerySuggested();
             }, (o) =>
             {
-                return this.MangaChapters.CanPageUp;
+                if (MangaChapters != null)
+                    return this.MangaChapters.CanPageUp;
+                else
+                    return false;
             });
             NextChapterPageCommand = CommandManager.CreateProperCommand((o) =>
             {
@@ -117,7 +139,10 @@ namespace MangaEpsilon.ViewModel
                 System.Windows.Input.CommandManager.InvalidateRequerySuggested();
             }, (o) =>
             {
-                return MangaChapters.CanPageUp;
+                if (MangaChapters != null)
+                    return MangaChapters.CanPageUp;
+                else
+                    return false;
             });
             PreviousChapterPageCommand = CommandManager.CreateProperCommand((o) =>
             {
@@ -125,7 +150,10 @@ namespace MangaEpsilon.ViewModel
                 System.Windows.Input.CommandManager.InvalidateRequerySuggested();
             }, (o) =>
             {
-                return MangaChapters.CanPageDown;
+                if (MangaChapters != null)
+                    return MangaChapters.CanPageDown;
+                else
+                    return false;
             });
             MangaClickCommand = CommandManager.CreateProperCommand((o) =>
             {
@@ -155,6 +183,14 @@ namespace MangaEpsilon.ViewModel
                     }
                 });
 
+        }
+
+        void DownloadsService_DownloadCompleted(ChapterLight download)
+        {
+            if (download.ParentManga.MangaName == Manga.MangaName)
+            {
+                CollectionViewSource.GetDefaultView(MangaChapters).Refresh();
+            }
         }
 
         private async Task GetReviews()

@@ -23,5 +23,14 @@ namespace MangaEpsilon.Services
         {
             Messenger.PushMessage(typeof(DownloadsService), "MangaChapterDownload", entry);
         }
+
+        internal static void RaiseDownloadCompleted(ChapterLight entry, MangaEpsilon.ViewModel.MainWindowDownloadsViewModel source)
+        {
+            if (DownloadCompleted != null)
+                DownloadCompleted(entry);
+        }
+
+        public delegate void DownloadCompletedHandler(ChapterLight download);
+        public static event DownloadCompletedHandler DownloadCompleted;
     }
 }
