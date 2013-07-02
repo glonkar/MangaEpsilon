@@ -34,7 +34,7 @@ namespace MangaEpsilon.ViewModel
             SetManga(argument);
         }
 
-        private void SetManga(KeyValuePair<string, object>[] argument)
+        private async void SetManga(KeyValuePair<string, object>[] argument)
         {
             IsBusy = true;
 
@@ -55,14 +55,41 @@ namespace MangaEpsilon.ViewModel
 
             //var firstEntry = Yukihyo.MAL.MyAnimeListAPI.Search(Manga.MangaName, Yukihyo.MAL.MALSearchType.manga).First(x => x.Title.ToLower() == Manga.MangaName.ToLower());
 
-            MangaIsFavorited = FavoritesService.IsMangaFavorited(Manga);
+            MangaChapters = new PaginatedObservableCollection<ChapterEntry>(selectedManga.Chapters);
+            MangaChapters.PageSize = 40;
 
+            MangaIsFavorited = await FavoritesService.IsMangaFavoritedAsync(Manga);
+
+            InitializeCommands();
+
+            IsBusy = false;
+
+            Manga.Categories = selectedManga.Categories;
+
+            if (Yukihyo.MAL.Utils.NetworkUtils.IsConnectedToInternet())
+            {
+                if (Manga == null) return;
+
+                await GetUpdatedInfo();
+
+                
+                var reviews = GetReviews();  
+                var related =  GetRelatedManga();
+                    
+                await reviews.ConfigureAwait(false);
+                await related.ConfigureAwait(false);
+            }
+
+        }
+
+        private void InitializeCommands()
+        {
             MangaAddFavoriteCommand = CommandManager.CreateProperCommand(async (o) =>
             {
                 await Task.Run(() =>
-                    {
-                        FavoritesService.AddManga(Manga);
-                    });
+                {
+                    FavoritesService.AddManga(Manga);
+                });
                 MangaIsFavorited = true;
             }, (o) =>
             {
@@ -74,9 +101,9 @@ namespace MangaEpsilon.ViewModel
             MangaRemoveFavoriteCommand = CommandManager.CreateProperCommand(async (o) =>
             {
                 await Task.Run(() =>
-                    {
-                        FavoritesService.RemoveManga(Manga);
-                    });
+                {
+                    FavoritesService.RemoveManga(Manga);
+                });
                 MangaIsFavorited = false;
             }, (o) =>
             {
@@ -114,9 +141,6 @@ namespace MangaEpsilon.ViewModel
             }, (o) =>
                 o != null && o is ChapterEntry && !LibraryService.Contains((ChapterEntry)o) && SelectedChapterItems != null && Yukihyo.MAL.Utils.NetworkUtils.IsConnectedToInternet());
 
-            MangaChapters = new PaginatedObservableCollection<ChapterEntry>(selectedManga.Chapters);
-            MangaChapters.PageSize = 40;
-
             BeginningChapterPageCommand = CommandManager.CreateProperCommand((o) =>
             {
                 MangaChapters.CurrentPage = 0;
@@ -125,7 +149,7 @@ namespace MangaEpsilon.ViewModel
             {
                 if (MangaChapters != null)
                     return this.MangaChapters.CanPageDown;
-                else 
+                else
                     return false;
             });
             EndingChapterPageCommand = CommandManager.CreateProperCommand((o) =>
@@ -173,22 +197,6 @@ namespace MangaEpsilon.ViewModel
                     win.Focus();
 
             }, (o) => o != null && o is Manga.Base.Manga);
-
-            IsBusy = false;
-
-            Task.Run(async () =>
-                {
-                    Manga.Categories = selectedManga.Categories;
-
-                    if (Yukihyo.MAL.Utils.NetworkUtils.IsConnectedToInternet())
-                    {
-                        await GetUpdatedInfo();
-
-                        GetReviews();
-                        GetRelatedManga();
-                    }
-                });
-
         }
 
         async void DownloadsService_DownloadCompleted(ChapterLight download)
@@ -208,6 +216,7 @@ namespace MangaEpsilon.ViewModel
 
         private async Task GetReviews()
         {
+            if (Manga == null) return;
             try
             {
                 IsError_Reviews = false;
@@ -257,6 +266,9 @@ namespace MangaEpsilon.ViewModel
         private async Task GetUpdatedInfo()
         {
             var newManga = await App.MangaSource.GetMangaInfo(Manga.MangaName, false); //Get fresh, updated information.
+
+            if (Manga == null) return;
+
             Manga.Description = newManga.Description;
             Manga.Author = newManga.Author;
             Manga.Status = newManga.Status;

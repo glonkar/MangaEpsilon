@@ -94,6 +94,11 @@ namespace MangaEpsilon.Services
             return FavoritesCollection.Contains(Manga.MangaName);
         }
 
+        internal static Task<bool> IsMangaFavoritedAsync(Manga.Base.Manga Manga)
+        {
+            return Task.Run<bool>(() => FavoritesCollection.Contains(Manga.MangaName));
+        }
+
         internal static async void AddManga(Manga.Base.Manga Manga)
         {
             if (!FavoritesCollection.Contains(Manga.MangaName))
