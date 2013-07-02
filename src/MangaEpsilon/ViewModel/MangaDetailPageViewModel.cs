@@ -12,6 +12,8 @@ using System.Windows.Media;
 using Crystal.Messaging;
 using MangaEpsilon.Services;
 using System.Collections.ObjectModel;
+using Crystal.Services;
+using Crystal.Localization;
 
 namespace MangaEpsilon.ViewModel
 {
@@ -66,7 +68,11 @@ namespace MangaEpsilon.ViewModel
             {
                 ChapterEntry selectedChapter = x as ChapterEntry;
 
-                NavigationService.ShowWindow<MangaChapterViewPageViewModel>(new KeyValuePair<string, object>("chapter", selectedChapter));
+                if ((!LibraryService.Contains(selectedChapter) && Yukihyo.MAL.Utils.NetworkUtils.IsConnectedToInternet())
+                    || LibraryService.Contains(selectedChapter))
+                    NavigationService.ShowWindow<MangaChapterViewPageViewModel>(new KeyValuePair<string, object>("chapter", selectedChapter));
+                else
+                    ServiceManager.Resolve<IMessageBoxService>().ShowMessage(LocalizationManager.GetLocalizedValue("NoInternetConnectionTitle"), LocalizationManager.GetLocalizedValue("NoInternetConnectionMsg"));
             });
 
             MangaDownloadCommand = CommandManager.CreateProperCommand((o) =>
