@@ -220,7 +220,7 @@
                                     </i:Interaction.Triggers>
                                     <ListBox.ContextMenu>
                                         <ContextMenu HasDropShadow="True" PlacementTarget="{Binding ElementName=chaptersGridView}">
-                                            <MenuItem Header="Download this chapter" Command="{Binding MangaDownloadCommand}" CommandParameter="{Binding SelectedChapterItem}"/>
+                                            <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='DownloadChapterMenuItem',NullValue='Download chapter(s).'}" Command="{Binding MangaDownloadCommand}" CommandParameter="{Binding SelectedChapterItem}"/>
                                         </ContextMenu>
                                     </ListBox.ContextMenu>
                                     <ListBox.Resources>
