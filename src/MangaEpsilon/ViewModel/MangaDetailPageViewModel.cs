@@ -242,7 +242,7 @@ namespace MangaEpsilon.ViewModel
                         results2.Select(x =>
                             App.MangaSource.AvailableManga.Find(y =>
                                 LevenshteinDistance.Compute(y.MangaName, x.Title) <= 2 && y.MangaName != Manga.MangaName))
-                            .Where(x => x != null));
+                            .Where(x => x != null).Distinct());
 
                 });
                 IsBusy_RelatedManga = false;
