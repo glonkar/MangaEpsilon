@@ -145,5 +145,11 @@ namespace MangaEpsilon
 
         internal static bool CanMinimizeToTray = false;
         public static bool SaveZoomPosition = false;
+
+        internal static async Task UpdateMangaCatalog()
+        {
+            await App.MangaSource.AcquireAvailableManga();
+            await SaveAvailableManga(true);
+        }
     }
 }

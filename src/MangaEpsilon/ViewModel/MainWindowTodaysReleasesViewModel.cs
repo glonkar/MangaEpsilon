@@ -108,6 +108,20 @@ namespace MangaEpsilon.ViewModel
 
                 var latestMangas = await App.MangaSource.GetNewReleasesOfToday(12);
 
+                foreach (Manga.Base.ChapterEntry manga in latestMangas)
+                {
+                    if (manga.ParentManga == null)
+                    {
+                        //only possible reason is the manga was added after the last time the catalog was fetched.
+
+                        await App.UpdateMangaCatalog();
+
+                        latestMangas = await App.MangaSource.GetNewReleasesOfToday(12); //rebuild the chapter entries
+
+                        break;
+                    }
+                }
+
                 NewReleasesToday = new ObservableCollection<ChapterEntry>();
 
                 foreach (var manga in latestMangas)
