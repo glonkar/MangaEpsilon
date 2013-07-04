@@ -1,7 +1,6 @@
 ﻿using Crystal.Core;
 using MangaEpsilon.Manga.Base;
 //using MangaEpsilon.Model;
-using MangaEpsilon.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,15 +9,39 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
-using MangaEpsilon.Services;
 using Crystal.Localization;
 using Crystal.Messaging;
 using Crystal.Command;
 
 namespace MangaEpsilon.ViewModel
 {
+#if !WINDOWS_PHONE
+    using MangaEpsilon.Services;
+    using MangaEpsilon.Extensions;
+#else
+    using MangaEpsilonWP;
+#endif
     public class MangaChapterViewPageViewModel : BaseViewModel
     {
+#if WINDOWS_PHONE
+        public override void OnNavigatedTo(KeyValuePair<string, string>[] argument = null)
+        {
+            Phone_Initialize(argument);
+
+            base.OnNavigatedTo(argument);
+        }
+
+        private async void Phone_Initialize(KeyValuePair<string, string>[] argument)
+        {
+            IsBusy = true;
+
+            ChapterBase entry = (await App.MangaSource.GetMangaInfo(argument[0].Value)).Chapters.First(x => x.Name == argument[1].Value);
+
+            ChapterName = entry.Name;
+
+            GetMangaPages(entry);
+        }
+#else
         public override void OnNavigatedTo(params KeyValuePair<string, object>[] argument)
         {
             ChapterBase entry = (ChapterBase)argument[0].Value;
@@ -31,11 +54,16 @@ namespace MangaEpsilon.ViewModel
 
             base.OnNavigatedTo(argument);
         }
+#endif
 
         private ChapterLight chapter = null;
         private async void GetMangaPages(ChapterBase entry)
         {
             IsBusy = true;
+
+            ChapterName = entry.Name;
+
+#if !WINDOWS_PHONE
             Pages = new ObservableCollection<Uri>();
 
             DownloadChapterCommand = CommandManager.CreateProperCommand((o) =>
@@ -68,7 +96,8 @@ namespace MangaEpsilon.ViewModel
             }
             else
             {
-                if (entry.ParentManga.Chapters.Count == 0)
+#endif
+            if (entry.ParentManga.Chapters.Count == 0)
                     entry.ParentManga = await App.MangaSource.GetMangaInfo(entry.ParentManga.MangaName, false);
 
                 if (entry is ChapterEntry)
@@ -81,32 +110,26 @@ namespace MangaEpsilon.ViewModel
                 //Pages.Add(new Uri(await App.MangaSource.GetChapterPageImageUrl(chapter, CurrentPageIndex)));
 
 
+#if !WINDOWS_PHONE
                 for (int i = 0; i < chapter.TotalPages; i++)
                 {
                     Pages.Add(new Uri(await App.MangaSource.GetChapterPageImageUrl(chapter, i)));
                 }
+#else
+                Pages = new ObservableCollection<string>();
+
+                for (int i = 0; i < chapter.TotalPages; i++)
+                {
+                    Pages.Add(await App.MangaSource.GetChapterPageImageUrl(chapter, i));
+                }
+#endif
 
                 RaisePropertyChanged(x => this.Pages);
+#if !WINDOWS_PHONE    
             }
+#endif
 
             CurrentPageIndex = 0;
-
-            IsBusy = false;
-        }
-
-        private async void GetNextBatchOfPages()
-        {
-            IsBusy = true;
-
-            await Task.Delay(1);
-
-            for (int i = CurrentPageIndex; i < Math.Min(chapter.TotalPages, CurrentPageIndex + 3); i++)
-            {
-                if (Pages[i] == null)
-                    Pages[i] = new Uri(await App.MangaSource.GetChapterPageImageUrl(chapter, i));
-            }
-
-            await Task.Delay(1000);
 
             IsBusy = false;
         }
@@ -126,6 +149,7 @@ namespace MangaEpsilon.ViewModel
 
                 CurrentPage = CurrentPageIndex + 1;
 
+#if !WINDOWS_PHONE
                 if (chapter != null)
                     if (!LibraryService.Contains(chapter))
                         if (Pages != null)
@@ -136,6 +160,7 @@ namespace MangaEpsilon.ViewModel
 
                 CurrentPageLabelString = String.Format(LocalizationManager.GetLocalizedValue("MangaChapterViewCurrentPageLabelFormatString"),
                     CurrentPage.ToString(), Pages.Count.ToString());
+#endif
             }
         }
         public int CurrentPage
@@ -147,11 +172,19 @@ namespace MangaEpsilon.ViewModel
             }
         }
 
+#if !WINDOWS_PHONE
         public ObservableCollection<Uri> Pages
         {
             get { return GetPropertyOrDefaultType<ObservableCollection<Uri>>(x => this.Pages); }
             set { SetProperty(x => this.Pages, value); }
         }
+#else
+        public ObservableCollection<string> Pages
+        {
+            get { return GetPropertyOrDefaultType<ObservableCollection<string>>(x => this.Pages); }
+            set { SetProperty(x => this.Pages, value); }
+        }
+#endif
 
         public bool IsBusy
         {
@@ -161,8 +194,8 @@ namespace MangaEpsilon.ViewModel
 
         public string CurrentPageLabelString
         {
-            get{ return GetPropertyOrDefaultType<string>(x => this.CurrentPageLabelString);}
-            set { SetProperty(x => this.CurrentPageLabelString, value);}
+            get { return GetPropertyOrDefaultType<string>(x => this.CurrentPageLabelString); }
+            set { SetProperty(x => this.CurrentPageLabelString, value); }
         }
 
         public bool? SaveZoomPosition
@@ -171,15 +204,28 @@ namespace MangaEpsilon.ViewModel
             set { SetProperty<bool?>(x => this.SaveZoomPosition, value); Messenger.PushMessage(this, "MangaViewerSaveZoomPosition", SaveZoomPosition); }
         }
 
+#if !WINDOWS_PHONE
         public CrystalProperCommand DownloadChapterCommand
         {
             get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.DownloadChapterCommand); }
             set { SetProperty(x => this.DownloadChapterCommand, value); }
         }
 
-        public override void CloseViewModel()
+        private async void GetNextBatchOfPages()
         {
-            base.CloseViewModel();
+            IsBusy = true;
+
+            await Task.Delay(1);
+
+            for (int i = CurrentPageIndex; i < Math.Min(chapter.TotalPages, CurrentPageIndex + 3); i++)
+            {
+                if (Pages[i] == null)
+                    Pages[i] = new Uri(await App.MangaSource.GetChapterPageImageUrl(chapter, i));
+            }
+
+            await Task.Delay(1000);
+
+            IsBusy = false;
         }
 
         private async Task<BitmapImage> LoadImgUrl(string url, bool block = false)
@@ -193,6 +239,12 @@ namespace MangaEpsilon.ViewModel
                 await bi.WaitForDownloadCompletion();
 
             return bi;
+        }
+#endif
+
+        public override void CloseViewModel()
+        {
+            base.CloseViewModel();
         }
     }
 }

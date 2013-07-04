@@ -4,12 +4,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+#if !WINDOWS_PHONE
 using System.Net.Http;
+#else
+using MangaEpsilonWP;
+using MangaEpsilonWP.Reimps;
+#endif
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MangaEpsilon.Manga.Base;
 using Newtonsoft.Json;
+using System.IO.IsolatedStorage;
 
 namespace MangaEpsilon.Manga.Sources.MangaEden
 {
@@ -35,15 +41,27 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                 light.ID = updatedChapter.ID;
             }
 
-
             string json = string.Empty;
             using (var client = new HttpClient())
             {
                 json = await client.GetStringAsync("http://www.mangaeden.com/api/chapter/" + light.ID + "/");
             }
 
-            var pages = (JSON.JSON.JsonDecode(json) as Hashtable)["images"];
-            foreach (ArrayList page in (IEnumerable)pages)
+
+            Dictionary<string, object> data = null;
+
+            using (var sr = new StringReader(json))
+            {
+                using (var jtr = new JsonTextReader(sr))
+                {
+                    data = App.DefaultJsonSerializer.Deserialize<Dictionary<string, object>>(jtr);
+                    jtr.Close();
+                }
+            }
+
+
+            var pages = data["images"];
+            foreach (IList page in (IEnumerable)pages)
             {
                 light.PagesUrls.Add("http://cdn.mangaeden.com/mangasimg/" + page[1]);
             }
@@ -57,14 +75,22 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
 
         public Task<string> GetChapterPageImageUrl(Base.ChapterLight chapter, int pageIndex)
         {
+#if !WINDOWS_PHONE
             return Task.FromResult(chapter.PagesUrls[pageIndex]);
+#else
+            return TaskEx.FromResult(chapter.PagesUrls[pageIndex]);
+#endif
         }
 
         public async Task<Base.Manga> GetMangaInfo(string name, bool local = true)
         {
             //http://www.mangaeden.com/api/manga/[manga.id]/ 
 
+#if !WINDOWS_PHONE
             var manga = AvailableManga.Find(x => x.MangaName == name);
+#else
+            var manga = AvailableManga.First(x => x.MangaName == name);
+#endif
 
             if (local == false)
                 try
@@ -75,7 +101,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                         json = await client.GetStringAsync("http://www.mangaeden.com/api/manga/" + manga.ID + "/");
                     }
 
-                    var data = JSON.JSON.JsonDecode(json) as Hashtable;
+                    var data = JSON.JSON.JsonDecode(json) as Dictionary<string, object>;
 
                     //Updates the existing entry for the manga for later.
                     var index = AvailableManga.IndexOf(manga);
@@ -87,6 +113,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
 
                     manga.OnlineWebpage = new Uri("http://www.mangaeden.com/en-manga/" + (string)data["alias"] + "/");
 
+#if !WINDOWS_PHONE
                     manga.Description = Regex.Replace(
                         WebUtility.HtmlDecode(
                             Regex.Replace(
@@ -97,6 +124,17 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                         "<.+?>", 
                         "", 
                         RegexOptions.Singleline | RegexOptions.Compiled);
+#else
+                    manga.Description = Regex.Replace(
+                            Regex.Replace(
+                                (data["description"] as string),
+                                @"<br\s*(/)?>",
+                                Environment.NewLine,
+                                RegexOptions.Compiled | RegexOptions.Singleline),
+                        "<.+?>",
+                        "",
+                        RegexOptions.Singleline | RegexOptions.Compiled);
+#endif
 
                     manga.LanguageByIetfTag = this.LanguageByIetfTag;
 
@@ -104,7 +142,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
 
                     try
                     {
-                        manga.Categories = data["categories"] as ArrayList;
+                        manga.Categories = data["categories"] as List<string>;
                     }
                     catch (Exception)
                     {
@@ -120,11 +158,15 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
 
                     //manga.Chapters.Clear();
 
+#if !WINDOWS_PHONE
                     await Task.Run(() =>
+#else
+                    await TaskEx.Run(() =>
+#endif
                         {
-                            var chapters = data["chapters"] as ArrayList;
+                            var chapters = data["chapters"] as List<object>;
 
-                            foreach (ArrayList chapter in chapters)
+                            foreach (List<object> chapter in chapters)
                             {
                                 ChapterEntry entry = new ChapterEntry(manga);
 
@@ -149,7 +191,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                             }
 
                             manga.Chapters = new System.Collections.ObjectModel.ObservableCollection<ChapterEntry>(manga.Chapters.OrderByDescending(x => x.ChapterNumber));
-                        });
+                        }).ConfigureAwait(false);
 
                     AvailableManga[index] = manga;
                 }
@@ -210,7 +252,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                 date = date.Replace("Today", DateTime.Today.Date.ToShortDateString());
                 date = date.Replace("Yesterday", DateTime.Today.Subtract(new TimeSpan(24, 0, 0)).ToShortDateString());
 
-                ChapterEntry entry = new ChapterEntry(AvailableManga.Find(x => x.MangaName == name));
+                ChapterEntry entry = new ChapterEntry(AvailableManga.First(x => x.MangaName == name));
 
                 entry.Name = string.Format("{0} #{1}",
                     name, chapterNum);
@@ -230,12 +272,18 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
         public void LoadAvilableMangaFromFile(string file)
         {
             //AvailableManga = JSON.JsonSerializer.Deserialize<List<Manga.Base.Manga>>(System.IO.File.ReadAllText(file));
+
+#if !WINDOWS_PHONE
             using (var str = new StreamReader(File.OpenRead(file)))
+#else
+            using (var str = new StreamReader(IsolatedStorageFile.GetUserStoreForApplication().OpenFile(file, FileMode.Open)))
+#endif
             {
                 using (var jtr = new JsonTextReader(str))
                 {
                     AvailableManga = App.DefaultJsonSerializer.Deserialize<List<Manga.Base.Manga>>(jtr);
                 }
+                str.Close();
             }
         }
 
@@ -249,11 +297,11 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
             using (var client = new HttpClient())
             {
                 var json = await client.GetStringAsync("http://www.mangaeden.com/api/list/0/");
-                var data = JSON.JSON.JsonDecode(json) as Hashtable;
+                var data = JSON.JSON.JsonDecode(json) as Dictionary<string, object>;
 
-                var mangas = data["manga"] as ArrayList;
+                var mangas = data["manga"] as List<object>;
 
-                foreach (Hashtable manga in mangas)
+                foreach (Dictionary<string, object> manga in mangas)
                 {
                     Manga.Base.Manga mangaObj = new Base.Manga();
                     mangaObj.MangaName = manga["t"] as string;

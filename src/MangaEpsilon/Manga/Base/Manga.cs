@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Collections.ObjectModel;
 using System.Net;
-using System.Net.Http;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
@@ -15,6 +14,10 @@ using System.Collections;
 
 namespace MangaEpsilon.Manga.Base
 {
+#if !WINDOWS_PHONE
+    using System.Net.Http;
+#endif
+
     [DataContract(Name = "Manga")]
     public class Manga: BaseModel
     {
@@ -23,29 +26,33 @@ namespace MangaEpsilon.Manga.Base
             Chapters = new ObservableCollection<ChapterEntry>();
         }
         [DataMember]
-        public string BookImageUrl { get { return GetPropertyOrDefaultType<string>("BookImageUrl"); } internal set { SetProperty("BookImageUrl", value); } }
+        public string BookImageUrl { get { return GetPropertyOrDefaultType<string>("BookImageUrl"); } set { SetProperty("BookImageUrl", value); } }
         [DataMember]
-        public ObservableCollection<ChapterEntry> Chapters { get { return GetPropertyOrDefaultType<ObservableCollection<ChapterEntry>>(x => this.Chapters); } internal set { SetProperty(x => this.Chapters, value); } }
+        public ObservableCollection<ChapterEntry> Chapters { get { return GetPropertyOrDefaultType<ObservableCollection<ChapterEntry>>(x => this.Chapters); } set { SetProperty(x => this.Chapters, value); } }
         [DataMember]
-        public string MangaName { get; internal set; }
+        public string MangaName { get; set; }
         [DataMember]
-        public string Author { get { return (string)GetProperty("Author"); } internal set { SetProperty("Author", value); } }
+        public string Author { get { return (string)GetProperty("Author"); } set { SetProperty("Author", value); } }
         [DataMember]
-        public string Description { get { return (string)GetProperty("Description"); } internal set { SetProperty("Description", value); } }
+        public string Description { get { return (string)GetProperty("Description"); } set { SetProperty("Description", value); } }
         [DataMember]
-        public int StartRelease { get; internal set; }
+        public int StartRelease { get; set; }
         [DataMember]
-        public string ID { get; internal set; }
+        public string ID { get; set; }
         [DataMember]
+#if !WINDOWS_PHONE
         public ArrayList Categories { get { return (ArrayList)GetProperty("Categories"); } internal set { SetProperty("Categories", value); } }
+#else
+        public List<string> Categories { get { return (List<string>)GetProperty("Categories"); } set { SetProperty("Categories", value); } }
+#endif
         [DataMember]
-        public MangaStatus Status { get { return GetPropertyOrDefaultType<MangaStatus>("Status"); } internal set { SetProperty("Status", value); } }
+        public MangaStatus Status { get { return GetPropertyOrDefaultType<MangaStatus>("Status"); } set { SetProperty("Status", value); } }
         [DataMember]
-        public Uri OnlineWebpage { get; internal set; }
+        public Uri OnlineWebpage { get; set; }
         [DataMember]
-        public string SourceName { get; internal set; }
+        public string SourceName { get; set; }
         [DataMember]
-        public string LanguageByIetfTag { get; internal set; }
+        public string LanguageByIetfTag { get; set; }
     }
 
     public enum MangaStatus

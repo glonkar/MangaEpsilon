@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Collections;
 using System.Globalization;
@@ -12,6 +11,8 @@ using System.Globalization;
 
 namespace MangaEpsilon.JSON
 {
+#if !WINDOWS_PHONE
+    using System.Runtime.Serialization.Json;
     //http://stackoverflow.com/questions/10965829/how-do-i-de-serialize-json-in-winrt
     public static class JsonSerializer
     {
@@ -37,12 +38,13 @@ namespace MangaEpsilon.JSON
             }
         }
     }
+#endif
 
     /// <summary>
     /// This class encodes and decodes JSON strings.
     /// Spec. details, see http://www.json.org/
     ///
-    /// JSON uses Arrays and Objects. These correspond here to the datatypes ArrayList and Hashtable.
+    /// JSON uses Arrays and Objects. These correspond here to the datatypes List<object> and Dictionary<string, object>.
     /// All numbers are parsed to doubles.
     /// https://raw.github.com/XAMPP/Kyoko/master/src/Kyoko/Misc/JSON.cs
     /// </summary>
@@ -67,7 +69,7 @@ namespace MangaEpsilon.JSON
         /// Parses the string json into a value
         /// </summary>
         /// <param name="json">A JSON string.</param>
-        /// <returns>An ArrayList, a Hashtable, a double, a string, null, true, or false</returns>
+        /// <returns>An List<object>, a Dictionary<string, object>, a double, a string, null, true, or false</returns>
         public static object JsonDecode(string json)
         {
             bool success = true;
@@ -80,7 +82,7 @@ namespace MangaEpsilon.JSON
         /// </summary>
         /// <param name="json">A JSON string.</param>
         /// <param name="success">Successful parse?</param>
-        /// <returns>An ArrayList, a Hashtable, a double, a string, null, true, or false</returns>
+        /// <returns>An List<object>, a Dictionary<string, object>, a double, a string, null, true, or false</returns>
         public static object JsonDecode(string json, ref bool success)
         {
             success = true;
@@ -98,9 +100,9 @@ namespace MangaEpsilon.JSON
         }
 
         /// <summary>
-        /// Converts a Hashtable / ArrayList object into a JSON string
+        /// Converts a Dictionary<string, object> / List<object> object into a JSON string
         /// </summary>
-        /// <param name="json">A Hashtable / ArrayList</param>
+        /// <param name="json">A Dictionary<string, object> / List<object></param>
         /// <returns>A JSON encoded string, or null if object 'json' is not serializable</returns>
         public static string JsonEncode(object json)
         {
@@ -109,9 +111,9 @@ namespace MangaEpsilon.JSON
             return (success ? builder.ToString() : null);
         }
 
-        protected static Hashtable ParseObject(char[] json, ref int index, ref bool success)
+        protected static Dictionary<string,object> ParseObject(char[] json, ref int index, ref bool success)
         {
-            Hashtable table = new Hashtable();
+            Dictionary<string, object> table = new Dictionary<string, object>();
             int token;
 
             // {
@@ -169,9 +171,9 @@ namespace MangaEpsilon.JSON
             return table;
         }
 
-        protected static ArrayList ParseArray(char[] json, ref int index, ref bool success)
+        protected static List<object> ParseArray(char[] json, ref int index, ref bool success)
         {
-            ArrayList array = new ArrayList();
+            List<object> array = new List<object>();
 
             // [
             NextToken(json, ref index);
@@ -303,6 +305,7 @@ namespace MangaEpsilon.JSON
                     {
                         s.Append('\t');
                     }
+#if !WINDOWS_PHONE
                     else if (c == 'u')
                     {
                         int remainingLength = json.Length - index;
@@ -324,6 +327,7 @@ namespace MangaEpsilon.JSON
                             break;
                         }
                     }
+#endif
 
                 }
                 else
@@ -482,13 +486,13 @@ namespace MangaEpsilon.JSON
             {
                 success = SerializeString((string)value, builder);
             }
-            else if (value is Hashtable)
+            else if (value is Dictionary<string, object>)
             {
-                success = SerializeObject((Hashtable)value, builder);
+                success = SerializeObject((Dictionary<string, object>)value, builder);
             }
-            else if (value is ArrayList)
+            else if (value is List<object>)
             {
-                success = SerializeArray((ArrayList)value, builder);
+                success = SerializeArray((List<object>)value, builder);
             }
             else if ((value is Boolean) && ((Boolean)value == true))
             {
@@ -514,7 +518,7 @@ namespace MangaEpsilon.JSON
             return success;
         }
 
-        protected static bool SerializeObject(Hashtable anObject, StringBuilder builder)
+        protected static bool SerializeObject(Dictionary<string, object> anObject, StringBuilder builder)
         {
             builder.Append("{");
 
@@ -544,7 +548,7 @@ namespace MangaEpsilon.JSON
             return true;
         }
 
-        protected static bool SerializeArray(ArrayList anArray, StringBuilder builder)
+        protected static bool SerializeArray(List<object> anArray, StringBuilder builder)
         {
             builder.Append("[");
 
