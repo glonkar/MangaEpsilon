@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ using MangaEpsilon.Services;
 
 namespace MangaEpsilon.ViewModel
 {
-    public class MainWindowLibraryViewModel: BaseViewModel
+    public class MainWindowLibraryViewModel : BaseViewModel
     {
         public MainWindowLibraryViewModel()
         {
@@ -35,12 +36,12 @@ namespace MangaEpsilon.ViewModel
             LibraryService.LibraryItemAdded += LibraryService_LibraryItemAdded;
             LibraryService.LibraryItemRemoved += LibraryService_LibraryItemRemoved;
 
-            FavoritesService.ItemFavorited += FavoritesService_ItemFavorited;
-            FavoritesService.ItemUnfavorited += FavoritesService_ItemUnfavorited;
+            FavoritesService.ItemFavorited += FavoritesService_ItemFavoriteStatusChanged;
+            FavoritesService.ItemUnfavorited += FavoritesService_ItemFavoriteStatusChanged;
 
             LibraryItems = new ObservableCollection<Manga.Base.ChapterLight>(LibraryService.LibraryCollection.Select(x => x.Item1));
 
-            var libraryItemsView = CollectionViewSource.GetDefaultView(LibraryItems);
+            libraryItemsView = (System.Windows.Data.ListCollectionView)CollectionViewSource.GetDefaultView(LibraryItems);
             libraryItemsView.GroupDescriptions.Add(new PropertyGroupDescription("ParentManga.MangaName"));
             libraryItemsView.SortDescriptions.Add(new System.ComponentModel.SortDescription("ParentManga.MangaName", System.ComponentModel.ListSortDirection.Ascending));
             libraryItemsView.SortDescriptions.Add(new System.ComponentModel.SortDescription("ChapterNumber", System.ComponentModel.ListSortDirection.Ascending));
@@ -48,30 +49,26 @@ namespace MangaEpsilon.ViewModel
             InitializeCommands();
         }
 
-        async void FavoritesService_ItemUnfavorited(Manga.Base.Manga manga)
+        System.Windows.Data.ListCollectionView libraryItemsView = null;
+
+        void FavoritesService_ItemFavoriteStatusChanged(Manga.Base.Manga manga)
         {
-            await Dispatcher.InvokeAsync(() =>
-            {
-                //flush the queue
-                Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.SystemIdle, new Action(() => { }));
+            //CollectionViewGroup group = (CollectionViewGroup)libraryItemsView.Groups.First(x => 
+            //    ((ChapterLight)((CollectionViewGroup)x).Items[0]).ParentManga.MangaName == manga.MangaName);
 
-                var libraryItemsView = CollectionViewSource.GetDefaultView(LibraryItems);
-
-                libraryItemsView.Refresh();
-            });
+            RedrawLibraryItems();
         }
 
-        async void FavoritesService_ItemFavorited(Manga.Base.Manga manga)
+        private void RedrawLibraryItems()
         {
-            await Dispatcher.InvokeAsync(() =>
-                {
-                    //flush the queue
-                    Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.SystemIdle, new Action(() => { }));
+            //flush the queue
+            //Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.SystemIdle, new Action(() => { }));
+            //await Dispatcher.InvokeAsync(() => { }, System.Windows.Threading.DispatcherPriority.SystemIdle);
+            //await System.Windows.Threading.Dispatcher.Yield();
 
-                    var libraryItemsView = CollectionViewSource.GetDefaultView(LibraryItems);
+            var libraryItemsView2 = CollectionViewSource.GetDefaultView(LibraryItems);
 
-                    libraryItemsView.Refresh();
-                });
+            libraryItemsView2.Refresh();
         }
 
         private void InitializeCommands()
@@ -130,7 +127,7 @@ namespace MangaEpsilon.ViewModel
 
                     int imgcount = chapter.PagesUrls.Count;
                     int i = 1;
-                    foreach(var image in chapter.PagesUrls)
+                    foreach (var image in chapter.PagesUrls)
                     {
                         await Task.Run(() =>
                             {
@@ -163,7 +160,7 @@ namespace MangaEpsilon.ViewModel
 
         async void LibraryService_LibraryItemRemoved(Tuple<ChapterLight, string> tuple)
         {
-            await Dispatcher.InvokeAsync(() =>
+            await UIDispatcher.InvokeAsync(() =>
             {
                 LibraryItems.Remove(tuple.Item1);
 
@@ -175,7 +172,7 @@ namespace MangaEpsilon.ViewModel
 
         async void LibraryService_LibraryItemAdded(Tuple<Manga.Base.ChapterLight, string> tuple)
         {
-            await Dispatcher.InvokeAsync(() =>
+            await UIDispatcher.InvokeAsync(() =>
                 {
                     LibraryItems.Add(tuple.Item1);
 
