@@ -89,6 +89,7 @@
     <Compile Include="AttachedProperties\LoadedOnceHelper.cs" />
     <Compile Include="Converters\ImageCachingConverter.cs" />
     <Compile Include="Converters\ImageDownloadingConverter.cs" />
+    <Compile Include="Converters\ItemIsInCollectionToBoolConverter.cs" />
     <Compile Include="Converters\MangaIsFavoritedBooleanToVisibilityConverter.cs" />
     <Compile Include="CServices\MessageBoxService.cs" />
     <Compile Include="CServices\SaveFileDialogService.cs" />
@@ -252,7 +253,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_ConfigurationName="Debug" BuildVersion_BuildAction="Build" />
+      <UserProperties BuildVersion_BuildAction="Build" BuildVersion_ConfigurationName="Debug" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

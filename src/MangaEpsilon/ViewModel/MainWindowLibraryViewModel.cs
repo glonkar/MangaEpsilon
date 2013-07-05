@@ -53,8 +53,8 @@ namespace MangaEpsilon.ViewModel
 
         void FavoritesService_ItemFavoriteStatusChanged(Manga.Base.Manga manga)
         {
-            //CollectionViewGroup group = (CollectionViewGroup)libraryItemsView.Groups.First(x => 
-            //    ((ChapterLight)((CollectionViewGroup)x).Items[0]).ParentManga.MangaName == manga.MangaName);
+            CollectionViewGroup group = (CollectionViewGroup)libraryItemsView.Groups.First(x => 
+                ((ChapterLight)((CollectionViewGroup)x).Items[0]).ParentManga.MangaName == manga.MangaName);
 
             RedrawLibraryItems();
         }
@@ -68,7 +68,10 @@ namespace MangaEpsilon.ViewModel
 
             var libraryItemsView2 = CollectionViewSource.GetDefaultView(LibraryItems);
 
-            libraryItemsView2.Refresh();
+            UIDispatcher.BeginInvoke(new EmptyDelegate(() =>
+                {
+                    libraryItemsView.Refresh();
+                }));
         }
 
         private void InitializeCommands()

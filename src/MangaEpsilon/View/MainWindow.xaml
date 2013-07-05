@@ -377,6 +377,11 @@
                         </CollectionViewSource>
                     </Grid.Resources>-->
                     <Grid>
+                        <Grid.Resources>
+                            <ResourceDictionary>
+                                <conv:ItemIsInCollectionToBoolConverter x:Key="icb"/>
+                            </ResourceDictionary>
+                        </Grid.Resources>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="20*"/>
@@ -389,15 +394,32 @@
                                  Grid.Row="1" x:Name="LibraryListBox">
                             <ListBox.GroupStyle>
                                 <GroupStyle>
-                                    <GroupStyle.HeaderTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <Rectangle Width="20" Height="20" Visibility="{Binding Items[0].ParentManga, Converter={StaticResource FavConv}, UpdateSourceTrigger=PropertyChanged}" 
+                                    <GroupStyle.ContainerStyle>
+                                        <Style TargetType="{x:Type GroupItem}">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                                                        <Expander Validation.ErrorTemplate="{x:Null}">
+                                                            <Expander.IsExpanded>
+                                                                <MultiBinding Converter="{StaticResource icb}" NotifyOnValidationError="False">
+                                                                    <Binding Path="Items" Mode="OneWay"/>
+                                                                    <Binding Path="SelectedItem" ElementName="LibraryListBox" UpdateSourceTrigger="PropertyChanged"/>
+                                                                </MultiBinding>
+                                                            </Expander.IsExpanded>
+                                                            <Expander.Header>
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <Rectangle Width="20" Height="20" Visibility="{Binding Items[0].ParentManga, Converter={StaticResource FavConv}, UpdateSourceTrigger=PropertyChanged}" 
                                                            Fill="{StaticResource LibraryItemStarBrush}"/>
-                                                <TextBlock Text="{Binding Name}" FontSize="17" FontWeight="bold" Margin="5 0 0 0" />
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </GroupStyle.HeaderTemplate>
+                                                                    <TextBlock Text="{Binding Name}" FontSize="17" FontWeight="bold" Margin="5 0 0 0" />
+                                                                </StackPanel>
+                                                            </Expander.Header>
+                                                            <ItemsPresenter Margin="5,0,0,0" />
+                                                        </Expander>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </GroupStyle.ContainerStyle>
                                 </GroupStyle>
                             </ListBox.GroupStyle>
                             <ListBox.ItemTemplate>
@@ -578,10 +600,10 @@
                         <Paragraph>
                             <Span>
                                 You can visit him at his badly-designed site,
-                                <Hyperlink NavigateUri="http://amrykid.devsocket.net/" Click="Hyperlink_Click">here</Hyperlink>.
+                                <Hyperlink NavigateUri="http://amrykid.devsocket.net/" Click="Hyperlink_Click">here</Hyperlink> .
                                 <LineBreak/>
-                                MangaEpsilon's source code can be found 
-                                <Hyperlink NavigateUri="http://github.com/Amrykid/MangaEpsilon" Click="Hyperlink_Click">here</Hyperlink>.
+                                MangaEpsilon's source code can be found
+                                <Hyperlink NavigateUri="http://github.com/Amrykid/MangaEpsilon" Click="Hyperlink_Click">here</Hyperlink> .
                             </Span>
                         </Paragraph>
                     </FlowDocument>
