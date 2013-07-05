@@ -80,6 +80,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
             var manga = AvailableManga.Find(x => x.MangaName == name);
 
             if (local == false)
+            {
                 try
                 {
                     string json = string.Empty;
@@ -88,7 +89,16 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                         json = await client.GetStringAsync("http://www.mangaeden.com/api/manga/" + manga.ID + "/").ConfigureAwait(false);
                     }
 
-                    var data = JSON.JSON.JsonDecode(json) as Hashtable;
+                    Dictionary<string, object> data = null;
+
+                    using (StringReader sr = new StringReader(json))
+                    {
+                        using (JsonTextReader jtr = new JsonTextReader(sr))
+                        {
+                            data = App.DefaultJsonSerializer.Deserialize<Dictionary<string, object>>(jtr);
+                            jtr.Close();
+                        }
+                    }
 
                     //Updates the existing entry for the manga for later.
                     var index = AvailableManga.IndexOf(manga);
@@ -117,7 +127,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
 
                     try
                     {
-                        manga.Categories = data["categories"] as ArrayList;
+                        manga.Categories = new List<object>(((JArray)data["categories"]).Values());
                     }
                     catch (Exception)
                     {
@@ -135,14 +145,17 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
 
                     await Task.Run(() =>
                         {
-                            var chapters = data["chapters"] as ArrayList;
+                            var chapters = data["chapters"] as IList;
 
-                            foreach (ArrayList chapter in chapters)
+                            foreach (IList chapter in chapters)
                             {
-                                ChapterEntry entry = new ChapterEntry(manga);
-
                                 var chapterNum = double.Parse(chapter[0].ToString());
 
+                                if (manga.Chapters.Any(x => x.ChapterNumber == chapterNum))
+                                    continue;
+
+                                ChapterEntry entry = new ChapterEntry(manga);
+                                
                                 var time = Sayuka.IRC.Utilities.UnixTimeUtil.UnixTimeToDateTime(chapter[1].ToString());
 
                                 entry.Name = string.Format("{0} #{1}",
@@ -150,15 +163,13 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
 
                                 entry.ReleaseDate = time;
 
-                                entry.ChapterNumber = double.Parse(chapterNum.ToString());
+                                entry.ChapterNumber = chapterNum;
 
                                 entry.Subtitle = chapter[2];
 
                                 entry.ID = chapter[3] as string;
 
-
-                                if (!manga.Chapters.Any(x => x.ChapterNumber == entry.ChapterNumber))
-                                    manga.Chapters.Add(entry);
+                                manga.Chapters.Add(entry);
                             }
 
                             manga.Chapters = new System.Collections.ObjectModel.ObservableCollection<ChapterEntry>(manga.Chapters.OrderByDescending(x => x.ChapterNumber));
@@ -170,6 +181,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                 {
                     //Probably off line. Should return whatever data we have.
                 }
+            }
 
             return manga;
         }
@@ -193,7 +205,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
 
             var mangaListTable = Regex.Match(html, "<table id=\"mangaList\">.+?</table>", RegexOptions.Singleline | RegexOptions.Compiled);
 
-            var mangaItems = Regex.Matches(mangaListTable.Value, "<tr>.+?</tr>", RegexOptions.Singleline | RegexOptions.Compiled);
+            var mangaItems = await Task.Run(() => Regex.Matches(mangaListTable.Value, "<tr>.+?</tr>", RegexOptions.Singleline | RegexOptions.Compiled)).ConfigureAwait(false);
 
             int i = 0;
 
@@ -248,6 +260,8 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                 using (var jtr = new JsonTextReader(str))
                 {
                     AvailableManga = App.DefaultJsonSerializer.Deserialize<List<Manga.Base.Manga>>(jtr);
+
+                    jtr.Close();
                 }
             }
         }

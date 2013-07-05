@@ -125,7 +125,7 @@ namespace MangaEpsilon.Manga.Sources.MangaFox
 
             //manga.Artist = artist;
 
-            manga.Categories = new System.Collections.ArrayList((System.Collections.ICollection)MangaGenreRegex.Matches(html).OfType<Match>().Select(x => x.Groups["name"].Value).ToArray());
+            manga.Categories = new List<object>(MangaGenreRegex.Matches(html).OfType<Match>().Select(x => x.Groups["name"].Value));
 
             manga.BookImageUrl = MangaCoverImageRegex.Match(html).Groups["url"].Value;
 

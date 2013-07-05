@@ -37,7 +37,7 @@ namespace MangaEpsilon.Manga.Base
         [DataMember]
         public string ID { get; internal set; }
         [DataMember]
-        public ArrayList Categories { get { return (ArrayList)GetProperty("Categories"); } internal set { SetProperty("Categories", value); } }
+        public List<object> Categories { get { return (List<object>)GetProperty("Categories"); } internal set { SetProperty("Categories", value); } }
         [DataMember]
         public MangaStatus Status { get { return GetPropertyOrDefaultType<MangaStatus>("Status"); } internal set { SetProperty("Status", value); } }
         [DataMember]
