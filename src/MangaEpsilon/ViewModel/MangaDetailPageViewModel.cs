@@ -121,7 +121,7 @@ namespace MangaEpsilon.ViewModel
                     return false;
             });
 
-            OpenMangaChapterCommand = CommandManager.CreateCommand(x =>
+            OpenMangaChapterCommand = CommandManager.CreateProperCommand(x =>
             {
                 ChapterEntry selectedChapter = x as ChapterEntry;
 
@@ -130,7 +130,7 @@ namespace MangaEpsilon.ViewModel
                     NavigationService.ShowWindow<MangaChapterViewPageViewModel>(new KeyValuePair<string, object>("chapter", selectedChapter));
                 else
                     ServiceManager.Resolve<IMessageBoxService>().ShowMessage(LocalizationManager.GetLocalizedValue("NoInternetConnectionTitle"), LocalizationManager.GetLocalizedValue("NoInternetConnectionMsg"));
-            });
+            }, (o) => o != null && o is ChapterBase);
 
             MangaDownloadCommand = CommandManager.CreateProperCommand((o) =>
             {
@@ -311,7 +311,7 @@ namespace MangaEpsilon.ViewModel
         public CrystalProperCommand EndingChapterPageCommand { get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.EndingChapterPageCommand); } set { SetProperty<CrystalProperCommand>(x => this.EndingChapterPageCommand, value); } }
         public CrystalProperCommand PreviousChapterPageCommand { get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.PreviousChapterPageCommand); } set { SetProperty<CrystalProperCommand>(x => this.PreviousChapterPageCommand, value); } }
         public CrystalProperCommand NextChapterPageCommand { get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.NextChapterPageCommand); } set { SetProperty<CrystalProperCommand>(x => this.NextChapterPageCommand, value); } }
-        public CrystalCommand OpenMangaChapterCommand { get; set; }
+        public CrystalProperCommand OpenMangaChapterCommand { get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.OpenMangaChapterCommand); } set { SetProperty<CrystalProperCommand>(x => this.OpenMangaChapterCommand, value); } }
         public CrystalProperCommand MangaDownloadCommand
         {
             get { return (CrystalProperCommand)GetProperty(x => this.MangaDownloadCommand); }
