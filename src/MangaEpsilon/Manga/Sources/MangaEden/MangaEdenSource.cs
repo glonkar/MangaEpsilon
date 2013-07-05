@@ -147,43 +147,48 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
 
                     //manga.Chapters.Clear();
 
-                    await Task.Run(() =>
-                        {
-                            var chapters = data["chapters"] as IList;
+                    int chaptersAmount = int.Parse(data["chapters_len"].ToString());
 
-                            var chapterList = new ChapterEntry[int.Parse(data["chapters_len"].ToString())];
-
-                            Parallel.ForEach(chapters.Cast<IList>(), (IList chapter, ParallelLoopState loopState, long loopIndex) =>
+                    if (chaptersAmount != manga.Chapters.Count)
+                    {
+                        await Task.Run(() =>
                             {
-                                var chapterNum = double.Parse(chapter[0].ToString());
+                                var chapters = data["chapters"] as IList;
 
-                                if (!manga.Chapters.Any(x => x.ChapterNumber == chapterNum) && loopIndex > manga.Chapters.Count - 1)
+                                var chapterList = new ChapterEntry[chaptersAmount];
+
+                                Parallel.ForEach(chapters.Cast<IList>(), (IList chapter, ParallelLoopState loopState, long loopIndex) =>
                                 {
+                                    var chapterNum = double.Parse(chapter[0].ToString());
 
-                                    ChapterEntry entry = new ChapterEntry(manga);
+                                    if (!manga.Chapters.Any(x => x.ChapterNumber == chapterNum) && loopIndex > manga.Chapters.Count - 1)
+                                    {
 
-                                    var time = Sayuka.IRC.Utilities.UnixTimeUtil.UnixTimeToDateTime(chapter[1].ToString());
+                                        ChapterEntry entry = new ChapterEntry(manga);
 
-                                    entry.Name = string.Format("{0} #{1}",
-                                        manga.MangaName, chapterNum.ToString());
+                                        var time = Sayuka.IRC.Utilities.UnixTimeUtil.UnixTimeToDateTime(chapter[1].ToString());
 
-                                    entry.ReleaseDate = time;
+                                        entry.Name = string.Format("{0} #{1}",
+                                            manga.MangaName, chapterNum.ToString());
 
-                                    entry.ChapterNumber = chapterNum;
+                                        entry.ReleaseDate = time;
 
-                                    entry.Subtitle = chapter[2];
+                                        entry.ChapterNumber = chapterNum;
 
-                                    entry.ID = chapter[3].ToString();
+                                        entry.Subtitle = chapter[2];
 
-                                    chapterList[loopIndex] = entry;
-                                }
-                                else
-                                    chapterList[loopIndex] = manga.Chapters[(int)loopIndex];
+                                        entry.ID = chapter[3].ToString();
 
+                                        chapterList[loopIndex] = entry;
+                                    }
+                                    else
+                                        chapterList[loopIndex] = manga.Chapters[(int)loopIndex];
+
+                                });
+
+                                manga.Chapters = new System.Collections.ObjectModel.ObservableCollection<ChapterEntry>(chapterList.OrderByDescending(x => x.ChapterNumber));
                             });
-
-                            manga.Chapters = new System.Collections.ObjectModel.ObservableCollection<ChapterEntry>(chapterList.OrderByDescending(x => x.ChapterNumber));
-                        });
+                    }
 
                     AvailableManga[index] = manga;
                 }
