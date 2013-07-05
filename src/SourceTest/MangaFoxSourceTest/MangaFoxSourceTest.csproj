@@ -63,10 +63,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\Visual Studio 2010\Projects\Crystal\src\Crystal\Crystal.csproj">
-      <Project>{8c5a2d35-824e-4f52-9b18-b1aa19c42bda}</Project>
-      <Name>Crystal</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\MangaEpsilon\MangaEpsilon.csproj">
       <Project>{71e73763-ba66-4e69-9699-850d35384442}</Project>
       <Name>MangaEpsilon</Name>
@@ -92,7 +88,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
