@@ -45,7 +45,14 @@ namespace MangaEpsilon.Converters
                 return image;
             }
             else
-                return App.ImageCacheDir + filename;
+            {
+                BitmapImage image = new BitmapImage();
+                image.BeginInit();
+                image.UriSource = new Uri(App.ImageCacheDir + filename);
+                image.EndInit();
+
+                return image.GetAsFrozen();
+            }
         }
 
         void image_DownloadFailed(object sender, ExceptionEventArgs e)
