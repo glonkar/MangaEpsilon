@@ -51,7 +51,8 @@ namespace MangaEpsilon.ViewModel
             Manga.BookImageUrl = selectedManga.BookImageUrl;
             Manga.Status = selectedManga.Status;
 
-            ViewTitle = Manga.MangaName + " - " + Crystal.Localization.LocalizationManager.GetLocalizedValue("MangaDetailsTitle") + " - " + Crystal.Localization.LocalizationManager.GetLocalizedValue("MainApplicationTitle");
+            ViewTitle = Manga.MangaName + " - " + Crystal.Localization.LocalizationManager.GetLocalizedValue("MangaDetailsTitle") + " - " +
+                Crystal.Localization.LocalizationManager.GetLocalizedValue("MainApplicationTitle");
 
             //var firstEntry = Yukihyo.MAL.MyAnimeListAPI.Search(Manga.MangaName, Yukihyo.MAL.MALSearchType.manga).First(x => x.Title.ToLower() == Manga.MangaName.ToLower());
 
@@ -129,7 +130,8 @@ namespace MangaEpsilon.ViewModel
                     || LibraryService.Contains(selectedChapter))
                     NavigationService.ShowWindow<MangaChapterViewPageViewModel>(new KeyValuePair<string, object>("chapter", selectedChapter));
                 else
-                    ServiceManager.Resolve<IMessageBoxService>().ShowMessage(LocalizationManager.GetLocalizedValue("NoInternetConnectionTitle"), LocalizationManager.GetLocalizedValue("NoInternetConnectionMsg"));
+                    ServiceManager.Resolve<IMessageBoxService>().ShowMessage(LocalizationManager.GetLocalizedValue("NoInternetConnectionTitle"),
+                        LocalizationManager.GetLocalizedValue("NoInternetConnectionMsg"));
             }, (o) => o != null && o is ChapterBase);
 
             MangaDownloadCommand = CommandManager.CreateProperCommand((o) =>
@@ -197,7 +199,8 @@ namespace MangaEpsilon.ViewModel
             {
                 var manga = ((Manga.Base.Manga)o);
 
-                var win = ViewModelOperations.FindWindow((vm) => vm.ContainsProperty("Manga") && ((Manga.Base.Manga)vm.GetProperty("Manga")).MangaName == manga.MangaName); //checks if its already open. probably not MVVM-ish.
+                var win = ViewModelOperations.FindWindow((vm) => vm.ContainsProperty("Manga") &&
+                    ((Manga.Base.Manga)vm.GetProperty("Manga")).MangaName == manga.MangaName); //checks if its already open. probably not MVVM-ish.
 
                 if (win == null)
                     NavigationService.ShowWindow<MangaDetailPageViewModel>(new KeyValuePair<string, object>("manga", manga));
@@ -248,6 +251,8 @@ namespace MangaEpsilon.ViewModel
 
                 await Task.Run(() =>
                 {
+                    if (Manga == null) return;
+
                     var results = Yukihyo.MAL.MyAnimeListAPI.Search(Manga.MangaName, Yukihyo.MAL.MALSearchType.manga);
                     var results2 = results.Where(x =>
                             x.Title.ToLower().Trim() != Manga.MangaName.ToLower().Trim() &&
@@ -307,11 +312,31 @@ namespace MangaEpsilon.ViewModel
             set { SetProperty(x => this.MangaClickCommand, value); }
         }
 
-        public CrystalProperCommand BeginningChapterPageCommand { get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.BeginningChapterPageCommand); } set { SetProperty<CrystalProperCommand>(x => this.BeginningChapterPageCommand, value); } }
-        public CrystalProperCommand EndingChapterPageCommand { get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.EndingChapterPageCommand); } set { SetProperty<CrystalProperCommand>(x => this.EndingChapterPageCommand, value); } }
-        public CrystalProperCommand PreviousChapterPageCommand { get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.PreviousChapterPageCommand); } set { SetProperty<CrystalProperCommand>(x => this.PreviousChapterPageCommand, value); } }
-        public CrystalProperCommand NextChapterPageCommand { get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.NextChapterPageCommand); } set { SetProperty<CrystalProperCommand>(x => this.NextChapterPageCommand, value); } }
-        public CrystalProperCommand OpenMangaChapterCommand { get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.OpenMangaChapterCommand); } set { SetProperty<CrystalProperCommand>(x => this.OpenMangaChapterCommand, value); } }
+        public CrystalProperCommand BeginningChapterPageCommand
+        {
+            get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.BeginningChapterPageCommand); }
+            set { SetProperty<CrystalProperCommand>(x => this.BeginningChapterPageCommand, value); }
+        }
+        public CrystalProperCommand EndingChapterPageCommand
+        {
+            get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.EndingChapterPageCommand); }
+            set { SetProperty<CrystalProperCommand>(x => this.EndingChapterPageCommand, value); }
+        }
+        public CrystalProperCommand PreviousChapterPageCommand
+        {
+            get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.PreviousChapterPageCommand); }
+            set { SetProperty<CrystalProperCommand>(x => this.PreviousChapterPageCommand, value); }
+        }
+        public CrystalProperCommand NextChapterPageCommand
+        {
+            get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.NextChapterPageCommand); }
+            set { SetProperty<CrystalProperCommand>(x => this.NextChapterPageCommand, value); }
+        }
+        public CrystalProperCommand OpenMangaChapterCommand
+        {
+            get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.OpenMangaChapterCommand); }
+            set { SetProperty<CrystalProperCommand>(x => this.OpenMangaChapterCommand, value); }
+        }
         public CrystalProperCommand MangaDownloadCommand
         {
             get { return (CrystalProperCommand)GetProperty(x => this.MangaDownloadCommand); }
