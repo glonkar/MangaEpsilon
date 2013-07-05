@@ -157,7 +157,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                             {
                                 var chapterNum = double.Parse(chapter[0].ToString());
 
-                                if (!manga.Chapters.Any(x => x.ChapterNumber == chapterNum))
+                                if (!manga.Chapters.Any(x => x.ChapterNumber == chapterNum) && loopIndex > manga.Chapters.Count - 1)
                                 {
 
                                     ChapterEntry entry = new ChapterEntry(manga);
@@ -179,6 +179,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                                 }
                                 else
                                     chapterList[loopIndex] = manga.Chapters[(int)loopIndex];
+
                             });
 
                             manga.Chapters = new System.Collections.ObjectModel.ObservableCollection<ChapterEntry>(chapterList.OrderByDescending(x => x.ChapterNumber));
