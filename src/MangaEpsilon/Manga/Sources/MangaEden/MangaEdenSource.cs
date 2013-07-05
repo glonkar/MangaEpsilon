@@ -90,15 +90,19 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                     }
 
                     Dictionary<string, object> data = null;
-
-                    using (StringReader sr = new StringReader(json))
+                    data = await Task.Run(() =>
                     {
-                        using (JsonTextReader jtr = new JsonTextReader(sr))
+                        Dictionary<string, object> result = null;
+                        using (StringReader sr = new StringReader(json))
                         {
-                            data = App.DefaultJsonSerializer.Deserialize<Dictionary<string, object>>(jtr);
-                            jtr.Close();
+                            using (JsonTextReader jtr = new JsonTextReader(sr))
+                            {
+                                result = App.DefaultJsonSerializer.Deserialize<Dictionary<string, object>>(jtr);
+                                jtr.Close();
+                            }
                         }
-                    }
+                        return result;
+                    }).ConfigureAwait(false);
 
                     //Updates the existing entry for the manga for later.
                     var index = AvailableManga.IndexOf(manga);
@@ -147,32 +151,37 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                         {
                             var chapters = data["chapters"] as IList;
 
-                            foreach (IList chapter in chapters)
+                            var chapterList = new ChapterEntry[int.Parse(data["chapters_len"].ToString())];
+
+                            Parallel.ForEach(chapters.Cast<IList>(), (IList chapter, ParallelLoopState loopState, long loopIndex) =>
                             {
                                 var chapterNum = double.Parse(chapter[0].ToString());
 
-                                if (manga.Chapters.Any(x => x.ChapterNumber == chapterNum))
-                                    continue;
+                                if (!manga.Chapters.Any(x => x.ChapterNumber == chapterNum))
+                                {
 
-                                ChapterEntry entry = new ChapterEntry(manga);
-                                
-                                var time = Sayuka.IRC.Utilities.UnixTimeUtil.UnixTimeToDateTime(chapter[1].ToString());
+                                    ChapterEntry entry = new ChapterEntry(manga);
 
-                                entry.Name = string.Format("{0} #{1}",
-                                    manga.MangaName, chapterNum.ToString());
+                                    var time = Sayuka.IRC.Utilities.UnixTimeUtil.UnixTimeToDateTime(chapter[1].ToString());
 
-                                entry.ReleaseDate = time;
+                                    entry.Name = string.Format("{0} #{1}",
+                                        manga.MangaName, chapterNum.ToString());
 
-                                entry.ChapterNumber = chapterNum;
+                                    entry.ReleaseDate = time;
 
-                                entry.Subtitle = chapter[2];
+                                    entry.ChapterNumber = chapterNum;
 
-                                entry.ID = chapter[3] as string;
+                                    entry.Subtitle = chapter[2];
 
-                                manga.Chapters.Add(entry);
-                            }
+                                    entry.ID = chapter[3] as string;
 
-                            manga.Chapters = new System.Collections.ObjectModel.ObservableCollection<ChapterEntry>(manga.Chapters.OrderByDescending(x => x.ChapterNumber));
+                                    chapterList[loopIndex] = entry;
+                                }
+                                else
+                                    chapterList[loopIndex] = manga.Chapters[(int)loopIndex];
+                            });
+
+                            manga.Chapters = new System.Collections.ObjectModel.ObservableCollection<ChapterEntry>(chapterList.OrderByDescending(x => x.ChapterNumber));
                         });
 
                     AvailableManga[index] = manga;
