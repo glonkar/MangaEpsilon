@@ -173,7 +173,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
 
                                     entry.Subtitle = chapter[2];
 
-                                    entry.ID = chapter[3] as string;
+                                    entry.ID = chapter[3].ToString();
 
                                     chapterList[loopIndex] = entry;
                                 }
