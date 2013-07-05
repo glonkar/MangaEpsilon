@@ -58,6 +58,8 @@ namespace MangaEpsilon.ViewModel
 
             MangaChapters = new PaginatedObservableCollection<ChapterEntry>(selectedManga.Chapters);
             MangaChapters.PageSize = 30;
+            if (selectedManga.Chapters.Count > MangaChapters.PageSize && MangaChapters.CanPageUp == false)
+                System.Windows.Input.CommandManager.InvalidateRequerySuggested();
 
             MangaIsFavorited = await FavoritesService.IsMangaFavoritedAsync(Manga);
 
