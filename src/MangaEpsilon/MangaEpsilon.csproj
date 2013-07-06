@@ -110,6 +110,7 @@
     <Compile Include="Notifications\NotificationType.cs" />
     <Compile Include="ObservableQueue.cs" />
     <Compile Include="PaginatedObservableCollection.cs" />
+    <Compile Include="ParallelAsync.cs" />
     <Compile Include="Selectors\MangaDetailViewChapterTemplateSelector.cs" />
     <Compile Include="Services\DownloadsService.cs" />
     <Compile Include="Services\FavoritesService.cs" />
@@ -253,7 +254,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildAction="Build" BuildVersion_ConfigurationName="Debug" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_ConfigurationName="Debug" BuildVersion_BuildAction="Build" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

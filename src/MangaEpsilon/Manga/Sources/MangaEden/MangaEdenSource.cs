@@ -151,19 +151,18 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
 
                     if (chaptersAmount != manga.Chapters.Count)
                     {
-                        await Task.Run(() =>
-                            {
+                        //await Task.Run(() =>
+                            //{
                                 var chapters = data["chapters"] as IList;
 
                                 var chapterList = new ChapterEntry[chaptersAmount];
 
-                                Parallel.ForEach(chapters.Cast<IList>(), (IList chapter, ParallelLoopState loopState, long loopIndex) =>
+                                await ParallelAsync.ForEachAsync((IEnumerable<object>)chapters, Environment.ProcessorCount, new Func<object, long, Task>((dynamic chapter, long loopIndex) =>
                                 {
                                     var chapterNum = double.Parse(chapter[0].ToString());
 
                                     if (!manga.Chapters.Any(x => x.ChapterNumber == chapterNum) && loopIndex > manga.Chapters.Count - 1)
                                     {
-
                                         ChapterEntry entry = new ChapterEntry(manga);
 
                                         var time = Sayuka.IRC.Utilities.UnixTimeUtil.UnixTimeToDateTime(chapter[1].ToString());
@@ -184,10 +183,11 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                                     else
                                         chapterList[loopIndex] = manga.Chapters[(int)loopIndex];
 
-                                });
+                                    return Task.FromResult(chapterList[loopIndex]);
+                                }));
 
                                 manga.Chapters = new System.Collections.ObjectModel.ObservableCollection<ChapterEntry>(chapterList.OrderByDescending(x => x.ChapterNumber));
-                            });
+                            //});
                     }
 
                     AvailableManga[index] = manga;
