@@ -391,8 +391,9 @@
                             <TextBox VerticalAlignment="Top" HorizontalAlignment="Right" metro:TextboxHelper.Watermark="Search..." metro:TextboxHelper.ClearTextButton="True" 
                              metro:TextboxHelper.SelectAllOnFocus="True" Width="200" Text="{Binding SearchFilter, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=200}" x:Name="LibrarySearchBox"/>
                         </Grid>
-                        <ListBox ItemsSource="{Binding LibraryItems, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedEntry, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                 Grid.Row="1" x:Name="LibraryListBox">
+                        <ListBox ItemsSource="{Binding LibraryItems, UpdateSourceTrigger=PropertyChanged}" 
+                                 SelectedItem="{Binding SelectedEntry, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Grid.Row="1" x:Name="LibraryListBox" VirtualizingStackPanel.IsVirtualizingWhenGrouping="True">
                             <ListBox.GroupStyle>
                                 <GroupStyle>
                                     <GroupStyle.ContainerStyle>
