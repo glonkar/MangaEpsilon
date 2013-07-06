@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MangaEpsilon.Manga.Base;
 using Newtonsoft.Json;
 
 namespace MangaEpsilon.Services
@@ -128,5 +129,20 @@ namespace MangaEpsilon.Services
 
         public delegate void ItemUnfavoritedHandler(Manga.Base.Manga manga);
         public static event ItemUnfavoritedHandler ItemUnfavorited;
+
+        internal static void CheckAndDownload(Manga.Base.ChapterEntry chapter)
+        {
+            CheckAndDownload(chapter.ParentManga, chapter);
+        }
+        internal static void CheckAndDownload(Manga.Base.Manga manga, ChapterEntry chapter = null)
+        {
+            if (chapter == null)
+                chapter = manga.Chapters[0];
+
+            //If the manga is subscribed too (favorited), download the latest manga.
+            if (FavoritesService.IsMangaFavorited(manga))
+                if (!LibraryService.Contains(chapter) && !DownloadsService.IsDownloading(chapter))
+                    DownloadsService.AddDownload(chapter);
+        }
     }
 }
