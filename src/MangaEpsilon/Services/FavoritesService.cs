@@ -132,12 +132,20 @@ namespace MangaEpsilon.Services
 
         internal static void CheckAndDownload(Manga.Base.ChapterEntry chapter)
         {
+            if (chapter == null) return;
+
             CheckAndDownload(chapter.ParentManga, chapter);
         }
         internal static void CheckAndDownload(Manga.Base.Manga manga, ChapterEntry chapter = null)
         {
+            if (manga == null) return;
+
             if (chapter == null)
+            {
+                if (manga.Chapters.Count == 0)
+                    return;
                 chapter = manga.Chapters[0];
+            }
 
             //If the manga is subscribed too (favorited), download the latest manga.
             if (FavoritesService.IsMangaFavorited(manga))

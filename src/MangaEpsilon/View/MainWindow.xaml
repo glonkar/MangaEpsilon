@@ -245,6 +245,7 @@
                                                     <ContextMenu HasDropShadow="True">
                                                         <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='ShowMangaMenuItem',NullValue='Show Manga Information...'}" 
                                                                   Command="{Binding MangaInfoCommand}" CommandParameter="{Binding SelectedEntry}"/>
+                                                        <Separator/>
                                                         <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='DownloadChapterMenuItem',NullValue='Download this chapter.'}" 
                                                                   Command="{Binding MangaDownloadCommand}" CommandParameter="{Binding SelectedEntry}"/>
                                                     </ContextMenu>

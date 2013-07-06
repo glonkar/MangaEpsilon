@@ -161,16 +161,13 @@ namespace MangaEpsilon.ViewModel
                 o != null && o is ChapterLight);
         }
 
-        async void LibraryService_LibraryItemRemoved(Tuple<ChapterLight, string> tuple)
+        void LibraryService_LibraryItemRemoved(Tuple<ChapterLight, string> tuple)
         {
-            await UIDispatcher.InvokeAsync(() =>
-            {
-                LibraryItems.Remove(tuple.Item1);
-
-                var libraryItemsView = CollectionViewSource.GetDefaultView(LibraryItems);
-
-                libraryItemsView.Refresh();
-            });
+            UIDispatcher.BeginInvoke(new EmptyDelegate(() =>
+                {
+                    LibraryItems.Remove(tuple.Item1);
+                    libraryItemsView.Refresh();
+                }));
         }
 
         void LibraryService_LibraryItemAdded(Tuple<Manga.Base.ChapterLight, string> tuple)

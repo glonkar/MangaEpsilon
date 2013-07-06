@@ -81,7 +81,9 @@ namespace MangaEpsilon.ViewModel
                 var reviews = GetReviews();
                 var related = GetRelatedManga();
 
-                await Task.WhenAll(reviews, related).ConfigureAwait(false);
+                //await Task.WhenAll(reviews, related).ConfigureAwait(false);
+                await reviews.ConfigureAwait(false);
+                await related.ConfigureAwait(false);
             }
 
         }
