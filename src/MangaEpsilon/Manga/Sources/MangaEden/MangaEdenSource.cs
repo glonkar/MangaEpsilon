@@ -311,7 +311,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                     {
                         string mangaName = manga["t"].Value<string>();
 
-                        if (tempList.Any(x => 
+                        if (tempList.Any(x =>
                             {
                                 if (x == null) return false;
                                 else return ((Manga.Base.Manga)x).MangaName == mangaName;
@@ -337,7 +337,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                     }
 
                     return Task.FromResult(tempList[Convert.ToInt32(index)]);
-                }));
+                })).ConfigureAwait(false);
 
                 AvailableManga = new List<Base.Manga>((IEnumerable<Manga.Base.Manga>)tempList);
             }

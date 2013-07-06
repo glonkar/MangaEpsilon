@@ -99,10 +99,8 @@ namespace MangaEpsilon
                     File.Delete(oldCatalogFile);
                 }
 
-                await App.MangaSource.AcquireAvailableManga();
+                await App.MangaSource.AcquireAvailableManga().ConfigureAwait(false);
                 await SaveAvailableManga(true);
-                await Task.Delay(500);
-
             }
         }
 

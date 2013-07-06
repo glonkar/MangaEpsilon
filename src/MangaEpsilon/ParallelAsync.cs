@@ -31,7 +31,7 @@ namespace MangaEpsilon
                 {
                     using (partition)
                         while (partition.MoveNext())
-                            await body(partition.Current.Value, partition.Current.Key);
+                            await body(partition.Current.Value, partition.Current.Key).ConfigureAwait(false);
                 }));
         }
     }
