@@ -66,7 +66,7 @@ namespace MangaEpsilon.ViewModel
             //await Dispatcher.InvokeAsync(() => { }, System.Windows.Threading.DispatcherPriority.SystemIdle);
             //await System.Windows.Threading.Dispatcher.Yield();
 
-            var libraryItemsView2 = CollectionViewSource.GetDefaultView(LibraryItems);
+            //var libraryItemsView2 = CollectionViewSource.GetDefaultView(LibraryItems);
 
             UIDispatcher.BeginInvoke(new EmptyDelegate(() =>
                 {
@@ -173,16 +173,13 @@ namespace MangaEpsilon.ViewModel
             });
         }
 
-        async void LibraryService_LibraryItemAdded(Tuple<Manga.Base.ChapterLight, string> tuple)
+        void LibraryService_LibraryItemAdded(Tuple<Manga.Base.ChapterLight, string> tuple)
         {
-            await UIDispatcher.InvokeAsync(() =>
+            UIDispatcher.BeginInvoke(new EmptyDelegate(() =>
                 {
                     LibraryItems.Add(tuple.Item1);
-
-                    var libraryItemsView = CollectionViewSource.GetDefaultView(LibraryItems);
-
                     libraryItemsView.Refresh();
-                });
+                }));
         }
 
         public ObservableCollection<Manga.Base.ChapterLight> LibraryItems

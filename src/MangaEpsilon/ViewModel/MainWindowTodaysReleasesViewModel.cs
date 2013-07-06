@@ -130,10 +130,7 @@ namespace MangaEpsilon.ViewModel
                     await Task.Delay(100);
                     NewReleasesToday.Add(manga);
 
-                    //If the manga is subscribed too (favorited), download the latest manga.
-                    if (FavoritesService.IsMangaFavorited(manga.ParentManga))
-                        if (!LibraryService.Contains(manga) && !DownloadsService.IsDownloading(manga))
-                            DownloadsService.AddDownload(manga);
+                    FavoritesService.CheckAndDownload(manga);
                 }
 
                 IsError = false;

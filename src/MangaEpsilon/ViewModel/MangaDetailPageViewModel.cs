@@ -75,12 +75,13 @@ namespace MangaEpsilon.ViewModel
 
                 await GetUpdatedInfo();
 
+                if (MangaIsFavorited)
+                    FavoritesService.CheckAndDownload(selectedManga);
 
                 var reviews = GetReviews();
                 var related = GetRelatedManga();
 
-                await reviews.ConfigureAwait(false);
-                await related.ConfigureAwait(false);
+                await Task.WhenAll(reviews, related).ConfigureAwait(false);
             }
 
         }
@@ -217,7 +218,7 @@ namespace MangaEpsilon.ViewModel
             if (download.ParentManga.MangaName == Manga.MangaName)
             {
                 var selected = SelectedChapterItem;
-                await Dispatcher.InvokeAsync(() =>
+                await UIDispatcher.InvokeAsync(() =>
                     {
                         MangaChapters.Refresh();
                         //CollectionViewSource.GetDefaultView(MangaChapters).Refresh();
