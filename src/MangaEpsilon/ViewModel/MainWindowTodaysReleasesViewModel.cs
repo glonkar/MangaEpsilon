@@ -91,7 +91,7 @@ namespace MangaEpsilon.ViewModel
 
         async void refreshTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            await Dispatcher.InvokeAsync(async () =>
+            await UIDispatcher.InvokeAsync(async () =>
             {
                 await GetNewReleases();
             });
