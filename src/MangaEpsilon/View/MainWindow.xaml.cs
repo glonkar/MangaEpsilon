@@ -111,5 +111,15 @@ namespace MangaEpsilon
             else
                 ((MainWindowDownloadsViewModel)downloadsListView.DataContext).SelectedItems = (IList)((ListView)sender).SelectedItems;
         }
+
+        private void LibraryTabItem_KeyDown(object sender, KeyEventArgs e)
+        {
+            LibrarySearchBox.Focus();
+        }
+
+        private void CatalogTabItem_KeyDown(object sender, KeyEventArgs e)
+        {
+            CatalogSearchBox.Focus();
+        }
     }
 }
