@@ -592,7 +592,7 @@
             </metro:MetroTabItem>
             <metro:MetroTabItem Header="{i18n:CrystalLocalizedValueMarkup Key='AboutTabHeader',NullValue='about'}" HeaderFontSize="15">
                 <FlowDocumentScrollViewer>
-                    <FlowDocument>
+                    <FlowDocument FontFamily="{Binding ElementName='thisWindow',Path='FontFamily'}">
                         <Paragraph>
                             <Run>MangaEpsilon was written for manga readers who want to get to what they want as fast as possible.</Run>
                         </Paragraph>
