@@ -38,12 +38,13 @@ namespace MangaEpsilon.Services
 
         private static async Task LoadFavorites()
         {
-            FavoritesCollection = new ObservableCollection<Tuple<string, List<double>>>();
+            FavoritesCollection = new ObservableCollection<Tuple<string, List<object>>>();
 
             await Task.Run(() =>
                 {
                     if (File.Exists(FavoritesFile))
                     {
+                        bool isOldFormat = false;
                         using (var sr = new StreamReader(FavoritesFile))
                         {
                             using (var jtr = new JsonTextReader(sr))
@@ -53,22 +54,47 @@ namespace MangaEpsilon.Services
                                     //test if its the old format and if so, convert.
 
                                     var oldFormatCollection = App.DefaultJsonSerializer.Deserialize<ObservableCollection<string>>(jtr);
+                                    jtr.Close();
 
-                                    FavoritesCollection = new ObservableCollection<Tuple<string, List<double>>>();
+                                    isOldFormat = true;
+
+                                    if (FavoritesCollection != null)
+                                        FavoritesCollection = new ObservableCollection<Tuple<string, List<object>>>();
 
                                     foreach (var manga in oldFormatCollection)
                                         if (!FavoritesCollection.Any(x => x.Item1 == manga))
-                                            FavoritesCollection.Add(new Tuple<string, List<double>>(manga, new List<double>()));
+                                            FavoritesCollection.Add(new Tuple<string, List<object>>(manga, new List<object>()));
                                 }
                                 catch (Exception)
                                 {
-                                    //is the new format, load it
-                                    FavoritesCollection = App.DefaultJsonSerializer.Deserialize<ObservableCollection<Tuple<string, List<double>>>>(jtr);
+
+                                }
+                            }
+                        }
+
+                        //JsonTextReader auto disposes of the upper stream. >_>
+                        if (!isOldFormat)
+                        {
+                            using (var sr = new StreamReader(FavoritesFile))
+                            {
+                                using (var jtr = new JsonTextReader(sr))
+                                {
+                                    try
+                                    {
+                                        //is the new format, load it
+                                        FavoritesCollection = App.DefaultJsonSerializer.Deserialize<ObservableCollection<Tuple<string, List<object>>>>(jtr);
+                                    }
+                                    catch (Exception)
+                                    {
+                                    }
                                 }
                             }
                         }
                     }
                 });
+
+            if (FavoritesLoaded != null)
+                FavoritesLoaded();
         }
 
         private static void SaveFavorites()
@@ -100,7 +126,7 @@ namespace MangaEpsilon.Services
             }
         }
 
-        internal static ObservableCollection<Tuple<string, List<double>>> FavoritesCollection = null;
+        internal static ObservableCollection<Tuple<string, List<object>>> FavoritesCollection = null;
 
         internal static string FavoritesFile { get; private set; }
 
@@ -120,7 +146,7 @@ namespace MangaEpsilon.Services
         {
             if (!IsMangaFavorited(Manga))
             {
-                FavoritesCollection.Add(new Tuple<string, List<double>>(Manga.MangaName, new List<double>()));
+                FavoritesCollection.Add(new Tuple<string, List<object>>(Manga.MangaName, new List<object>()));
                 //await SaveFavorites(false);
 
                 if (ItemFavorited != null)
@@ -142,7 +168,7 @@ namespace MangaEpsilon.Services
 
         internal static double[] GetNoAutoDownloadChapters(Manga.Base.Manga manga)
         {
-            return FavoritesCollection.First(x => x.Item1 == manga.MangaName).Item2.ToArray();
+            return FavoritesCollection.First(x => x.Item1 == manga.MangaName).Item2.OfType<double>().ToArray();
         }
         internal static void AddNoAutoDownloadChapter(Manga.Base.Manga manga, ChapterEntry entry)
         {
@@ -164,6 +190,9 @@ namespace MangaEpsilon.Services
 
         public delegate void ItemUnfavoritedHandler(Manga.Base.Manga manga);
         public static event ItemUnfavoritedHandler ItemUnfavorited;
+
+        public delegate void FavoritesLoadedHandler();
+        public static event FavoritesLoadedHandler FavoritesLoaded;
 
         internal static void CheckAndDownload(Manga.Base.ChapterEntry chapter)
         {

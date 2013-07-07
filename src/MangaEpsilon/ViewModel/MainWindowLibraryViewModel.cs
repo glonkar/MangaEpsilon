@@ -38,6 +38,7 @@ namespace MangaEpsilon.ViewModel
 
             FavoritesService.ItemFavorited += FavoritesService_ItemFavoriteStatusChanged;
             FavoritesService.ItemUnfavorited += FavoritesService_ItemFavoriteStatusChanged;
+            FavoritesService.FavoritesLoaded += FavoritesService_FavoritesLoaded;
 
             LibraryItems = new ObservableCollection<Manga.Base.ChapterLight>(LibraryService.LibraryCollection.Select(x => x.Item1));
 
@@ -47,6 +48,11 @@ namespace MangaEpsilon.ViewModel
             libraryItemsView.SortDescriptions.Add(new System.ComponentModel.SortDescription("ChapterNumber", System.ComponentModel.ListSortDirection.Ascending));
 
             InitializeCommands();
+        }
+
+        void FavoritesService_FavoritesLoaded()
+        {
+            RedrawLibraryItems();
         }
 
         System.Windows.Data.ListCollectionView libraryItemsView = null;
