@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -28,7 +29,8 @@ namespace MangaEpsilon.ViewModel
             Downloads = new ObservableQueue<MangaChapterDownload>();
             RegisterForMessages("MangaChapterDownload");
 
-            CollectionViewSource.GetDefaultView(Downloads).GroupDescriptions.Add(new PropertyGroupDescription("Status"));
+            downloadsCollectionView = CollectionViewSource.GetDefaultView(Downloads);
+            downloadsCollectionView.GroupDescriptions.Add(new PropertyGroupDescription("Status"));
 
             CancelDownloadCommand = CommandManager.CreateProperCommand(async (o) =>
             {
@@ -62,7 +64,7 @@ namespace MangaEpsilon.ViewModel
 
                 await Dispatcher.InvokeAsync(() =>
                     {
-                        CollectionViewSource.GetDefaultView(Downloads).Refresh();
+                        downloadsCollectionView.Refresh();
                     });
             },
             (o) =>
@@ -83,6 +85,8 @@ namespace MangaEpsilon.ViewModel
             }
         }
 
+        private ICollectionView downloadsCollectionView = null;
+
         private async void DownloadChapter(Crystal.Messaging.Message message)
         {
             ChapterEntry chapter = (ChapterEntry)message.Data;
@@ -91,13 +95,13 @@ namespace MangaEpsilon.ViewModel
 
             if (!LibraryService.Contains(chap) && !Downloads.Any(x => x.Chapter.Name == chap.Name))
             {
-                Downloads.Enqueue(new MangaChapterDownload(chap) { MaxProgress = chap.PagesUrls.Count, Status = MangaChapterDownloadStatus.Queued });
+                Downloads.Enqueue(new MangaChapterDownload(chap) { MaxProgress = chap.PagesUrls.Count, TotalFilesToDownload = chap.PagesUrls.Count, Status = MangaChapterDownloadStatus.Queued });
 
                 RaisePropertyChanged(x => this.Downloads);
 
                 await Dispatcher.InvokeAsync(() =>
                 {
-                    CollectionViewSource.GetDefaultView(Downloads).Refresh();
+                    downloadsCollectionView.Refresh();
                 });
 
                 if (!App.DownloadsRunning)
@@ -173,7 +177,8 @@ namespace MangaEpsilon.ViewModel
                                 download.ProgressStr = Math.Round(((Convert.ToDouble(download.Progress) / Convert.ToDouble(download.MaxProgress)) * 100.0), 2).ToString() + "%";
 
 
-                                await Task.Delay((download.Chapter.PagesUrls.Count - download.Progress) * 2 + 200);
+                                if (download.Progress % 10 == 0)
+                                    await Task.Delay(2000); //better throttle
                             }
                             else
                             {
@@ -223,6 +228,11 @@ namespace MangaEpsilon.ViewModel
                     DownloadsService.Downloads = Downloads;
 
                     await Task.Delay(1000);
+
+                    UIDispatcher.BeginInvoke(new EmptyDelegate(() =>
+                    {
+                        downloadsCollectionView.Refresh();
+                    }));
                 }
 
                 Messenger.PushMessage(this, "UpdateMainWindowState", System.Windows.Shell.TaskbarItemProgressState.None);
