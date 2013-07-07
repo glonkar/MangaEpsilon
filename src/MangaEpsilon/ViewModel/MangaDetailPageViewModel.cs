@@ -292,11 +292,11 @@ namespace MangaEpsilon.ViewModel
             Manga.Status = newManga.Status;
             Manga.Categories = newManga.Categories;
 
-            await Dispatcher.InvokeAsync(() =>
-                {
-                    if (MangaChapters.Count <= newManga.Chapters.Count)
-                        MangaChapters = new PaginatedObservableCollection<ChapterEntry>(newManga.Chapters, 40);
-                }, System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+            UIDispatcher.BeginInvoke(new EmptyDelegate(() =>
+            {
+                if (MangaChapters.Count <= newManga.Chapters.Count)
+                    MangaChapters = new PaginatedObservableCollection<ChapterEntry>(newManga.Chapters, 40);
+            }));
         }
 
         public Manga.Base.Manga Manga
