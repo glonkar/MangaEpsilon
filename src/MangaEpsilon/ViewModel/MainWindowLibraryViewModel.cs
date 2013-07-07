@@ -104,6 +104,7 @@ namespace MangaEpsilon.ViewModel
                 {
                     var chapter = ((ChapterLight)o);
                     LibraryService.RemoveLibraryItem(new Tuple<ChapterLight, string>(chapter, LibraryService.GetPath(chapter)), true);
+                    FavoritesService.AddNoAutoDownloadChapter(chapter.ParentManga, chapter);
                 }
             }, (o) =>
                 o != null && o is ChapterLight);
