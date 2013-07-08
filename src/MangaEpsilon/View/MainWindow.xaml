@@ -610,6 +610,9 @@
                                 <Hyperlink NavigateUri="http://github.com/Amrykid/MangaEpsilon" Click="Hyperlink_Click">here</Hyperlink> .
                             </Span>
                         </Paragraph>
+                        <Paragraph>
+                            <Span FontSize="20" BaselineAlignment="Center" x:Name="VersionSpan"/>
+                        </Paragraph>
                     </FlowDocument>
                 </FlowDocumentScrollViewer>
 

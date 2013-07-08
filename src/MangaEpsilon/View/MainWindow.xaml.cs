@@ -31,6 +31,8 @@ namespace MangaEpsilon
         public MainWindow()
         {
             InitializeComponent();
+
+            VersionSpan.Inlines.Add(new Run("Version: " + typeof(MainWindow).Assembly.GetName().Version.ToString()));
         }
 
         private void itemListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
