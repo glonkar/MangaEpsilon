@@ -109,7 +109,7 @@
                                 <TextBlock Text="{Binding Status, UpdateSourceTrigger=PropertyChanged,StringFormat='Status: {0}'}" 
                                            HorizontalAlignment="Center" FontSize="16" 
                                            Foreground="{DynamicResource AccentColorBrush}"/>
-                                <ItemsControl ItemsSource="{Binding Categories, UpdateSourceTrigger=PropertyChanged}" Width="400" Margin="2 0 2 0" Height="80">
+                                <ItemsControl ItemsSource="{Binding Categories, UpdateSourceTrigger=PropertyChanged}" Width="410" Margin="2 0 2 0" Height="80">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <WrapPanel ItemHeight="30" ItemWidth="Auto" IsItemsHost="True" 
@@ -119,7 +119,7 @@
                                     </ItemsControl.ItemsPanel>
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <Border BorderBrush="{DynamicResource AccentColorBrush}" 
+                                            <Border BorderBrush="{DynamicResource AccentColorBrush}" Margin="2 0 2 0" 
                                                     BorderThickness="1" CornerRadius="4" Padding="1" Background="{DynamicResource AccentColorBrush}">
                                                 <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{DynamicResource AccentColorBrush}">
                                                     <Label Content="{Binding .}" HorizontalAlignment="Center" VerticalAlignment="Center">
