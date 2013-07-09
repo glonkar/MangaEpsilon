@@ -176,10 +176,16 @@
         </ResourceDictionary>
     </metro:MetroWindow.Resources>
     <Grid>
-        <Label Panel.ZIndex="100" HorizontalAlignment="Center" VerticalAlignment="Top" 
-               Content="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type metro:MetroWindow}}}" FontSize="14"/>
+        <Grid Panel.ZIndex="100" VerticalAlignment="Top" x:Name="psuedoTitlebar">
+            <Label Content="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type metro:MetroWindow}}}" 
+                   FontSize="14" HorizontalAlignment="Center"/>
 
-        <metro:MetroAnimatedSingleRowTabControl Margin="5 25 40 5" SelectedIndex="{Binding SelectedTabIndex, UpdateSourceTrigger=PropertyChanged}">
+            <TextBox  HorizontalAlignment="Right" metro:TextboxHelper.Watermark="Search..." metro:TextboxHelper.ClearTextButton="True" 
+                             metro:TextboxHelper.SelectAllOnFocus="True" Width="200" x:Name="UnifiedSearchBox" Margin="0 0 100 0" Height="16" IsEnabled="False"/>
+        </Grid>
+
+        <metro:MetroAnimatedSingleRowTabControl Margin="5 25 40 5" SelectedIndex="{Binding SelectedTabIndex, UpdateSourceTrigger=PropertyChanged}"
+                                                x:Name="UpperTabControl" SelectionChanged="UpperTabControl_SelectionChanged">
             <metro:MetroTabItem Header="{i18n:CrystalLocalizedValueMarkup Key='HomeTabHeader',NullValue='home'}" HeaderFontSize="15">
                 <metro:MetroTabControl Margin="0 -4 0 0" TabStripMargin="0 -6 0 0">
                     <metro:MetroTabItem x:Name="todayReleasesTabItem" Header="{i18n:CrystalLocalizedValueMarkup Key='NewReleasesTabHeader', NullValue='today&quot;s releases'}">
@@ -384,17 +390,9 @@
                                 <conv:ItemIsInCollectionToBoolConverter x:Key="icb"/>
                             </ResourceDictionary>
                         </Grid.Resources>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="20*"/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <TextBox VerticalAlignment="Top" HorizontalAlignment="Right" metro:TextboxHelper.Watermark="Search..." metro:TextboxHelper.ClearTextButton="True" 
-                             metro:TextboxHelper.SelectAllOnFocus="True" Width="200" Text="{Binding SearchFilter, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=200}" x:Name="LibrarySearchBox"/>
-                        </Grid>
                         <ListBox ItemsSource="{Binding LibraryItems, UpdateSourceTrigger=PropertyChanged}" 
                                  SelectedItem="{Binding SelectedEntry, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                 Grid.Row="1" x:Name="LibraryListBox" VirtualizingStackPanel.IsVirtualizingWhenGrouping="True">
+                                 x:Name="LibraryListBox" VirtualizingStackPanel.IsVirtualizingWhenGrouping="True">
                             <ListBox.GroupStyle>
                                 <GroupStyle>
                                     <GroupStyle.ContainerStyle>
@@ -463,16 +461,7 @@
                     <vm:MainWindowCatalogViewModel/>
                 </TabItem.DataContext>
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="20*"/>
-                    </Grid.RowDefinitions>
-                    <Grid Grid.Row="0">
-                        <TextBox VerticalAlignment="Top" HorizontalAlignment="Right" metro:TextboxHelper.Watermark="Search..." metro:TextboxHelper.ClearTextButton="True" 
-                             metro:TextboxHelper.SelectAllOnFocus="True" x:Name="CatalogSearchBox" Width="200" Text="{Binding SearchFilter, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=200}"/>
-                    </Grid>
-
-                    <ListBox Grid.Row="1" ItemsSource="{Binding AvailableMangas, IsAsync=True}" x:Name="CatalogListView" 
+                    <ListBox ItemsSource="{Binding AvailableMangas, IsAsync=True}" x:Name="CatalogListView" 
                              VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.IsContainerVirtualizable="True" VirtualizingPanel.IsVirtualizing="True"
                              HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" ScrollViewer.CanContentScroll="True">
                         <ListBox.ItemTemplate>

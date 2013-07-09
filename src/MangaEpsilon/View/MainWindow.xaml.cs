@@ -116,12 +116,40 @@ namespace MangaEpsilon
 
         private void LibraryTabItem_KeyDown(object sender, KeyEventArgs e)
         {
-            LibrarySearchBox.Focus();
+            UnifiedSearchBox.Focus();
         }
 
         private void CatalogTabItem_KeyDown(object sender, KeyEventArgs e)
         {
-            CatalogSearchBox.Focus();
+            UnifiedSearchBox.Focus();
+        }
+
+        private void UpperTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (UpperTabControl.SelectedIndex)
+            {
+                case 2:
+                case 1:
+                    {
+                        UnifiedSearchBox.IsEnabled = true;
+                        UnifiedSearchBox.Text = string.Empty; //clear before re-binding so the previous viewmodel will not retain the searchfilter
+
+                        UnifiedSearchBox.SetBinding(TextBox.TextProperty, new Binding("SearchFilter")
+                        {
+                            Source = ((MetroTabItem)UpperTabControl.SelectedItem).DataContext,
+                            UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                            Mode = BindingMode.TwoWay,
+                            Delay = 500
+                        });
+                        break;
+                    }
+                default:
+                    UnifiedSearchBox.IsEnabled = false;
+                    UnifiedSearchBox.Text = string.Empty; //clear before re-binding so the previous viewmodel will not retain the searchfilter
+                    break;
+            }
+
+            //Text="{Binding SearchFilter, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=200}"
         }
     }
 }
