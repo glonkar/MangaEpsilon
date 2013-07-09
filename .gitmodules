@@ -1,9 +1,9 @@
-[submodule "lib/Crystal"]
-	path = lib/Crystal
-	url = ../Crystal.git
 [submodule "lib/Yukihyo"]
 	path = lib/Yukihyo
 	url = ../Yukihyo.git
 [submodule "lib/MahApps.Metro"]
 	path = lib/MahApps.Metro
 	url = ../MahApps.Metro.git
+[submodule "lib/Crystal"]
+	path = lib/Crystal
+	url = ../Crystal.git
