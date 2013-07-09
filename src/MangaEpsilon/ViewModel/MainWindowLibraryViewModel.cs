@@ -5,7 +5,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Crystal.Command;
 using Crystal.Core;
 using Crystal.Localization;
@@ -166,6 +170,49 @@ namespace MangaEpsilon.ViewModel
                 }
             }, (o) =>
                 o != null && o is ChapterLight);
+
+            PrintChapterCommand = CommandManager.CreateProperCommand((o) =>
+            {
+                ChapterLight chapter = (ChapterLight)o;
+
+                PrintDialog printDialog = new PrintDialog();
+
+                printDialog.CurrentPageEnabled = false;
+                printDialog.MaxPage = (uint)chapter.PagesUrls.Count;
+
+                if (printDialog.ShowDialog() == true)
+                {
+                    FixedDocument document = new FixedDocument();
+
+                    foreach (var pageUrl in chapter.PagesUrls)
+                    {
+                        var fileName = LibraryService.GetPath(chapter) + new Uri(pageUrl).Segments.Last();
+
+                        PageContent pageContent = new PageContent();
+
+                        FixedPage page = new FixedPage();
+
+                        Image img = new Image();
+
+                        BitmapImage bitmap = new BitmapImage();
+                        bitmap.BeginInit();
+                        bitmap.UriSource = new Uri(fileName);
+                        bitmap.DecodePixelWidth = (int)printDialog.PrintableAreaWidth;
+                        bitmap.EndInit();
+
+                        img.Source = bitmap;
+
+                        page.Children.Add(img);
+
+                        pageContent.Child = page;
+
+                        document.Pages.Add(pageContent);
+                    }
+
+                    printDialog.PrintDocument(document.DocumentPaginator, chapter.Name);
+                }
+            }, (o) =>
+                o != null && o is ChapterLight);
         }
 
         void LibraryService_LibraryItemRemoved(Tuple<ChapterLight, string> tuple)
@@ -212,6 +259,11 @@ namespace MangaEpsilon.ViewModel
         {
             get { return (CrystalProperCommand)GetProperty(x => this.CreateCBZCommand); }
             set { SetProperty(x => this.CreateCBZCommand, value); }
+        }
+        public CrystalProperCommand PrintChapterCommand
+        {
+            get { return (CrystalProperCommand)GetProperty(x => this.PrintChapterCommand); }
+            set { SetProperty(x => this.PrintChapterCommand, value); }
         }
 
         public ChapterLight SelectedEntry
