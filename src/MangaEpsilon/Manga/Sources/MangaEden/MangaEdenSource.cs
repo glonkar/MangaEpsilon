@@ -281,6 +281,8 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                 {
                     AvailableManga = App.DefaultJsonSerializer.Deserialize<List<Manga.Base.Manga>>(jtr);
 
+                    AvailableManga.RemoveAll(x => x == null); //trim any null items out as a result of resizing the array.
+
                     jtr.Close();
                 }
             }
@@ -314,51 +316,41 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                 else
                 {
                     tempList = AvailableManga.ToArray();
-                    Array.Resize(ref tempList, mangas.Count);
+                    Array.Resize(ref tempList, mangas.Count());
                 }
 
                 await ParallelAsync.ForEachAsync<JToken>((IEnumerable<JToken>)mangas, Environment.ProcessorCount, new Func<JToken, long, Task>((manga, index) =>
                 {
-                    try
-                    {
-                        string mangaName = manga["t"].Value<string>();
+                    string mangaName = manga["t"].Value<string>();
 
-                        if (tempList.Any(x =>
-                            {
-                                if (x == null) return false;
-                                else return ((Manga.Base.Manga)x).MangaName == mangaName;
-                            }))
+                    if (tempList.Any(x =>
                         {
-                            //do something with an existing entry?
-                        }
-                        else
-                        {
-                            Manga.Base.Manga mangaObj = new Base.Manga();
-                            mangaObj.MangaName = mangaName;
-                            mangaObj.ID = manga["i"].Value<string>();
-                            mangaObj.OnlineWebpage = new Uri("http://www.mangaeden.com/en-manga/" + (string)manga["a"] + "/");
-
-                            if (manga["im"] != null)
-                                mangaObj.BookImageUrl = "http://cdn.mangaeden.com/mangasimg/" + manga["im"] as string;
-
-                            tempList[Convert.ToInt32(index)] = mangaObj;
-                        }
-                    }
-                    catch (ArgumentOutOfRangeException)
+                            if (x == null) return false;
+                            else return ((Manga.Base.Manga)x).MangaName == mangaName;
+                        }))
                     {
+                        //do something with an existing entry?
+                        //tempList[Convert.ToInt32(index)] = tempList.First(x => ((Manga.Base.Manga)x).MangaName == mangaName);
+                    }
+                    else
+                    {
+                        Manga.Base.Manga mangaObj = new Base.Manga();
+                        mangaObj.MangaName = mangaName;
+                        mangaObj.ID = manga["i"].Value<string>();
+                        mangaObj.OnlineWebpage = new Uri("http://www.mangaeden.com/en-manga/" + (string)manga["a"] + "/");
+
+                        if (manga["im"] != null)
+                            mangaObj.BookImageUrl = "http://cdn.mangaeden.com/mangasimg/" + manga["im"] as string;
+
+                        tempList[Convert.ToInt32(index)] = mangaObj;
                     }
 
-                    try
-                    {
-                        return Task.FromResult(tempList[Convert.ToInt32(index)]);
-                    }
-                    catch (Exception)
-                    {
-                        return null;
-                    }
+                    return Task.FromResult(tempList[Convert.ToInt32(index)]);
                 })).ConfigureAwait(false);
 
                 AvailableManga = new List<Base.Manga>((IEnumerable<Manga.Base.Manga>)tempList);
+
+                AvailableManga.RemoveAll(x => x == null); //trim any null items out as a result of resizing the array.
             }
         }
 
