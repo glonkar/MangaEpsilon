@@ -308,7 +308,14 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
 
                 JArray mangas = (JArray)data.First().Value;
 
-                var tempList = AvailableManga == null ? new Manga.Base.Manga[mangas.Count] : AvailableManga.ToArray();
+                Manga.Base.Manga[] tempList = null;
+                if (AvailableManga == null)
+                    tempList = new Manga.Base.Manga[mangas.Count];
+                else
+                {
+                    tempList = AvailableManga.ToArray();
+                    Array.Resize(ref tempList, mangas.Count);
+                }
 
                 await ParallelAsync.ForEachAsync<JToken>((IEnumerable<JToken>)mangas, Environment.ProcessorCount, new Func<JToken, long, Task>((manga, index) =>
                 {
@@ -341,7 +348,14 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                     {
                     }
 
-                    return Task.FromResult(tempList[Convert.ToInt32(index)]);
+                    try
+                    {
+                        return Task.FromResult(tempList[Convert.ToInt32(index)]);
+                    }
+                    catch (Exception)
+                    {
+                        return null;
+                    }
                 })).ConfigureAwait(false);
 
                 AvailableManga = new List<Base.Manga>((IEnumerable<Manga.Base.Manga>)tempList);
