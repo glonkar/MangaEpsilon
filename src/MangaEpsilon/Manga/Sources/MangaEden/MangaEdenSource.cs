@@ -281,6 +281,8 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                 {
                     AvailableManga = App.DefaultJsonSerializer.Deserialize<List<Manga.Base.Manga>>(jtr);
 
+                    AvailableManga.RemoveAll(x => x == null); //trim any null items out as a result of resizing the array.
+
                     jtr.Close();
                 }
             }
@@ -314,7 +316,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                 else
                 {
                     tempList = AvailableManga.ToArray();
-                    Array.Resize(ref tempList, mangas.Count);
+                    Array.Resize(ref tempList, mangas.Count());
                 }
 
                 await ParallelAsync.ForEachAsync<JToken>((IEnumerable<JToken>)mangas, Environment.ProcessorCount, new Func<JToken, long, Task>((manga, index) =>
@@ -328,6 +330,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                         }))
                     {
                         //do something with an existing entry?
+
                     }
                     else
                     {
@@ -346,6 +349,8 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                 })).ConfigureAwait(false);
 
                 AvailableManga = new List<Base.Manga>((IEnumerable<Manga.Base.Manga>)tempList);
+
+                AvailableManga.RemoveAll(x => x == null); //trim any null items out as a result of resizing the array.
             }
         }
 
