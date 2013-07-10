@@ -361,7 +361,7 @@
 
             <TextBox  HorizontalAlignment="Right" metro:TextboxHelper.Watermark="Search..." metro:TextboxHelper.ClearTextButton="True" 
                              metro:TextboxHelper.SelectAllOnFocus="True" Width="200" x:Name="UnifiedSearchBox" Margin="0 0 100 0" Height="16" IsEnabled="False"
-                      Style="{DynamicResource SearchMetroTextBox}" BorderThickness="0.7"/>
+                      Style="{DynamicResource SearchMetroTextBox}" BorderThickness="0.7" VerticalContentAlignment="Center"/>
         </Grid>
 
         <metro:MetroAnimatedSingleRowTabControl Margin="5 25 40 5" SelectedIndex="{Binding SelectedTabIndex, UpdateSourceTrigger=PropertyChanged}"
