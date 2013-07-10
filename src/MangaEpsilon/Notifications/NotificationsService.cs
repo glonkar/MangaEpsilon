@@ -114,7 +114,7 @@ namespace MangaEpsilon.Notifications
                                     }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
 
                                 while (nw.IsVisible)
-                                    Thread.Sleep(50);
+                                    Thread.Sleep(200);
 
                                 Application.Current.Dispatcher.Invoke(new EmptyDelegate(
                                     () =>

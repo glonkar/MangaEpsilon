@@ -17,6 +17,14 @@
             </ResourceDictionary.MergedDictionaries>
 
             <conv:ThumbnailImageCachingConverter x:Key="TImgCache"/>
+            <Storyboard x:Key="SlideIn" >
+                <DoubleAnimation Duration="0:0:.75" Storyboard.TargetProperty="Left" From="{Binding Path=HiddenLeftValue,ElementName=thisWindow}" To="{Binding Path=SlideOutLeft, ElementName=thisWindow}" 
+                             DecelerationRatio=".9" />
+            </Storyboard>
+
+            <Storyboard x:Key="SlideOut">
+                <DoubleAnimation Duration="0:0:.5" Storyboard.TargetProperty="Left" To="{Binding Path=HiddenLeftValue,ElementName=thisWindow}" AccelerationRatio=".9"/>
+            </Storyboard>
         </ResourceDictionary>
     </Window.Resources>
     <Grid Background="Transparent">

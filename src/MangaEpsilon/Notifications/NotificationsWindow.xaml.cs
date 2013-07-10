@@ -15,6 +15,8 @@ using System.Timers;
 using System.Threading;
 using MahApps.Metro.Controls;
 using MahApps.Metro;
+using System.Threading.Tasks;
+using Crystal.Core;
 
 namespace MangaEpsilon.Notifications
 {
@@ -29,6 +31,10 @@ namespace MangaEpsilon.Notifications
         private System.Timers.Timer tm;
         private bool r = false;
 
+        public bool IsSlideIn { get; set; }
+        public double HiddenLeftValue { get; set; }
+        public double SlideOutLeft { get; set; }
+
         public NotificationsWindow()
         {
             InitializeComponent();
@@ -38,24 +44,19 @@ namespace MangaEpsilon.Notifications
             this.Loaded += NotificationsWindow_Loaded;
             this.Unloaded += NotificationsWindow_Unloaded;
             this.MouseDoubleClick += NotificationsWindow_MouseDoubleClick;
-            aniStry = new Storyboard();
-            heightAni = new DoubleAnimation();
             tm = new System.Timers.Timer();
-            aniStry.Completed += aniStry_Completed;
             tm.Elapsed += tm_Elapsed;
 
-            this.Top = System.Windows.SystemParameters.PrimaryScreenHeight;
-            this.Left = System.Windows.SystemParameters.PrimaryScreenWidth - this.Width;
+            this.Top = System.Windows.SystemParameters.PrimaryScreenHeight / 8;
+            HiddenLeftValue = System.Windows.SystemParameters.PrimaryScreenWidth;
+            this.Left = HiddenLeftValue;
+            SlideOutLeft = HiddenLeftValue - this.Width;
             this.WindowStartupLocation = System.Windows.WindowStartupLocation.Manual;
 
-            this.T = System.Windows.SystemParameters.WorkArea.Height - this.Height;
-
-            heightAni.To = this.T;
-            heightAni.From = this.Top;
-            heightAni.Duration = new Duration(TimeSpan.FromSeconds(0.3));
-            aniStry.Children.Add(heightAni);
-            Storyboard.SetTarget(heightAni, this);
-            Storyboard.SetTargetProperty(heightAni, new PropertyPath(Window.TopProperty));
+            Dispatcher.InvokeAsync(() =>
+                {
+                    SlideIn();
+                });
         }
 
         void NotificationsWindow_Unloaded(object sender, RoutedEventArgs e)
@@ -65,7 +66,6 @@ namespace MangaEpsilon.Notifications
             this.Unloaded -= NotificationsWindow_Unloaded;
             this.MouseDoubleClick -= NotificationsWindow_MouseDoubleClick;
 
-            aniStry.Completed -= aniStry_Completed;
             tm.Elapsed -= tm_Elapsed;
 
             BindingOperations.ClearAllBindings(this);
@@ -90,8 +90,8 @@ namespace MangaEpsilon.Notifications
             //this.PreviewMouseLeftButtonUp += NotificationsWindow_PreviewMouseLeftButtonUp;
 
             tm.Interval = info.Duration;
+            tm.Start();
             this.Show();
-            aniStry.Begin(this);
         }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -125,50 +125,49 @@ namespace MangaEpsilon.Notifications
         void NotificationsWindow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             tm.Stop();
-            this.Retract();
+            SlideOut();
         }
 
-        void tm_Elapsed(object sender, ElapsedEventArgs e)
+        async void tm_Elapsed(object sender, ElapsedEventArgs e)
         {
             tm.Stop();
-            if (!r)
-            {
-                while (this.IsMouseOver) { System.Threading.Thread.Sleep(50); } //If the mouse is over, keep the window up.
 
-                Dispatcher.Invoke(new MangaEpsilon.Notifications.NotificationsService.EmptyDelegate(() =>
-                    {
-                        this.Retract();
-                    }));
-            }
-            else
-            {
-                Dispatcher.Invoke(new MangaEpsilon.Notifications.NotificationsService.EmptyDelegate(() =>
-                    {
-                        //DialogResult = true;
-                        this.Close();
-                    }));
-            }
+            while (this.IsMouseOver) { System.Threading.Thread.Sleep(50); } //If the mouse is over, keep the window up.
+
+            Dispatcher.BeginInvoke(new EmptyDelegate(() =>
+                 {
+                     SlideOut().ContinueWith((t) =>
+                         Dispatcher.BeginInvoke(new EmptyDelegate(() =>
+                             {
+                                 this.Hide();
+                             })));
+                 }));
+
+
+
         }
 
-        void aniStry_Completed(object sender, EventArgs e)
+        private void SlideIn()
         {
-            tm.Start();
+            this.Focus();
+
+            Storyboard storyboard = Resources["SlideIn"] as Storyboard;
+            storyboard.Begin(this);
+
+            IsSlideIn = true;
+
             this.Topmost = true;
         }
-        public void Retract()
+        private async Task SlideOut()
         {
-            aniStry.Children.Remove(heightAni);
-            heightAni.To = System.Windows.SystemParameters.PrimaryScreenHeight;
-            heightAni.From = this.Top;
-            heightAni.Duration = new Duration(TimeSpan.FromSeconds(0.3));
-            aniStry.Children.Add(heightAni);
-            Storyboard.SetTarget(heightAni, this);
-            Storyboard.SetTargetProperty(heightAni, new PropertyPath(Window.TopProperty));
-            r = true;
-            this.Topmost = false;
-            tm.Interval = 1000;
-            tm.Start();
-            aniStry.Begin(this);
+            Storyboard storyboard = Resources["SlideOut"] as Storyboard;
+
+            Task waitTask = storyboard.WaitForStoryboardCompletion();
+            storyboard.Begin(this);
+
+            await Task.WhenAny(waitTask);
+
+            IsSlideIn = false;
         }
         private double T { get; set; }
     }
