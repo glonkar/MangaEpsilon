@@ -784,6 +784,17 @@
                         <Paragraph>
                             <Span FontSize="20" BaselineAlignment="Center" x:Name="VersionSpan"/>
                         </Paragraph>
+                        <Paragraph>
+                            <Span FontSize="18">Content Providers:</Span>
+                            <Span>Manga content provided by
+                                <Hyperlink NavigateUri="http://mangaeden.com" Click="Hyperlink_Click">
+                                    <Image Source="/Resources/mangaeden-logo2.png" Width="300"/>
+                                </Hyperlink> .
+                            </Span>
+                            <Span>Additional manga information provided by
+                                <Hyperlink NavigateUri="http://myanimelist.net/" Click="Hyperlink_Click">MyAnimeList</Hyperlink> .
+                            </Span>
+                        </Paragraph>
                     </FlowDocument>
                 </FlowDocumentScrollViewer>
 
