@@ -26,10 +26,7 @@ namespace MangaEpsilon.Notifications
     /// </summary>
     public partial class NotificationsWindow : MetroWindow
     {
-        private Storyboard aniStry;
-        private DoubleAnimation heightAni;
         private System.Timers.Timer tm;
-        private bool r = false;
 
         public bool IsSlideIn { get; set; }
         public double HiddenLeftValue { get; set; }
@@ -128,7 +125,7 @@ namespace MangaEpsilon.Notifications
             SlideOut();
         }
 
-        async void tm_Elapsed(object sender, ElapsedEventArgs e)
+        void tm_Elapsed(object sender, ElapsedEventArgs e)
         {
             tm.Stop();
 

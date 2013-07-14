@@ -90,7 +90,7 @@ namespace MangaEpsilon.ViewModel
 
         private void InitializeCommands()
         {
-            MangaAddFavoriteCommand = CommandManager.CreateProperCommand(async (o) =>
+            MangaAddFavoriteCommand = CommandManager.CreateProperCommand((o) =>
             {
                 if (MangaFavoritedCommandIsBusy) return;
                 Task.Run(() =>

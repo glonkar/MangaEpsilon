@@ -22,11 +22,11 @@ namespace MangaEpsilon
                 Observers.Add(observer);
             return new ObservableQueueUnsubscriber<T>(Observers, observer);
         }
-        private class ObservableQueueUnsubscriber<T> : IDisposable
+        private class ObservableQueueUnsubscriber<V> : IDisposable
         {
-            private IObserver<T> observer;
-            private List<IObserver<T>> observers;
-            public ObservableQueueUnsubscriber(List<IObserver<T>> _obsers, IObserver<T> ob)
+            private IObserver<V> observer;
+            private List<IObserver<V>> observers;
+            public ObservableQueueUnsubscriber(List<IObserver<V>> _obsers, IObserver<V> ob)
             {
                 observers = _obsers;
                 observer = ob;
