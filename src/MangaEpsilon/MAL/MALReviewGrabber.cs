@@ -45,7 +45,7 @@ namespace MangaEpsilon.MAL
                     //var manga = MyAnimeListAPI.GetMangaInfo(mangaResult);
 
                     string html = string.Empty;
-                    using (var http = new HttpClient())
+                    using (var http = new HttpClient(new HttpClientHandler() { AutomaticDecompression = System.Net.DecompressionMethods.Deflate | System.Net.DecompressionMethods.GZip }))
                     {
                         html = await http.GetStringAsync(url);
                     }

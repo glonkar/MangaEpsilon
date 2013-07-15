@@ -64,7 +64,7 @@
         <vm:MangaChapterViewPageViewModel/>
     </Window.DataContext>
     <Grid x:Name="MainGrid" FocusVisualStyle="{x:Null}" Focusable="False">
-        <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" 
+        <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center"
                             HorizontalAlignment="Stretch" Width="40" Height="40" 
                             x:Name="MainProgressIndictator" IsActive="{Binding IsBusy, UpdateSourceTrigger=PropertyChanged}" Visibility="Visible"></metro:ProgressRing>
         <metro:FlipView ItemsSource="{Binding Pages, UpdateSourceTrigger=PropertyChanged}" 

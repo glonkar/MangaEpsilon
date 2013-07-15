@@ -38,7 +38,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
 
 
             string json = string.Empty;
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(new HttpClientHandler() { AutomaticDecompression = System.Net.DecompressionMethods.Deflate | System.Net.DecompressionMethods.GZip }))
             {
                 json = await client.GetStringAsync("http://www.mangaeden.com/api/chapter/" + light.ID + "/").ConfigureAwait(false);
             }
@@ -84,7 +84,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                 try
                 {
                     string json = string.Empty;
-                    using (var client = new HttpClient())
+                    using (var client = new HttpClient(new HttpClientHandler() { AutomaticDecompression = System.Net.DecompressionMethods.Deflate | System.Net.DecompressionMethods.GZip }))
                     {
                         json = await client.GetStringAsync("http://www.mangaeden.com/api/manga/" + manga.ID + "/").ConfigureAwait(false);
                     }
@@ -218,7 +218,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
             string html = string.Empty;
             List<ChapterEntry> entries = new List<ChapterEntry>();
 
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(new HttpClientHandler() { AutomaticDecompression = System.Net.DecompressionMethods.Deflate | System.Net.DecompressionMethods.GZip }))
             {
                 html = await client.GetStringAsync("http://www.mangaeden.com/en-directory/?order=3").ConfigureAwait(false);
             }
@@ -293,7 +293,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
         {
             //http://www.mangaeden.com/api/list/0/ 
 
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(new HttpClientHandler() { AutomaticDecompression = System.Net.DecompressionMethods.Deflate | System.Net.DecompressionMethods.GZip }))
             {
                 var json = await client.GetStringAsync("http://www.mangaeden.com/api/list/0/").ConfigureAwait(false);
                 Dictionary<string, object> data = null;
