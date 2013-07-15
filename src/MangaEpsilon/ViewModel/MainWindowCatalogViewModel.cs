@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -31,13 +32,15 @@ namespace MangaEpsilon.ViewModel
             // new PaginatedObservableCollection<Manga.Base.Manga>(App.MangaSource.AvailableManga);
             //AvailableMangas.PageSize = 30;
 
+            VisibleMangas = new List<object>();
+
             CollectionViewSource.GetDefaultView(AvailableMangas).SortDescriptions.Add(new System.ComponentModel.SortDescription("MangaName", System.ComponentModel.ListSortDirection.Ascending));
 
             MangaClickCommand = CommandManager.CreateProperCommand((o) =>
             {
                 var manga = ((Manga.Base.Manga)o);
 
-                var win = ViewModelOperations.FindWindow((vm) =>  vm.ContainsProperty("Manga") && ((Manga.Base.Manga)vm.GetProperty("Manga")).MangaName == manga.MangaName); //checks if its already open. probably not MVVM-ish.
+                var win = ViewModelOperations.FindWindow((vm) => vm.ContainsProperty("Manga") && ((Manga.Base.Manga)vm.GetProperty("Manga")).MangaName == manga.MangaName); //checks if its already open. probably not MVVM-ish.
 
                 if (win == null)
                     NavigationService.ShowWindow<MangaDetailPageViewModel>(new KeyValuePair<string, object>("manga", manga));
@@ -85,6 +88,22 @@ namespace MangaEpsilon.ViewModel
         {
             get { return GetPropertyOrDefaultType<ObservableCollection<Manga.Base.Manga>>(x => this.AvailableMangas); }
             set { SetProperty(x => this.AvailableMangas, value); }
+        }
+
+        public object VisibleMangas
+        {
+            get { return GetProperty(x => this.VisibleMangas); }
+            set
+            {
+                SetProperty(x => this.VisibleMangas, value);
+
+                foreach (Manga.Base.Manga item in (System.Collections.IEnumerable)VisibleMangas)
+                    if (item.Status == Manga.Base.MangaStatus.Unknown)
+                        Throttle.QueueWork(new Tuple<Action, Func<bool>>(() =>
+                            {
+                                App.MangaSource.GetMangaInfo(item.MangaName, false);
+                            }, () => ((IList)VisibleMangas).Contains(item)));
+            }
         }
 
         public bool IsBusy

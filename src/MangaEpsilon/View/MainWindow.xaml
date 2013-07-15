@@ -12,6 +12,7 @@
         xmlns:conv="clr-namespace:MangaEpsilon.Converters"
         xmlns:metrigs="clr-namespace:MangaEpsilon.Triggers"
         xmlns:meap="clr-namespace:MangaEpsilon.AttachedProperties"
+        xmlns:local="clr-namespace:MangaEpsilon"
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
@@ -681,11 +682,13 @@
                     </TextBlock>
                     <ListBox ItemsSource="{Binding AvailableMangas, IsAsync=True}" x:Name="CatalogListView" 
                              VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.IsContainerVirtualizable="True" VirtualizingPanel.IsVirtualizing="True"
-                             HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" ScrollViewer.CanContentScroll="True">
+                             HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" ScrollViewer.CanContentScroll="True" local:ListBoxVisibleItemsHelper.VisibleItems="{Binding VisibleMangas, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Cursor="Hand">
-                                    <Image Source="{Binding BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=100,TargetNullValue='pack://application:,,,/MangaEpsilon;component/Resources/no-photo.png'}" MaxWidth="100"/>
+                                    <Image 
+                                        Source="{Binding BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=100,
+                                        TargetNullValue='pack://application:,,,/MangaEpsilon;component/Resources/no-photo.png'}" MaxWidth="100"/>
                                     <StackPanel Orientation="Vertical" Margin="2">
                                         <Label FontSize="18" Content="{Binding MangaName, UpdateSourceTrigger=PropertyChanged}"/>
                                         <TextBlock Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" TextTrimming="CharacterEllipsis" 
@@ -701,7 +704,8 @@
                                             </ItemsControl.ItemsPanel>
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="1" CornerRadius="4" Padding="1" Margin="2 0 2 0" Background="{DynamicResource AccentColorBrush}">
+                                                    <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="1" CornerRadius="4" Padding="1" Margin="2 0 2 0" 
+                                                            Background="{DynamicResource AccentColorBrush}">
                                                         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{DynamicResource AccentColorBrush}">
                                                             <Label Content="{Binding .}" HorizontalAlignment="Center" VerticalAlignment="Center">
                                                                 <Label.Foreground>
