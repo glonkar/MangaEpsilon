@@ -80,6 +80,8 @@ namespace MangaEpsilon.ViewModel
 
                 //Pages.Add(new Uri(await App.MangaSource.GetChapterPageImageUrl(chapter, CurrentPageIndex)));
 
+                if (Pages == null)
+                    return; //viewmodel has been closed.
 
                 for (int i = 0; i < chapter.TotalPages; i++)
                 {
