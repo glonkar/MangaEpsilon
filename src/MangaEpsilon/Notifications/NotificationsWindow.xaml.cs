@@ -110,6 +110,13 @@ namespace MangaEpsilon.Notifications
                     }));
 
                 }));
+
+                tm.Stop();
+                SlideOut().ContinueWith((t) =>
+                    Dispatcher.BeginInvoke(new EmptyDelegate(() =>
+                    {
+                        this.Hide();
+                    })));
             }
         }
 
@@ -121,8 +128,7 @@ namespace MangaEpsilon.Notifications
 
         void NotificationsWindow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            tm.Stop();
-            SlideOut();
+
         }
 
         void tm_Elapsed(object sender, ElapsedEventArgs e)
