@@ -51,7 +51,8 @@ namespace MangaEpsilon
 
             if (App.DownloadsRunning)
             {
-                if (MessageBox.Show(LocalizationManager.GetLocalizedValue("DownloadClosingWarningMsg"), LocalizationManager.GetLocalizedValue("DownloadClosingWarningTitle"), MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                if (MessageBox.Show(LocalizationManager.GetLocalizedValue("DownloadClosingWarningMsg"), 
+                    LocalizationManager.GetLocalizedValue("DownloadClosingWarningTitle"), MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     e.Cancel = false;
                 else
                     e.Cancel = true;

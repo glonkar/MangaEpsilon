@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using Crystal.Command;
 using Crystal.Core;
+using Crystal.Localization;
 using Crystal.Messaging;
 using Crystal.Navigation;
 using MangaEpsilon.Manga.Base;
@@ -31,6 +32,7 @@ namespace MangaEpsilon.ViewModel
             refreshTimer.Elapsed += refreshTimer_Elapsed;
 
             IsBusy = true;
+            IsBusyText = LocalizationManager.GetLocalizedValue("MangaLoadingTxt");
             await Task.WhenAll(App.MangaSourceInitializationTask); //Checks (and waits if needed) for the Manga Source's initialization.
 
             if (App.MangaSourceInitializationTask.IsCanceled) return; //MainWindowAmrykidsFavoritesViewModel will show a messagebox about this rare circumstance.
@@ -82,6 +84,7 @@ namespace MangaEpsilon.ViewModel
                             refreshTimer.Start();
                 }, (o) => IsError);
 
+            IsBusyText = LocalizationManager.GetLocalizedValue("MangaNewReleasesLoadingTxt");
             await GetNewReleases();
 
             if (IsError == false)
@@ -142,6 +145,7 @@ namespace MangaEpsilon.ViewModel
             finally
             {
                 IsBusy = false;
+                IsBusyText = string.Empty;
             }
         }
 
@@ -190,6 +194,12 @@ namespace MangaEpsilon.ViewModel
         {
             get { return GetPropertyOrDefaultType<bool>(x => this.IsBusy); }
             set { SetProperty<bool>(x => this.IsBusy, value); }
+        }
+
+        public string IsBusyText
+        {
+            get { return GetPropertyOrDefaultType<string>(x => this.IsBusyText); }
+            set { SetProperty<string>(x => this.IsBusyText, value); }
         }
 
         public bool IsError
