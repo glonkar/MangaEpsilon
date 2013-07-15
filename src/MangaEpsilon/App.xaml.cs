@@ -143,6 +143,7 @@ namespace MangaEpsilon
 
         internal static bool CanMinimizeToTray = false;
         public static bool SaveZoomPosition = false;
+        public static bool EnableNotificationsSounds = true;
 
         internal static async Task UpdateMangaCatalog()
         {

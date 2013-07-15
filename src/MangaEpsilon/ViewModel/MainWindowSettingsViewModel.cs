@@ -60,6 +60,7 @@ namespace MangaEpsilon.ViewModel
                 settings.CurrentThemeAccent = "Blue";
                 settings.MinimizeToTray = false;
                 settings.SaveZoomPosition = false;
+                settings.EnableNotificationsSounds = true;
             }
 
             #region Theme stuff
@@ -68,8 +69,9 @@ namespace MangaEpsilon.ViewModel
             SelectedTheme = (Theme)Enum.Parse(typeof(Theme), settings.CurrentTheme.ToString());
             #endregion
 
-            App.CanMinimizeToTray = settings.MinimizeToTray;
-            App.SaveZoomPosition = settings.SaveZoomPosition;
+            CanMinimizeToTray = settings.MinimizeToTray;
+            SaveZoomPosition = settings.SaveZoomPosition;
+            EnableNotificationsSounds = settings.EnableNotificationsSounds;
         }
         private void SaveSettings()
         {
@@ -78,6 +80,7 @@ namespace MangaEpsilon.ViewModel
             settings.CurrentThemeAccent = SelectedAccent.Name;
             settings.MinimizeToTray = App.CanMinimizeToTray;
             settings.SaveZoomPosition = App.SaveZoomPosition;
+            settings.EnableNotificationsSounds = App.EnableNotificationsSounds;
 
             using (var sw = new StreamWriter(SettingsFile))
             {
@@ -137,6 +140,15 @@ namespace MangaEpsilon.ViewModel
             {
                 SetProperty(x => this.SaveZoomPosition, value);
                 App.SaveZoomPosition = value;
+            }
+        }
+        public bool EnableNotificationsSounds
+        {
+            get { return GetPropertyOrDefaultType<bool>(x => this.EnableNotificationsSounds); }
+            set
+            {
+                SetProperty(x => this.EnableNotificationsSounds, value);
+                App.EnableNotificationsSounds = value;
             }
         }
     }

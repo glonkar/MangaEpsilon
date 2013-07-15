@@ -849,6 +849,10 @@
                         </ComboBox>
                     </StackPanel>
                 </GroupBox>
+                <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='NotificationsSettingsHeader',NullValue='Notifications'}" Height="Auto">
+                    <metro:ToggleSwitch IsChecked="{Binding EnableNotificationsSounds, UpdateSourceTrigger=PropertyChanged}" 
+                                        Header="{i18n:CrystalLocalizedValueMarkup Key='EnableNotificationsSoundsHeader',NullValue='Enable Notifications Sounds?'}"/>
+                </GroupBox>
             </StackPanel>
         </metro:Flyout>
     </metro:MetroWindow.Flyouts>

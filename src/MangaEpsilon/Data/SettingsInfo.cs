@@ -18,5 +18,7 @@ namespace MangaEpsilon.Data
         public bool MinimizeToTray { get; set; }
         [DataMember]
         public bool SaveZoomPosition { get; set; }
+        [DataMember]
+        public bool EnableNotificationsSounds { get; set; }
     }
 }

@@ -33,6 +33,8 @@ namespace MangaEpsilon
             InitializeComponent();
 
             VersionSpan.Inlines.Add(new Run("Version: " + typeof(MainWindow).Assembly.GetName().Version.ToString()));
+
+            Notifications.NotificationsService.AddNotification("Moo", "moo");
         }
 
         private void itemListView_SelectionChanged(object sender, SelectionChangedEventArgs e)

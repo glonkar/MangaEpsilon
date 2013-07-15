@@ -106,11 +106,14 @@ namespace MangaEpsilon.Notifications
 
                                         nw.Show();
 
-                                        try
+                                        if (App.EnableNotificationsSounds)
                                         {
-                                            SoundManager.WindowsPrintCompleted.Play();
+                                            try
+                                            {
+                                                SoundManager.WindowsPrintCompleted.Play();
+                                            }
+                                            catch (Exception) { }
                                         }
-                                        catch (Exception) { }
                                     }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
 
                                 while (nw.IsVisible)
