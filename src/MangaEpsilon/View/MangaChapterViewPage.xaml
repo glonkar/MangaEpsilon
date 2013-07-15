@@ -45,9 +45,14 @@
                                 <conv:ImageDownloadingConverter x:Key="ImgDl"/>
                             </ResourceDictionary>
                         </Grid.Resources>
-                        <Grid VerticalAlignment="Center" Width="100" Visibility="{Binding Source={StaticResource ImgDl}, Path=IsDownloading, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BTV}}">
-                            <metro:MetroProgressBar Foreground="{DynamicResource AccentColorBrush}" Value="{Binding Source={StaticResource ImgDl},Path=DownloadProgress, UpdateSourceTrigger=PropertyChanged}"/>
-                        </Grid>
+                        <StackPanel VerticalAlignment="Center" Width="100" 
+                                    Visibility="{Binding Source={StaticResource ImgDl}, Path=IsDownloading, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BTV}}">
+                            <metro:MetroProgressBar Foreground="{DynamicResource AccentColorBrush}" 
+                                                    Value="{Binding Source={StaticResource ImgDl},Path=DownloadProgress, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center"
+                                Text="{Binding Source={StaticResource ImgDl},Path=DownloadProgress, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0}%'}" FontSize="16"/>   
+                        </StackPanel>
+                        
                         <Image Source="{Binding ., Converter={StaticResource ImgDl}}" Stretch="Uniform" Width="800" Height="800">
                         </Image>
                     </Grid>
