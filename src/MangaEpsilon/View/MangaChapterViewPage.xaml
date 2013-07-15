@@ -9,9 +9,12 @@
         xmlns:crystal="clr-namespace:Crystal.Core;assembly=Amrykid.Crystal"
         xmlns:utils="clr-namespace:Crystal.Utilities;assembly=Amrykid.Crystal"
         xmlns:conv="clr-namespace:MangaEpsilon.Converters"
-        ShowTitleBar="False" x:Name="thisWindow" SaveWindowPosition="True" Height="658" Width="1284" ShowActivated="True" Loaded="thisWindow_Loaded" crystal:WindowViewModelHelper.AutoBindingClear="True">
+        ShowTitleBar="False" x:Name="thisWindow" SaveWindowPosition="True"
+                   Height="658" Width="1284" ShowActivated="True" Loaded="thisWindow_Loaded" 
+                   crystal:WindowViewModelHelper.AutoBindingClear="True">
     <i:Interaction.Behaviors>
         <Behaviours:BorderlessWindowBehavior ResizeWithGrip="True" EnableDWMDropShadow="True" />
+        <Behaviours:WindowsSettingBehaviour />
     </i:Interaction.Behaviors>
     <metro:MetroWindow.Resources>
         <ResourceDictionary>

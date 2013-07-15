@@ -28,6 +28,7 @@
     </Window.TaskbarItemInfo>
     <i:Interaction.Behaviors>
         <Behaviours:BorderlessWindowBehavior ResizeWithGrip="True" EnableDWMDropShadow="True" />
+        <Behaviours:WindowsSettingBehaviour/>
     </i:Interaction.Behaviors>
     <metro:MetroWindow.Resources>
         <ResourceDictionary>
