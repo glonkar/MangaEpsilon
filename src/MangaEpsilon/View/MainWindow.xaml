@@ -570,6 +570,21 @@
                                 <conv:ItemIsInCollectionToBoolConverter x:Key="icb"/>
                             </ResourceDictionary>
                         </Grid.Resources>
+                        <TextBlock Margin="4" FontStyle="Italic" FontSize="16" 
+                               Text="{i18n:CrystalLocalizedValueMarkup Key='NoItemsInListTxt',NullValue='Either the items have failed to load or your search yielded no results.'}">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ElementName=LibraryListBox, Path=Items.Count}" Value="0">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
                         <ListBox ItemsSource="{Binding LibraryItems, UpdateSourceTrigger=PropertyChanged}" 
                                  SelectedItem="{Binding SelectedEntry, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                  x:Name="LibraryListBox" VirtualizingStackPanel.IsVirtualizingWhenGrouping="True">
@@ -641,6 +656,21 @@
                     <vm:MainWindowCatalogViewModel/>
                 </TabItem.DataContext>
                 <Grid>
+                    <TextBlock Margin="4" FontStyle="Italic" FontSize="16" 
+                               Text="{i18n:CrystalLocalizedValueMarkup Key='NoItemsInListTxt',NullValue='Either the items have failed to load or your search yielded no results.'}">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=CatalogListView, Path=Items.Count}" Value="0">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                     <ListBox ItemsSource="{Binding AvailableMangas, IsAsync=True}" x:Name="CatalogListView" 
                              VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.IsContainerVirtualizable="True" VirtualizingPanel.IsVirtualizing="True"
                              HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" ScrollViewer.CanContentScroll="True">
