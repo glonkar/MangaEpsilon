@@ -682,7 +682,8 @@
                     </TextBlock>
                     <ListBox ItemsSource="{Binding AvailableMangas, IsAsync=True}" x:Name="CatalogListView" 
                              VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.IsContainerVirtualizable="True" VirtualizingPanel.IsVirtualizing="True"
-                             HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" ScrollViewer.CanContentScroll="True" local:ListBoxVisibleItemsHelper.VisibleItems="{Binding VisibleMangas, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                             HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" ScrollViewer.CanContentScroll="True" 
+                             local:ListBoxVisibleItemsHelper.VisibleItems="{Binding VisibleMangas, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Cursor="Hand">
