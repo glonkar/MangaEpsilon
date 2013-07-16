@@ -151,7 +151,7 @@ namespace MangaEpsilon
 
         public int MaxPageIndex { get; private set; }
 
-        internal void Refresh()
+        public void Refresh()
         {
             RecalculateThePageItems();
         }

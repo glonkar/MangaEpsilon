@@ -90,139 +90,66 @@
                                                 IsActive="{Binding IsBusy, UpdateSourceTrigger=PropertyChanged}" Visibility="Visible"></metro:ProgressRing>
 
         <Grid Margin="0 25 0 0">
-            <ScrollViewer  VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" x:Name="PageScrollViewer" Margin="0">
-                <StackPanel Orientation="Horizontal">
-                    <Grid VerticalAlignment="Top" Height="600" Width="475" x:Name="MangaInfoGrid" DataContext="{Binding Manga, UpdateSourceTrigger=PropertyChanged}">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="20*"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100*"/>
+                <RowDefinition Height="35"/>
+            </Grid.RowDefinitions>
 
-                        <Grid Grid.Row="0">
-                            <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='CoverSection',NullValue='cover'}" >
-                                <Image Height="Auto" Width="450" Margin="0 0 0 0" 
-                                       Source="{Binding BookImageUrl, Converter={StaticResource ImgCache}, TargetNullValue='pack://application:,,,/MangaEpsilon;component/Resources/no-photo.png'}" VerticalAlignment="Top" x:Name="CoverImage"/>
-                            </GroupBox>
-                        </Grid>
-                        <Grid Grid.Row="1">
-                            <StackPanel>
-                                <TextBlock Text="{Binding Author, UpdateSourceTrigger=PropertyChanged,StringFormat='Author: {0}'}" 
-                                           HorizontalAlignment="Center" FontSize="16"/>
-                                <TextBlock Text="{Binding Status, UpdateSourceTrigger=PropertyChanged,StringFormat='Status: {0}'}" 
-                                           HorizontalAlignment="Center" FontSize="16" 
-                                           Foreground="{DynamicResource AccentColorBrush}"/>
-                                <ItemsControl ItemsSource="{Binding Categories, UpdateSourceTrigger=PropertyChanged}" Width="410" Margin="2 0 2 0" Height="80">
-                                    <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <WrapPanel ItemHeight="30" ItemWidth="Auto" IsItemsHost="True" 
-                                                       Width="420"
-                                                       Height="{Binding (FrameworkElement.ActualHeight), RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}"/>
-                                        </ItemsPanelTemplate>
-                                    </ItemsControl.ItemsPanel>
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Border BorderBrush="{DynamicResource AccentColorBrush}" Margin="2 0 2 0" 
-                                                    BorderThickness="1" CornerRadius="4" Padding="1" Background="{DynamicResource AccentColorBrush}">
-                                                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{DynamicResource AccentColorBrush}">
-                                                    <Label Content="{Binding .}" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                                        <Label.Foreground>
-                                                            <SolidColorBrush Color="{DynamicResource BlackColor}"/>
-                                                        </Label.Foreground>
-                                                    </Label>
-                                                </Grid>
-                                            </Border>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                    <ItemsControl.Resources>
-                                        <Style TargetType="{x:Type ListBoxItem}">
-                                            <Style.Resources>
-                                                <!-- Background of selected item when focused -->
-                                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
-                                                <!-- Background of selected item when not focused -->
-                                                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
-                                            </Style.Resources>
-                                            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                                        </Style>
-                                    </ItemsControl.Resources>
-                                </ItemsControl>
-                                <StackPanel Orientation="Horizontal">
-                                    <ContentPresenter Height="40" Width="40">
-                                        <ContentPresenter.ContentTemplate>
-                                            <DataTemplate>
-                                                <Button x:Name="control">
-                                                    <Rectangle Width="20" Height="20" x:Name="brush">
-                                                    </Rectangle>
-                                                </Button>
-                                                <DataTemplate.Triggers>
-                                                    <DataTrigger Binding="{Binding ElementName=thisWindow,Path=DataContext.MangaIsFavorited, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                                        <Setter TargetName="control" Property="Content">
-                                                            <Setter.Value>
-                                                                <Rectangle Width="20" Height="20">
-                                                                    <Rectangle.Fill>
-                                                                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_star_delete}"/>
-                                                                    </Rectangle.Fill>
-                                                                </Rectangle>
-                                                            </Setter.Value>
-                                                        </Setter>
-                                                        <Setter TargetName="control" Property="Button.Command" 
-                                                                Value="{Binding ElementName=thisWindow,Path=DataContext.MangaRemoveFavoriteCommand, UpdateSourceTrigger=PropertyChanged}"/>
-                                                        <Setter TargetName="control" Property="ToolTip" Value="{i18n:CrystalLocalizedValueMarkup Key='RemoveFromFavoritesMsg',NullValue='Remove from Favorites'}"/>
-                                                        <Setter TargetName="control" Property="Style" Value="{DynamicResource MetroCircleButtonStyle}"/>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding ElementName=thisWindow,Path=DataContext.MangaIsFavorited, UpdateSourceTrigger=PropertyChanged}" Value="False">
-                                                        <Setter TargetName="control" Property="Content">
-                                                            <Setter.Value>
-                                                                <Rectangle Width="20" Height="20">
-                                                                    <Rectangle.Fill>
-                                                                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_star_add}"/>
-                                                                    </Rectangle.Fill>
-                                                                </Rectangle>
-                                                            </Setter.Value>
-                                                        </Setter>
-                                                        <Setter TargetName="control" Property="Button.Command" 
-                                                                Value="{Binding ElementName=thisWindow,Path=DataContext.MangaAddFavoriteCommand, UpdateSourceTrigger=PropertyChanged}"/>
-                                                        <Setter TargetName="control" Property="ToolTip" Value="{i18n:CrystalLocalizedValueMarkup Key='AddToFavoritesMsg',NullValue='Add to Favorites'}"/>
-                                                        <Setter TargetName="control" Property="Style" Value="{DynamicResource MetroCircleButtonStyle}"/>
-                                                    </DataTrigger>
-                                                </DataTemplate.Triggers>
-                                            </DataTemplate>
-                                        </ContentPresenter.ContentTemplate>
-                                    </ContentPresenter>
-                                </StackPanel>
-                            </StackPanel>
-                        </Grid>
+
+            <Grid VerticalAlignment="Top" x:Name="MangaInfoGrid" Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="900*"/>
+                    <ColumnDefinition Width="450*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0" Margin="20 0 0 0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="100*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <StackPanel DataContext="{Binding Manga, UpdateSourceTrigger=PropertyChanged}">
+                            <TextBlock Text="{Binding MangaName}" FontSize="29" VerticalAlignment="Center" HorizontalAlignment="Stretch" TextAlignment="Center"/>
+                            <Separator/>
+                        </StackPanel>
                     </Grid>
-                    <StackPanel Orientation="Vertical">
-                        <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='AboutSection',NullValue='about'}" 
-                                  DataContext="{Binding Manga, UpdateSourceTrigger=PropertyChanged}">
-                            <TextBlock FontSize="17" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" 
-                                       TextAlignment="Left" TextWrapping="Wrap" 
-                                       TextTrimming="CharacterEllipsis" Width="450" HorizontalAlignment="Center" x:Name="DescriptionTextBlock" />
-                        </GroupBox>
+                    <ScrollViewer Grid.Row="1">
+                        <StackPanel>
+                            <TextBlock Text="{i18n:CrystalLocalizedValueMarkup Key='DescriptionSection',NullValue='description'}" FontSize="26" 
+                                               HorizontalAlignment="Center" Foreground="{DynamicResource AccentColorBrush}"/>
+                            <TextBlock FontSize="17" Text="{Binding Manga.Description, UpdateSourceTrigger=PropertyChanged}" 
+                                       TextAlignment="Left" TextWrapping="Wrap" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                       TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" x:Name="DescriptionTextBlock"/>
 
-                        <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='ChaptersSection',NullValue='chapters'}">
+                            <Separator/>
+
                             <StackPanel>
-                                <ListBox ItemsSource="{Binding MangaChapters, UpdateSourceTrigger=PropertyChanged, Delay=1000}" 
+                                <TextBlock Text="{i18n:CrystalLocalizedValueMarkup Key='ChaptersSection',NullValue='chapters'}" FontSize="26" 
+                                                   HorizontalAlignment="Center" Foreground="{DynamicResource AccentColorBrush}"/>
+                                <ListBox ItemsSource="{Binding Path=MangaChapters, UpdateSourceTrigger=PropertyChanged, Delay=1000}" 
                                          Margin="20 20 0 0" Visibility="Visible" HorizontalAlignment="Left" 
-									x:Name="chaptersGridView" VerticalAlignment="Stretch" 
-                                    Width="625" Height="Auto" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" 
-                                    SelectedItem="{Binding SelectedChapterItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                    SelectionMode="Extended" SelectionChanged="chaptersGridView_SelectionChanged"
-                                    ItemTemplateSelector="{StaticResource ChapterTemplateSelector}">
+									        x:Name="chaptersGridView" VerticalAlignment="Stretch" 
+                                            Width="Auto" Height="200" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" 
+                                            SelectedItem="{Binding SelectedChapterItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                            SelectionMode="Extended" SelectionChanged="chaptersGridView_SelectionChanged"
+                                            ItemTemplateSelector="{StaticResource ChapterTemplateSelector}">
                                     <ListBox.ItemsPanel>
                                         <ItemsPanelTemplate>
-                                            <WrapPanel IsItemsHost="True" ItemHeight="50" Width="600" />
+                                            <WrapPanel IsItemsHost="True" ItemHeight="50" 
+                                                               Width="{Binding (FrameworkElement.ActualWidth), RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}" />
                                         </ItemsPanelTemplate>
                                     </ListBox.ItemsPanel>
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseDoubleClick">
-                                            <i:InvokeCommandAction Command="{Binding DataContext.OpenMangaChapterCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                                            <i:InvokeCommandAction 
+                                                        Command="{Binding DataContext.OpenMangaChapterCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
                                                                    CommandParameter="{Binding SelectedChapterItem}"/>
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                     <ListBox.ContextMenu>
                                         <ContextMenu HasDropShadow="True" PlacementTarget="{Binding ElementName=chaptersGridView}">
-                                            <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='DownloadChapterMenuItem',NullValue='Download chapter(s).'}" Command="{Binding MangaDownloadCommand}" CommandParameter="{Binding SelectedChapterItem}"/>
+                                            <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='DownloadChapterMenuItem',NullValue='Download chapter(s).'}" Command="{Binding MangaDownloadCommand}" 
+                                                      CommandParameter="{Binding SelectedChapterItem}"/>
                                         </ContextMenu>
                                     </ListBox.ContextMenu>
                                     <ListBox.Resources>
@@ -275,113 +202,242 @@
                                     </Button>
                                 </StackPanel>
                             </StackPanel>
-                        </GroupBox>
-                        <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='RelatedMangaSection',NullValue='related manga'}">
-                            <Grid>
-                                <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="40" Height="270" 
-                                                IsActive="{Binding IsBusy_RelatedManga, UpdateSourceTrigger=PropertyChanged}" 
-                                                    Visibility="{Binding IsBusy_RelatedManga, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BTV}}"></metro:ProgressRing>
-                                <ListBox ItemsSource="{Binding RelatedManga, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{DynamicResource MangaListBoxItemStyle}" 
-                                         x:Name="RelatedMangaListView">
-                                    <ListBox.Resources>
-                                        <DataTemplate x:Key="MangaListBoxItemTemplate">
-                                            <Grid HorizontalAlignment="Left" Width="250" Height="250" Margin="6" Cursor="Hand">
-                                                <Grid.CacheMode>
-                                                    <BitmapCache EnableClearType="True" RenderAtScale="1.0" />
-                                                </Grid.CacheMode>
-                                                <Border>
-                                                    <Image Source="{Binding BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=250}" Stretch="UniformToFill" 
-                                                           AutomationProperties.Name="{Binding MangaName}"/>
-                                                </Border>
-                                                <StackPanel VerticalAlignment="Bottom">
-                                                    <StackPanel.Background>
-                                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                                            <GradientStop Color="Transparent" Offset="-1"/>
-                                                            <!--<GradientStop Color="{DynamicResource WhiteColor}" Offset="1"/> Produces a nice effect-->
-                                                            <GradientStop Color="{DynamicResource BlackColor}" Offset="1"/>
-                                                        </LinearGradientBrush>
-                                                    </StackPanel.Background>
-                                                    <TextBlock Text="{Binding MangaName}" FontSize="18" Height="60" Margin="15,0,15,0">
-                                                        <TextBlock.Foreground>
-                                                            <SolidColorBrush Color="{DynamicResource WhiteColor}"/>
-                                                        </TextBlock.Foreground>
-                                                    </TextBlock>
-                                                    <TextBlock Text="{Binding ReleaseDate}" FontSize="15" TextWrapping="NoWrap" Margin="15,0,15,10">
-                                                        <TextBlock.Foreground>
-                                                            <SolidColorBrush Color="{DynamicResource WhiteColor}"/>
-                                                        </TextBlock.Foreground>
-                                                    </TextBlock>
-                                                </StackPanel>
-                                            </Grid>
-                                        </DataTemplate>
 
-                                        <Style TargetType="{x:Type ListBoxItem}" x:Key="MangaListBoxItemStyle">
-                                            <Setter Property="RenderTransform">
-                                                <Setter.Value>
-                                                    <ScaleTransform />
-                                                </Setter.Value>
-                                            </Setter>
-                                            <Setter Property="ContentTemplate" Value="{StaticResource MangaListBoxItemTemplate}"/>
-                                            <Style.Triggers>
-                                                <EventTrigger RoutedEvent="Loaded">
-                                                    <EventTrigger.Actions>
-                                                        <BeginStoryboard Name="LoadedStoryBoardBegin">
-                                                            <Storyboard  Timeline.DesiredFrameRate="60">
-                                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:.5" />
+                            <Separator/>
 
-                                                                <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleX)" 
-                                                                                 To="1.0" From="1.5" Duration="0:0:.5"/>
-                                                                <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleY)" 
-                                                                                 To="1.0" From="1.5" Duration="0:0:.5"/>
-                                                            </Storyboard>
-                                                        </BeginStoryboard>
-                                                    </EventTrigger.Actions>
-                                                </EventTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </ListBox.Resources>
-                                    <ListBox.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <WrapPanel IsItemsHost="True" ItemHeight="260" Width="600" />
-                                        </ItemsPanelTemplate>
-                                    </ListBox.ItemsPanel>
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="MouseDoubleClick">
-                                            <i:InvokeCommandAction Command="{Binding MangaClickCommand}" CommandParameter="{Binding ElementName=RelatedMangaListView,Path=SelectedItem}"/>
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                </ListBox>
-                            </Grid>
-                        </GroupBox>
-                    </StackPanel>
-                    <Grid VerticalAlignment="Top" Width="400" x:Name="MangaReviewsGrid">
-                        <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='ReviewSection',NullValue='reviews'}">
-                            <Grid>
-                                <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="40" Height="40" 
+
+                            <Grid x:Name="MangaReviewsGrid" Width="Auto" DataContext="{Binding ElementName=thisWindow,Path=DataContext, Delay=1000}">
+                                <StackPanel>
+                                    <TextBlock Text="{i18n:CrystalLocalizedValueMarkup Key='ReviewSection',NullValue='reviews'}" FontSize="26" Foreground="{DynamicResource AccentColorBrush}" HorizontalAlignment="Center"/>
+                                    <ScrollViewer>
+                                        <Grid>
+                                            <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="40" Height="40" 
                                                 IsActive="{Binding IsBusy_Reviews, UpdateSourceTrigger=PropertyChanged}"
                                                     Visibility="{Binding IsBusy_Reviews, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BTV}}"></metro:ProgressRing>
-                                <ListBox ItemsSource="{Binding Reviews, UpdateSourceTrigger=PropertyChanged}">
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Width="360">
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Image Source="{Binding ReviewAuthorAvatar}"/>
-                                                    <StackPanel>
-                                                        <Label Content="{Binding ReviewAuthor}" FontWeight="Bold" FontSize="17"/>
-                                                        <TextBlock Text="{Binding Overall_Rating}" Foreground="{DynamicResource AccentColorBrush}" FontSize="18" Margin="5 0 0 5"/>
-                                                    </StackPanel>
-                                                </StackPanel>
-                                                <TextBlock TextTrimming="CharacterEllipsis" TextWrapping="Wrap" Width="360" Height="200" Text="{Binding ReviewText}"/>
-                                                <Line />
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
+                                            <ListBox ItemsSource="{Binding Reviews, UpdateSourceTrigger=PropertyChanged}">
+                                                <ListBox.ItemTemplate>
+
+                                                    <DataTemplate>
+                                                        <!--Modified version of: http://limitless-thoughts.blogspot.com/2011/12/building-twitter-search-client-using.html | http://www.jarloo.com/tweetsearch/ -->
+                                                        <Grid VerticalAlignment="Top" Cursor="Hand" Margin="5,5,5,5">
+                                                            <Grid.Effect>
+                                                                <DropShadowEffect BlurRadius="13" ShadowDepth="1" Color="#FF578EA4"/>
+                                                            </Grid.Effect>
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition/>
+                                                                <RowDefinition Height="14"/>
+                                                            </Grid.RowDefinitions>
+                                                            <Rectangle Fill="White" Stroke="#FF2CBBF0" RadiusX="10" RadiusY="10"/>
+                                                            <Path Fill="White" Stretch="Fill" Stroke="#FF2CBBF0" HorizontalAlignment="Left" Margin="30,-5.597,0,0" Width="25" Grid.Row="1" Data="M22.166642,154.45381 L29.999666,187.66699 40.791059,154.54395" Height="19.6" VerticalAlignment="Top" RenderTransformOrigin="-0.685,0.49"/>
+                                                            <Rectangle Fill="White" RadiusX="10" RadiusY="10" Margin="1"/>
+                                                            <DockPanel Margin="5,5,5,5">
+
+                                                                <Image Source="{Binding ReviewAuthorAvatar}" Height="50" Width="50" DockPanel.Dock="Left" VerticalAlignment="Top"/>
+                                                                <StackPanel Margin="5 0 0 0">
+                                                                    <Label Content="{Binding ReviewAuthor}" FontWeight="Bold" FontSize="17"/>
+                                                                    <TextBlock Text="{Binding Overall_Rating}" Foreground="{DynamicResource AccentColorBrush}" FontSize="18" Margin="5 0 0 5"/>
+                                                                    <TextBlock TextTrimming="CharacterEllipsis" TextWrapping="Wrap" Width="{Binding (FrameworkElement.ActualWidth), RelativeSource={RelativeSource AncestorType=ListBox}}" 
+                                                                               Height="200" Text="{Binding ReviewText}"/>
+                                                                </StackPanel>
+                                                            </DockPanel>
+
+                                                            <Grid.Triggers>
+                                                                <EventTrigger RoutedEvent="Control.Loaded">
+                                                                    <BeginStoryboard>
+                                                                        <Storyboard>
+                                                                            <DoubleAnimation To="1" Duration="0:0:0.5" Storyboard.TargetProperty="Opacity"/>
+                                                                        </Storyboard>
+                                                                    </BeginStoryboard>
+                                                                </EventTrigger>
+                                                            </Grid.Triggers>
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
+                                        </Grid>
+                                    </ScrollViewer>
+                                </StackPanel>
                             </Grid>
-                        </GroupBox>
-                    </Grid>
-                </StackPanel>
-            </ScrollViewer>
+
+                            <Separator/>
+
+                            <StackPanel DataContext="{Binding ElementName=thisWindow,Path=DataContext}">
+                                <TextBlock Text="{i18n:CrystalLocalizedValueMarkup Key='RelatedMangaSection',NullValue='related manga'}" 
+                                           FontSize="26" Foreground="{DynamicResource AccentColorBrush}" HorizontalAlignment="Center"/>
+                                <ScrollViewer>
+                                    <Grid>
+                                        <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="40" Height="270" 
+                                                IsActive="{Binding IsBusy_RelatedManga, UpdateSourceTrigger=PropertyChanged}" 
+                                                    Visibility="{Binding IsBusy_RelatedManga, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BTV}}"></metro:ProgressRing>
+                                        <ListBox ItemsSource="{Binding RelatedManga, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{DynamicResource MangaListBoxItemStyle}" 
+                                         x:Name="RelatedMangaListView">
+                                            <ListBox.Resources>
+                                                <DataTemplate x:Key="MangaListBoxItemTemplate">
+                                                    <Grid HorizontalAlignment="Left" Width="250" Height="250" Margin="6" Cursor="Hand">
+                                                        <Grid.CacheMode>
+                                                            <BitmapCache EnableClearType="True" RenderAtScale="1.0" />
+                                                        </Grid.CacheMode>
+                                                        <Border>
+                                                            <Image Source="{Binding BookImageUrl, Converter={StaticResource TImgCache}, ConverterParameter=250}" Stretch="UniformToFill" 
+                                                           AutomationProperties.Name="{Binding MangaName}"/>
+                                                        </Border>
+                                                        <StackPanel VerticalAlignment="Bottom">
+                                                            <StackPanel.Background>
+                                                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                                    <GradientStop Color="Transparent" Offset="-1"/>
+                                                                    <!--<GradientStop Color="{DynamicResource WhiteColor}" Offset="1"/> Produces a nice effect-->
+                                                                    <GradientStop Color="{DynamicResource BlackColor}" Offset="1"/>
+                                                                </LinearGradientBrush>
+                                                            </StackPanel.Background>
+                                                            <TextBlock Text="{Binding MangaName}" FontSize="18" Height="60" Margin="15,0,15,0">
+                                                                <TextBlock.Foreground>
+                                                                    <SolidColorBrush Color="{DynamicResource WhiteColor}"/>
+                                                                </TextBlock.Foreground>
+                                                            </TextBlock>
+                                                            <TextBlock Text="{Binding ReleaseDate}" FontSize="15" TextWrapping="NoWrap" Margin="15,0,15,10">
+                                                                <TextBlock.Foreground>
+                                                                    <SolidColorBrush Color="{DynamicResource WhiteColor}"/>
+                                                                </TextBlock.Foreground>
+                                                            </TextBlock>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </DataTemplate>
+
+                                                <Style TargetType="{x:Type ListBoxItem}" x:Key="MangaListBoxItemStyle">
+                                                    <Setter Property="RenderTransform">
+                                                        <Setter.Value>
+                                                            <ScaleTransform />
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Setter Property="ContentTemplate" Value="{StaticResource MangaListBoxItemTemplate}"/>
+                                                    <Style.Triggers>
+                                                        <EventTrigger RoutedEvent="Loaded">
+                                                            <EventTrigger.Actions>
+                                                                <BeginStoryboard Name="LoadedStoryBoardBegin">
+                                                                    <Storyboard  Timeline.DesiredFrameRate="60">
+                                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:.5" />
+
+                                                                        <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleX)" 
+                                                                                 To="1.0" From="1.5" Duration="0:0:.5"/>
+                                                                        <DoubleAnimation Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleY)" 
+                                                                                 To="1.0" From="1.5" Duration="0:0:.5"/>
+                                                                    </Storyboard>
+                                                                </BeginStoryboard>
+                                                            </EventTrigger.Actions>
+                                                        </EventTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ListBox.Resources>
+                                            <ListBox.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <WrapPanel IsItemsHost="True" ItemHeight="260" Width="600" />
+                                                </ItemsPanelTemplate>
+                                            </ListBox.ItemsPanel>
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="MouseDoubleClick">
+                                                    <i:InvokeCommandAction Command="{Binding MangaClickCommand}" CommandParameter="{Binding ElementName=RelatedMangaListView,Path=SelectedItem}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </ListBox>
+                                    </Grid>
+                                </ScrollViewer>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+                <Grid Grid.Column="1" DataContext="{Binding Manga, UpdateSourceTrigger=PropertyChanged, Delay=1000}">
+                    <StackPanel>
+                        <Image Height="350" Width="Auto" Margin="0 0 0 0" Grid.Column="0" Grid.Row="0" Stretch="Uniform"
+                                       Source="{Binding BookImageUrl, Converter={StaticResource ImgCache}, 
+                            TargetNullValue='pack://application:,,,/MangaEpsilon;component/Resources/no-photo.png'}" VerticalAlignment="Top" x:Name="CoverImage"/>
+                        <TextBlock Text="{Binding Author, UpdateSourceTrigger=PropertyChanged,StringFormat='Author: {0}'}" 
+                                           FontSize="16" Margin="2" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{Binding Status, UpdateSourceTrigger=PropertyChanged,StringFormat='Status: {0}'}" 
+                                           FontSize="16" Margin="2" HorizontalAlignment="Center"
+                                           Foreground="{DynamicResource AccentColorBrush}"/>
+                        <ItemsControl ItemsSource="{Binding Categories, UpdateSourceTrigger=PropertyChanged}" Width="410" Margin="2 0 2 0" Height="80">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel ItemHeight="30" ItemWidth="Auto" IsItemsHost="True" 
+                                                       Width="420"
+                                                       Height="{Binding (FrameworkElement.ActualHeight), RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="{DynamicResource AccentColorBrush}" Margin="2 0 2 0" 
+                                                    BorderThickness="1" CornerRadius="4" Padding="1" Background="{DynamicResource AccentColorBrush}">
+                                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{DynamicResource AccentColorBrush}">
+                                            <Label Content="{Binding .}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <Label.Foreground>
+                                                    <SolidColorBrush Color="{DynamicResource BlackColor}"/>
+                                                </Label.Foreground>
+                                            </Label>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.Resources>
+                                <Style TargetType="{x:Type ListBoxItem}">
+                                    <Style.Resources>
+                                        <!-- Background of selected item when focused -->
+                                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                                        <!-- Background of selected item when not focused -->
+                                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                                    </Style.Resources>
+                                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                                </Style>
+                            </ItemsControl.Resources>
+                        </ItemsControl>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="1" x:Name="ButtonsPanel">
+                <ContentPresenter Height="40" Width="40">
+                    <ContentPresenter.ContentTemplate>
+                        <DataTemplate>
+                            <Button x:Name="control">
+                                <Rectangle Width="20" Height="20" x:Name="brush">
+                                </Rectangle>
+                            </Button>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=thisWindow,Path=DataContext.MangaIsFavorited, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                    <Setter TargetName="control" Property="Content">
+                                        <Setter.Value>
+                                            <Rectangle Width="20" Height="20">
+                                                <Rectangle.Fill>
+                                                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_star_delete}"/>
+                                                </Rectangle.Fill>
+                                            </Rectangle>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter TargetName="control" Property="Button.Command" 
+                                                                Value="{Binding ElementName=thisWindow,Path=DataContext.MangaRemoveFavoriteCommand, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <Setter TargetName="control" Property="ToolTip" Value="{i18n:CrystalLocalizedValueMarkup Key='RemoveFromFavoritesMsg',NullValue='Remove from Favorites'}"/>
+                                    <Setter TargetName="control" Property="Style" Value="{DynamicResource MetroCircleButtonStyle}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ElementName=thisWindow,Path=DataContext.MangaIsFavorited, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                    <Setter TargetName="control" Property="Content">
+                                        <Setter.Value>
+                                            <Rectangle Width="20" Height="20">
+                                                <Rectangle.Fill>
+                                                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_star_add}"/>
+                                                </Rectangle.Fill>
+                                            </Rectangle>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter TargetName="control" Property="Button.Command" 
+                                                                Value="{Binding ElementName=thisWindow,Path=DataContext.MangaAddFavoriteCommand, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <Setter TargetName="control" Property="ToolTip" Value="{i18n:CrystalLocalizedValueMarkup Key='AddToFavoritesMsg',NullValue='Add to Favorites'}"/>
+                                    <Setter TargetName="control" Property="Style" Value="{DynamicResource MetroCircleButtonStyle}"/>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ContentPresenter.ContentTemplate>
+                </ContentPresenter>
+            </StackPanel>
         </Grid>
     </Grid>
 </metro:MetroWindow>
