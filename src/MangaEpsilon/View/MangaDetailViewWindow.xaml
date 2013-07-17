@@ -404,50 +404,57 @@
                 </Grid>
             </Grid>
 
-            <StackPanel Orientation="Horizontal" Grid.Row="1" x:Name="ButtonsPanel">
-                <ContentPresenter Height="40" Width="40">
-                    <ContentPresenter.ContentTemplate>
-                        <DataTemplate>
-                            <Button x:Name="control">
-                                <Rectangle Width="20" Height="20" x:Name="brush">
-                                </Rectangle>
-                            </Button>
-                            <DataTemplate.Triggers>
-                                <DataTrigger Binding="{Binding ElementName=thisWindow,Path=DataContext.MangaIsFavorited, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                    <Setter TargetName="control" Property="Content">
-                                        <Setter.Value>
-                                            <Rectangle Width="20" Height="20">
-                                                <Rectangle.Fill>
-                                                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_star_delete}"/>
-                                                </Rectangle.Fill>
-                                            </Rectangle>
-                                        </Setter.Value>
-                                    </Setter>
-                                    <Setter TargetName="control" Property="Button.Command" 
+            <Grid Grid.Row="1">
+                <Border BorderThickness="1" BorderBrush="{DynamicResource AccentColorBrush}">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="13" ShadowDepth="1" Color="#FF578EA4"/>
+                    </Border.Effect>
+                </Border>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" x:Name="ButtonsPanel">
+                    <ContentPresenter Height="40" Width="40">
+                        <ContentPresenter.ContentTemplate>
+                            <DataTemplate>
+                                <Button x:Name="control">
+                                    <Rectangle Width="20" Height="20" x:Name="brush">
+                                    </Rectangle>
+                                </Button>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=thisWindow,Path=DataContext.MangaIsFavorited, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                        <Setter TargetName="control" Property="Content">
+                                            <Setter.Value>
+                                                <Rectangle Width="20" Height="20">
+                                                    <Rectangle.Fill>
+                                                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_star_delete}"/>
+                                                    </Rectangle.Fill>
+                                                </Rectangle>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter TargetName="control" Property="Button.Command" 
                                                                 Value="{Binding ElementName=thisWindow,Path=DataContext.MangaRemoveFavoriteCommand, UpdateSourceTrigger=PropertyChanged}"/>
-                                    <Setter TargetName="control" Property="ToolTip" Value="{i18n:CrystalLocalizedValueMarkup Key='RemoveFromFavoritesMsg',NullValue='Remove from Favorites'}"/>
-                                    <Setter TargetName="control" Property="Style" Value="{DynamicResource MetroCircleButtonStyle}"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding ElementName=thisWindow,Path=DataContext.MangaIsFavorited, UpdateSourceTrigger=PropertyChanged}" Value="False">
-                                    <Setter TargetName="control" Property="Content">
-                                        <Setter.Value>
-                                            <Rectangle Width="20" Height="20">
-                                                <Rectangle.Fill>
-                                                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_star_add}"/>
-                                                </Rectangle.Fill>
-                                            </Rectangle>
-                                        </Setter.Value>
-                                    </Setter>
-                                    <Setter TargetName="control" Property="Button.Command" 
+                                        <Setter TargetName="control" Property="ToolTip" Value="{i18n:CrystalLocalizedValueMarkup Key='RemoveFromFavoritesMsg',NullValue='Remove from Favorites'}"/>
+                                        <Setter TargetName="control" Property="Style" Value="{DynamicResource MetroCircleButtonStyle}"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ElementName=thisWindow,Path=DataContext.MangaIsFavorited, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                        <Setter TargetName="control" Property="Content">
+                                            <Setter.Value>
+                                                <Rectangle Width="20" Height="20">
+                                                    <Rectangle.Fill>
+                                                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_star_add}"/>
+                                                    </Rectangle.Fill>
+                                                </Rectangle>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter TargetName="control" Property="Button.Command" 
                                                                 Value="{Binding ElementName=thisWindow,Path=DataContext.MangaAddFavoriteCommand, UpdateSourceTrigger=PropertyChanged}"/>
-                                    <Setter TargetName="control" Property="ToolTip" Value="{i18n:CrystalLocalizedValueMarkup Key='AddToFavoritesMsg',NullValue='Add to Favorites'}"/>
-                                    <Setter TargetName="control" Property="Style" Value="{DynamicResource MetroCircleButtonStyle}"/>
-                                </DataTrigger>
-                            </DataTemplate.Triggers>
-                        </DataTemplate>
-                    </ContentPresenter.ContentTemplate>
-                </ContentPresenter>
-            </StackPanel>
+                                        <Setter TargetName="control" Property="ToolTip" Value="{i18n:CrystalLocalizedValueMarkup Key='AddToFavoritesMsg',NullValue='Add to Favorites'}"/>
+                                        <Setter TargetName="control" Property="Style" Value="{DynamicResource MetroCircleButtonStyle}"/>
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </ContentPresenter.ContentTemplate>
+                    </ContentPresenter>
+                </StackPanel>
+            </Grid>
         </Grid>
     </Grid>
 </metro:MetroWindow>
