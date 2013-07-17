@@ -283,7 +283,7 @@ namespace MangaEpsilon.ViewModel
 
         private async Task GetUpdatedInfo()
         {
-            var newManga = await App.MangaSource.GetMangaInfo(Manga.MangaName, false).ConfigureAwait(false); //Get fresh, updated information.
+            var newManga = await App.MangaSource.GetMangaInfo(Manga.MangaName, false); //Get fresh, updated information.
 
             if (Manga == null) return;
 
@@ -293,20 +293,10 @@ namespace MangaEpsilon.ViewModel
             Manga.Categories = newManga.Categories;
 
             UIDispatcher.BeginInvoke(new EmptyDelegate(() =>
-                {
-                    try
-                    {
-                        if (MangaChapters.Count <= newManga.Chapters.Count)
-                        {
-                            MangaChapters = new PaginatedObservableCollection<ChapterEntry>(newManga.Chapters, 40);
-
-                            MangaChapters.Refresh();
-                        }
-                    }
-                    catch (Exception)
-                    {
-                    }
-                }));
+            {
+                if (MangaChapters.Count <= newManga.Chapters.Count)
+                    MangaChapters = new PaginatedObservableCollection<ChapterEntry>(newManga.Chapters, 40);
+            }));
         }
 
         public Manga.Base.Manga Manga

@@ -98,8 +98,8 @@
 
             <Grid VerticalAlignment="Top" x:Name="MangaInfoGrid" Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="900*"/>
-                    <ColumnDefinition Width="450*"/>
+                    <ColumnDefinition Width="920*"/>
+                    <ColumnDefinition Width="350*"/>
                 </Grid.ColumnDefinitions>
 
                 <Grid Grid.Column="0" Margin="20 0 0 0">
@@ -127,7 +127,7 @@
                                 <TextBlock Text="{i18n:CrystalLocalizedValueMarkup Key='ChaptersSection',NullValue='chapters'}" FontSize="26" 
                                                    HorizontalAlignment="Center" Foreground="{DynamicResource AccentColorBrush}"/>
                                 <ListBox ItemsSource="{Binding Path=MangaChapters, UpdateSourceTrigger=PropertyChanged, Delay=1000}" 
-                                         Margin="20 20 0 0" Visibility="Visible" HorizontalAlignment="Left" 
+                                         Margin="20 20 0 0" Visibility="Visible" HorizontalAlignment="Stretch" 
 									        x:Name="chaptersGridView" VerticalAlignment="Stretch" 
                                             Width="Auto" Height="200" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" 
                                             SelectedItem="{Binding SelectedChapterItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
@@ -208,54 +208,64 @@
 
                             <Grid x:Name="MangaReviewsGrid" Width="Auto" DataContext="{Binding ElementName=thisWindow,Path=DataContext, Delay=1000}">
                                 <StackPanel>
-                                    <TextBlock Text="{i18n:CrystalLocalizedValueMarkup Key='ReviewSection',NullValue='reviews'}" FontSize="26" Foreground="{DynamicResource AccentColorBrush}" HorizontalAlignment="Center"/>
-                                    <ScrollViewer>
-                                        <Grid>
-                                            <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="40" Height="40" 
+                                    <TextBlock Text="{i18n:CrystalLocalizedValueMarkup Key='ReviewSection',NullValue='reviews'}" FontSize="26" Foreground="{DynamicResource AccentColorBrush}" 
+                                               HorizontalAlignment="Center"/>
+                                    <Grid>
+                                        <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="40" Height="40" 
                                                 IsActive="{Binding IsBusy_Reviews, UpdateSourceTrigger=PropertyChanged}"
                                                     Visibility="{Binding IsBusy_Reviews, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BTV}}"></metro:ProgressRing>
-                                            <ListBox ItemsSource="{Binding Reviews, UpdateSourceTrigger=PropertyChanged}">
-                                                <ListBox.ItemTemplate>
+                                        <ListBox ItemsSource="{Binding Reviews, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" Margin="5 0 5 0">
+                                            <ListBox.ItemContainerStyle>
+                                                <Style TargetType="ListBoxItem">
+                                                    <!--<Setter Property="Width" Value="{Binding (FrameworkElement.ActualWidth), RelativeSource={RelativeSource AncestorType=ListBox}}"/>-->
+                                                    <Setter Property="Margin" Value="0 0 50 0"/>
+                                                </Style>
+                                            </ListBox.ItemContainerStyle>
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <!--Modified version of: http://limitless-thoughts.blogspot.com/2011/12/building-twitter-search-client-using.html | http://www.jarloo.com/tweetsearch/ -->
+                                                    <Grid VerticalAlignment="Top" Cursor="Hand" Margin="0 0 -150 0"
+                                                              MaxWidth="{Binding (FrameworkElement.ActualWidth), RelativeSource={RelativeSource AncestorType=ListBox}}">
+                                                        <Grid.Effect>
+                                                            <DropShadowEffect BlurRadius="13" ShadowDepth="1" Color="#FF578EA4"/>
+                                                        </Grid.Effect>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition/>
+                                                            <RowDefinition Height="14"/>
+                                                        </Grid.RowDefinitions>
+                                                        <Rectangle Fill="White" Stroke="#FF2CBBF0" RadiusX="10" RadiusY="10"/>
+                                                        <Path Fill="White" Stretch="Fill" Stroke="#FF2CBBF0" HorizontalAlignment="Left" Margin="30,-5.597,0,0" Width="25" Grid.Row="1" 
+                                                              Data="M22.166642,154.45381 L29.999666,187.66699 40.791059,154.54395" Height="19.6" VerticalAlignment="Top" RenderTransformOrigin="-0.685,0.49"/>
+                                                        <Rectangle Fill="White" RadiusX="10" RadiusY="10" Margin="1"/>
+                                                        <DockPanel Margin="5,5,5,5">
 
-                                                    <DataTemplate>
-                                                        <!--Modified version of: http://limitless-thoughts.blogspot.com/2011/12/building-twitter-search-client-using.html | http://www.jarloo.com/tweetsearch/ -->
-                                                        <Grid VerticalAlignment="Top" Cursor="Hand" Margin="5,5,5,5">
-                                                            <Grid.Effect>
-                                                                <DropShadowEffect BlurRadius="13" ShadowDepth="1" Color="#FF578EA4"/>
-                                                            </Grid.Effect>
-                                                            <Grid.RowDefinitions>
-                                                                <RowDefinition/>
-                                                                <RowDefinition Height="14"/>
-                                                            </Grid.RowDefinitions>
-                                                            <Rectangle Fill="White" Stroke="#FF2CBBF0" RadiusX="10" RadiusY="10"/>
-                                                            <Path Fill="White" Stretch="Fill" Stroke="#FF2CBBF0" HorizontalAlignment="Left" Margin="30,-5.597,0,0" Width="25" Grid.Row="1" Data="M22.166642,154.45381 L29.999666,187.66699 40.791059,154.54395" Height="19.6" VerticalAlignment="Top" RenderTransformOrigin="-0.685,0.49"/>
-                                                            <Rectangle Fill="White" RadiusX="10" RadiusY="10" Margin="1"/>
-                                                            <DockPanel Margin="5,5,5,5">
+                                                            <Image Source="{Binding ReviewAuthorAvatar}" Height="50" Width="50" DockPanel.Dock="Left" VerticalAlignment="Top"/>
+                                                            <StackPanel Margin="5 0 0 0">
+                                                                <Label Content="{Binding ReviewAuthor}" FontWeight="Bold" FontSize="17"/>
+                                                                <TextBlock Text="{Binding Overall_Rating}" Foreground="{DynamicResource AccentColorBrush}" FontSize="18" Margin="5 0 0 5"/>
+                                                                <TextBlock Panel.ZIndex="2" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" Width="Auto" Margin="0 0 25 0"
+                                                                               Height="200" Text="{Binding ReviewText}">
+                                                                    <TextBlock.Foreground>
+                                                                        <SolidColorBrush Color="{DynamicResource BlackColor}"/>
+                                                                    </TextBlock.Foreground>
+                                                                </TextBlock>
+                                                            </StackPanel>
+                                                        </DockPanel>
 
-                                                                <Image Source="{Binding ReviewAuthorAvatar}" Height="50" Width="50" DockPanel.Dock="Left" VerticalAlignment="Top"/>
-                                                                <StackPanel Margin="5 0 0 0">
-                                                                    <Label Content="{Binding ReviewAuthor}" FontWeight="Bold" FontSize="17"/>
-                                                                    <TextBlock Text="{Binding Overall_Rating}" Foreground="{DynamicResource AccentColorBrush}" FontSize="18" Margin="5 0 0 5"/>
-                                                                    <TextBlock TextTrimming="CharacterEllipsis" TextWrapping="Wrap" Width="{Binding (FrameworkElement.ActualWidth), RelativeSource={RelativeSource AncestorType=ListBox}}" 
-                                                                               Height="200" Text="{Binding ReviewText}"/>
-                                                                </StackPanel>
-                                                            </DockPanel>
-
-                                                            <Grid.Triggers>
-                                                                <EventTrigger RoutedEvent="Control.Loaded">
-                                                                    <BeginStoryboard>
-                                                                        <Storyboard>
-                                                                            <DoubleAnimation To="1" Duration="0:0:0.5" Storyboard.TargetProperty="Opacity"/>
-                                                                        </Storyboard>
-                                                                    </BeginStoryboard>
-                                                                </EventTrigger>
-                                                            </Grid.Triggers>
-                                                        </Grid>
-                                                    </DataTemplate>
-                                                </ListBox.ItemTemplate>
-                                            </ListBox>
-                                        </Grid>
-                                    </ScrollViewer>
+                                                        <Grid.Triggers>
+                                                            <EventTrigger RoutedEvent="Control.Loaded">
+                                                                <BeginStoryboard>
+                                                                    <Storyboard>
+                                                                        <DoubleAnimation To="1" Duration="0:0:0.5" Storyboard.TargetProperty="Opacity"/>
+                                                                    </Storyboard>
+                                                                </BeginStoryboard>
+                                                            </EventTrigger>
+                                                        </Grid.Triggers>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </Grid>
                                 </StackPanel>
                             </Grid>
 
