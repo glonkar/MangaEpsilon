@@ -40,7 +40,9 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="controls:PivotItem">
-                                    <Image Source="{Binding .}"/>
+                                    <ScrollViewer>
+                                        <Image Source="{Binding .}" Width="470" Height="500" />
+                                    </ScrollViewer>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
@@ -59,11 +61,11 @@
                 </ResourceDictionary>
             </Grid.Resources>
             <controls:Pivot ItemsSource="{Binding Pages}" Style="{StaticResource emptyPivot}" 
-                ItemContainerStyle="{StaticResource PhotoVieweritemStyle}">
+                ItemContainerStyle="{StaticResource PhotoVieweritemStyle}" SelectedIndex="{Binding CurrentPageIndex, Mode=TwoWay}">
             </controls:Pivot>
         </Grid>
     </Grid>
- 
+
     <!--Sample code showing usage of ApplicationBar-->
     <!--<phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">

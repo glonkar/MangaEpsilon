@@ -20,6 +20,8 @@ namespace MangaEpsilon.ViewModel
     using MangaEpsilon.Extensions;
 #else
     using MangaEpsilonWP;
+    using MangaEpsilonWP.Reimps;
+    using Microsoft.Phone;
 #endif
     public class MangaChapterViewPageViewModel : BaseViewModel
     {
@@ -98,16 +100,16 @@ namespace MangaEpsilon.ViewModel
             {
 #endif
             if (entry.ParentManga.Chapters.Count == 0)
-                    entry.ParentManga = await App.MangaSource.GetMangaInfo(entry.ParentManga.MangaName, false);
+                entry.ParentManga = await App.MangaSource.GetMangaInfo(entry.ParentManga.MangaName, false);
 
-                if (entry is ChapterEntry)
-                    chapter = await App.MangaSource.GetChapterLight((ChapterEntry)entry);
-                else if (entry is ChapterLight)
-                    chapter = (ChapterLight)entry;
-                else
-                    throw new Exception();
+            if (entry is ChapterEntry)
+                chapter = await App.MangaSource.GetChapterLight((ChapterEntry)entry);
+            else if (entry is ChapterLight)
+                chapter = (ChapterLight)entry;
+            else
+                throw new Exception();
 
-                //Pages.Add(new Uri(await App.MangaSource.GetChapterPageImageUrl(chapter, CurrentPageIndex)));
+            //Pages.Add(new Uri(await App.MangaSource.GetChapterPageImageUrl(chapter, CurrentPageIndex)));
 
 
 #if !WINDOWS_PHONE
@@ -116,15 +118,26 @@ namespace MangaEpsilon.ViewModel
                     Pages.Add(new Uri(await App.MangaSource.GetChapterPageImageUrl(chapter, i)));
                 }
 #else
-                Pages = new ObservableCollection<string>();
+            object[] pageArray = new object[chapter.TotalPages];
 
-                for (int i = 0; i < chapter.TotalPages; i++)
+            for (int i = 0; i < chapter.TotalPages; i++)
+            {
+                var url = await App.MangaSource.GetChapterPageImageUrl(chapter, i).ConfigureAwait(false);
+                using (HttpClient http = new HttpClient())
                 {
-                    Pages.Add(await App.MangaSource.GetChapterPageImageUrl(chapter, i));
+                    var stream = await http.GetStreamAsync(url).ConfigureAwait(false);
+                    await Dispatcher.InvokeAsync(() =>
+                        {
+                            pageArray[i] = PictureDecoder.DecodeJpeg(stream, 470, 500);
+                        });
+                    stream.Dispose();
                 }
+            }
+
+            Pages = new ObservableCollection<object>(pageArray);
 #endif
 
-                RaisePropertyChanged(x => this.Pages);
+            RaisePropertyChanged(x => this.Pages);
 #if !WINDOWS_PHONE    
             }
 #endif
@@ -179,9 +192,9 @@ namespace MangaEpsilon.ViewModel
             set { SetProperty(x => this.Pages, value); }
         }
 #else
-        public ObservableCollection<string> Pages
+        public ObservableCollection<object> Pages
         {
-            get { return GetPropertyOrDefaultType<ObservableCollection<string>>(x => this.Pages); }
+            get { return GetPropertyOrDefaultType<ObservableCollection<object>>(x => this.Pages); }
             set { SetProperty(x => this.Pages, value); }
         }
 #endif

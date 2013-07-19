@@ -36,6 +36,7 @@ namespace MangaEpsilonWP.Reimps
         public async Task<Stream> GetStreamAsync(string url)
         {
             HttpWebRequest request = (HttpWebRequest)HttpWebRequest.CreateHttp(url);
+            request.AllowReadStreamBuffering = true;
             HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync().ConfigureAwait(false);
 
             return response.GetResponseStream();
