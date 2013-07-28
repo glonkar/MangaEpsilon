@@ -89,14 +89,9 @@
         <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="40" Height="40" 
                                                 IsActive="{Binding IsBusy, UpdateSourceTrigger=PropertyChanged}" Visibility="Visible"></metro:ProgressRing>
 
-        <Grid Margin="0 25 0 0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="100*"/>
-                <RowDefinition Height="35"/>
-            </Grid.RowDefinitions>
+        <Grid Margin="0 27 0 0">
 
-
-            <Grid VerticalAlignment="Top" x:Name="MangaInfoGrid" Grid.Row="0">
+            <Grid VerticalAlignment="Top" x:Name="MangaInfoGrid">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="920*"/>
                     <ColumnDefinition Width="350*"/>
@@ -132,7 +127,8 @@
                                             Width="Auto" Height="200" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" 
                                             SelectedItem="{Binding SelectedChapterItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                             SelectionMode="Extended" SelectionChanged="chaptersGridView_SelectionChanged"
-                                            ItemTemplateSelector="{StaticResource ChapterTemplateSelector}">
+                                            ItemTemplateSelector="{StaticResource ChapterTemplateSelector}"
+                                         ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                                     <ListBox.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <WrapPanel IsItemsHost="True" ItemHeight="50" 
@@ -214,7 +210,8 @@
                                         <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="40" Height="40" 
                                                 IsActive="{Binding IsBusy_Reviews, UpdateSourceTrigger=PropertyChanged}"
                                                     Visibility="{Binding IsBusy_Reviews, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BTV}}"></metro:ProgressRing>
-                                        <ListBox ItemsSource="{Binding Reviews, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" Margin="5 0 5 0">
+                                        <ListBox ItemsSource="{Binding Reviews, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" Margin="5 0 5 0"
+                                                 ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Hidden">
                                             <ListBox.ItemContainerStyle>
                                                 <Style TargetType="ListBoxItem">
                                                     <!--<Setter Property="Width" Value="{Binding (FrameworkElement.ActualWidth), RelativeSource={RelativeSource AncestorType=ListBox}}"/>-->
@@ -234,9 +231,17 @@
                                                             <RowDefinition Height="14"/>
                                                         </Grid.RowDefinitions>
                                                         <Rectangle Fill="White" Stroke="#FF2CBBF0" RadiusX="10" RadiusY="10"/>
-                                                        <Path Fill="White" Stretch="Fill" Stroke="#FF2CBBF0" HorizontalAlignment="Left" Margin="30,-5.597,0,0" Width="25" Grid.Row="1" 
-                                                              Data="M22.166642,154.45381 L29.999666,187.66699 40.791059,154.54395" Height="19.6" VerticalAlignment="Top" RenderTransformOrigin="-0.685,0.49"/>
-                                                        <Rectangle Fill="White" RadiusX="10" RadiusY="10" Margin="1"/>
+                                                        <Path Stretch="Fill" Stroke="{DynamicResource NormalForegroundBrush}" HorizontalAlignment="Left" Margin="30,-5.597,0,0" Width="25" Grid.Row="1" 
+                                                              Data="M22.166642,154.45381 L29.999666,187.66699 40.791059,154.54395" Height="19.6" VerticalAlignment="Top" RenderTransformOrigin="-0.685,0.49">
+                                                            <Path.Fill>
+                                                                <SolidColorBrush Color="{DynamicResource WhiteColor}"/>
+                                                            </Path.Fill>
+                                                        </Path>
+                                                        <Rectangle RadiusX="10" RadiusY="10" Margin="1">
+                                                            <Rectangle.Fill>
+                                                                <SolidColorBrush Color="{DynamicResource WhiteColor}"/>
+                                                            </Rectangle.Fill>
+                                                        </Rectangle>
                                                         <DockPanel Margin="5,5,5,5">
 
                                                             <Image Source="{Binding ReviewAuthorAvatar}" Height="50" Width="50" DockPanel.Dock="Left" VerticalAlignment="Top"/>
@@ -280,7 +285,7 @@
                                                 IsActive="{Binding IsBusy_RelatedManga, UpdateSourceTrigger=PropertyChanged}" 
                                                     Visibility="{Binding IsBusy_RelatedManga, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BTV}}"></metro:ProgressRing>
                                         <ListBox ItemsSource="{Binding RelatedManga, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{DynamicResource MangaListBoxItemStyle}" 
-                                         x:Name="RelatedMangaListView">
+                                         x:Name="RelatedMangaListView" ScrollViewer.CanContentScroll="False" ScrollViewer.VerticalScrollBarVisibility="Hidden">
                                             <ListBox.Resources>
                                                 <DataTemplate x:Key="MangaListBoxItemTemplate">
                                                     <Grid HorizontalAlignment="Left" Width="250" Height="250" Margin="6" Cursor="Hand">
@@ -400,60 +405,54 @@
                                 </Style>
                             </ItemsControl.Resources>
                         </ItemsControl>
+                        <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness=".8" CornerRadius="3" Padding="2">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" x:Name="ButtonsPanel">
+                                <ContentPresenter Height="40" Width="40">
+                                    <ContentPresenter.ContentTemplate>
+                                        <DataTemplate>
+                                            <Button x:Name="control">
+                                                <Rectangle Width="20" Height="20" x:Name="brush">
+                                                </Rectangle>
+                                            </Button>
+                                            <DataTemplate.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=thisWindow,Path=DataContext.MangaIsFavorited, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                                    <Setter TargetName="control" Property="Content">
+                                                        <Setter.Value>
+                                                            <Rectangle Width="20" Height="20">
+                                                                <Rectangle.Fill>
+                                                                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_star_delete}"/>
+                                                                </Rectangle.Fill>
+                                                            </Rectangle>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Setter TargetName="control" Property="Button.Command" 
+                                                                Value="{Binding ElementName=thisWindow,Path=DataContext.MangaRemoveFavoriteCommand, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <Setter TargetName="control" Property="ToolTip" Value="{i18n:CrystalLocalizedValueMarkup Key='RemoveFromFavoritesMsg',NullValue='Remove from Favorites'}"/>
+                                                    <Setter TargetName="control" Property="Style" Value="{DynamicResource MetroCircleButtonStyle}"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding ElementName=thisWindow,Path=DataContext.MangaIsFavorited, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                                    <Setter TargetName="control" Property="Content">
+                                                        <Setter.Value>
+                                                            <Rectangle Width="20" Height="20">
+                                                                <Rectangle.Fill>
+                                                                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_star_add}"/>
+                                                                </Rectangle.Fill>
+                                                            </Rectangle>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Setter TargetName="control" Property="Button.Command" 
+                                                                Value="{Binding ElementName=thisWindow,Path=DataContext.MangaAddFavoriteCommand, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <Setter TargetName="control" Property="ToolTip" Value="{i18n:CrystalLocalizedValueMarkup Key='AddToFavoritesMsg',NullValue='Add to Favorites'}"/>
+                                                    <Setter TargetName="control" Property="Style" Value="{DynamicResource MetroCircleButtonStyle}"/>
+                                                </DataTrigger>
+                                            </DataTemplate.Triggers>
+                                        </DataTemplate>
+                                    </ContentPresenter.ContentTemplate>
+                                </ContentPresenter>
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
                 </Grid>
-            </Grid>
-
-            <Grid Grid.Row="1">
-                <Border BorderThickness="1" BorderBrush="{DynamicResource AccentColorBrush}">
-                    <Border.Effect>
-                        <DropShadowEffect BlurRadius="13" ShadowDepth="1" Color="#FF578EA4"/>
-                    </Border.Effect>
-                </Border>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" x:Name="ButtonsPanel">
-                    <ContentPresenter Height="40" Width="40">
-                        <ContentPresenter.ContentTemplate>
-                            <DataTemplate>
-                                <Button x:Name="control">
-                                    <Rectangle Width="20" Height="20" x:Name="brush">
-                                    </Rectangle>
-                                </Button>
-                                <DataTemplate.Triggers>
-                                    <DataTrigger Binding="{Binding ElementName=thisWindow,Path=DataContext.MangaIsFavorited, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                        <Setter TargetName="control" Property="Content">
-                                            <Setter.Value>
-                                                <Rectangle Width="20" Height="20">
-                                                    <Rectangle.Fill>
-                                                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_star_delete}"/>
-                                                    </Rectangle.Fill>
-                                                </Rectangle>
-                                            </Setter.Value>
-                                        </Setter>
-                                        <Setter TargetName="control" Property="Button.Command" 
-                                                                Value="{Binding ElementName=thisWindow,Path=DataContext.MangaRemoveFavoriteCommand, UpdateSourceTrigger=PropertyChanged}"/>
-                                        <Setter TargetName="control" Property="ToolTip" Value="{i18n:CrystalLocalizedValueMarkup Key='RemoveFromFavoritesMsg',NullValue='Remove from Favorites'}"/>
-                                        <Setter TargetName="control" Property="Style" Value="{DynamicResource MetroCircleButtonStyle}"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding ElementName=thisWindow,Path=DataContext.MangaIsFavorited, UpdateSourceTrigger=PropertyChanged}" Value="False">
-                                        <Setter TargetName="control" Property="Content">
-                                            <Setter.Value>
-                                                <Rectangle Width="20" Height="20">
-                                                    <Rectangle.Fill>
-                                                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_star_add}"/>
-                                                    </Rectangle.Fill>
-                                                </Rectangle>
-                                            </Setter.Value>
-                                        </Setter>
-                                        <Setter TargetName="control" Property="Button.Command" 
-                                                                Value="{Binding ElementName=thisWindow,Path=DataContext.MangaAddFavoriteCommand, UpdateSourceTrigger=PropertyChanged}"/>
-                                        <Setter TargetName="control" Property="ToolTip" Value="{i18n:CrystalLocalizedValueMarkup Key='AddToFavoritesMsg',NullValue='Add to Favorites'}"/>
-                                        <Setter TargetName="control" Property="Style" Value="{DynamicResource MetroCircleButtonStyle}"/>
-                                    </DataTrigger>
-                                </DataTemplate.Triggers>
-                            </DataTemplate>
-                        </ContentPresenter.ContentTemplate>
-                    </ContentPresenter>
-                </StackPanel>
             </Grid>
         </Grid>
     </Grid>
