@@ -308,7 +308,7 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                     }
                 }
 
-                JArray mangas = (JArray)data.First().Value;
+                JArray mangas = (JArray)data.First(x => x.Key == "manga").Value;
 
                 Manga.Base.Manga[] tempList = null;
                 if (AvailableManga == null)
