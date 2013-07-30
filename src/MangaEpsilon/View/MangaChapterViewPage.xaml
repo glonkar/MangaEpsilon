@@ -63,7 +63,11 @@
     <Window.DataContext>
         <vm:MangaChapterViewPageViewModel/>
     </Window.DataContext>
+    
     <Grid x:Name="MainGrid" FocusVisualStyle="{x:Null}" Focusable="False">
+        <Label Panel.ZIndex="100" HorizontalAlignment="Center" VerticalAlignment="Top" 
+			Content="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type metro:MetroWindow}}}" FontSize="14"/>
+        
         <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center"
                             HorizontalAlignment="Stretch" Width="40" Height="40" 
                             x:Name="MainProgressIndictator" IsActive="{Binding IsBusy, UpdateSourceTrigger=PropertyChanged}" Visibility="Visible"></metro:ProgressRing>
