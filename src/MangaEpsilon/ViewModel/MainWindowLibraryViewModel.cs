@@ -198,6 +198,7 @@ namespace MangaEpsilon.ViewModel
                         bitmap.BeginInit();
                         bitmap.UriSource = new Uri(fileName);
                         bitmap.DecodePixelWidth = (int)printDialog.PrintableAreaWidth;
+                        bitmap.DecodePixelHeight = (int)printDialog.PrintableAreaHeight;
                         bitmap.EndInit();
 
                         img.Source = bitmap;
