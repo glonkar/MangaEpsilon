@@ -104,7 +104,7 @@
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0">
                         <StackPanel DataContext="{Binding Manga, UpdateSourceTrigger=PropertyChanged}">
-                            <TextBlock Text="{Binding MangaName}" FontSize="29" VerticalAlignment="Center" HorizontalAlignment="Stretch" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding MangaName, UpdateSourceTrigger=PropertyChanged}" FontSize="29" VerticalAlignment="Center" HorizontalAlignment="Stretch" TextAlignment="Center"/>
                             <Separator/>
                         </StackPanel>
                     </Grid>

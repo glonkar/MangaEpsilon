@@ -14,6 +14,7 @@ namespace MangaEpsilon.Services.Licensing
         string ProviderLicensedTitlesFile { get; }
 
         bool IsMangaLicensedFromProvider(Manga.Base.Manga Manga);
+        string GetMangaOfficialEnglishName(Manga.Base.Manga Manga);
 
         Task LoadLicensedMangas();
 

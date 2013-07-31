@@ -168,5 +168,13 @@ namespace MangaEpsilon.Services
         {
             return Licensors.Any(x => x.Item1 == Manga.MangaName) || providers.Any(x => x.IsMangaLicensedFromProvider(Manga));
         }
+
+        internal static async Task<string> GetLicensedTitleName(Manga.Base.Manga Manga)
+        {
+            string licensor = await GetLicensor(Manga).ConfigureAwait(false);
+
+            ILicenseProvider provider = providers.ToArray().FirstOrDefault(x => x.Name.ToLower() == licensor.ToLower());
+            return provider.GetMangaOfficialEnglishName(Manga);
+        }
     }
 }

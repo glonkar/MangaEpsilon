@@ -46,6 +46,9 @@ namespace MangaEpsilon.ViewModel
             //create a copy since directly binding to the Chapters collection slows the app down if there is 500+ entries.
             Manga = new Manga.Base.Manga();
             Manga.MangaName = selectedManga.MangaName;
+
+            await Task.Delay(500); //allow the entrance transition to complete
+
             Manga.ID = selectedManga.ID;
             Manga.Description = selectedManga.Description;
             Manga.Author = selectedManga.Author;
@@ -81,13 +84,14 @@ namespace MangaEpsilon.ViewModel
 
                 var reviews = GetReviews();
                 var related = GetRelatedManga();
-                var licensed = GetLicensor();
 
 
                 //await Task.WhenAll(reviews, related).ConfigureAwait(false);
-                await licensed.ConfigureAwait(false);
                 await reviews.ConfigureAwait(false);
                 await related.ConfigureAwait(false);
+
+                var licensed = GetLicensor();
+                await licensed.ConfigureAwait(false);
             }
 
         }
@@ -254,6 +258,15 @@ namespace MangaEpsilon.ViewModel
                     LicensorString = string.Format(LocalizationManager.GetLocalizedValue("LicensorTxt"), LicensorService.GetLicensorFriendlyName(Licensor));
 
                     LicensedBuyLink = await LicensorService.GetLicensorBuyLink(Manga);
+
+                    //The following updates the title to use the official English name of the Manga.
+                    //string licensedName = await LicensorService.GetLicensedTitleName(Manga);
+
+                    //if (licensedName != Manga.MangaName)
+                    //{
+                    //    Manga.MangaName = licensedName;
+                    //    RaisePropertyChanged(x => this.Manga);
+                    //}
                 }
             }
             catch (Exception)

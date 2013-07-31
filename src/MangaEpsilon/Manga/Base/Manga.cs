@@ -27,7 +27,7 @@ namespace MangaEpsilon.Manga.Base
         [DataMember]
         public ObservableCollection<ChapterEntry> Chapters { get { return GetPropertyOrDefaultType<ObservableCollection<ChapterEntry>>(x => this.Chapters); } internal set { SetProperty(x => this.Chapters, value); } }
         [DataMember]
-        public string MangaName { get; internal set; }
+        public string MangaName { get {return GetPropertyOrDefaultType<string>("MangaName"); } internal set { SetProperty("MangaName", value); } }
         [DataMember]
         public string Author { get { return (string)GetProperty("Author"); } internal set { SetProperty("Author", value); } }
         [DataMember]
