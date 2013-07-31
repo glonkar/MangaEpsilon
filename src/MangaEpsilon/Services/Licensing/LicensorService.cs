@@ -163,5 +163,10 @@ namespace MangaEpsilon.Services
                 return provider.FriendlyName;
             return Licensor;
         }
+
+        internal static bool IsLicensed(Manga.Base.Manga Manga)
+        {
+            return Licensors.Any(x => x.Item1 == Manga.MangaName) || providers.Any(x => x.IsMangaLicensedFromProvider(Manga));
+        }
     }
 }

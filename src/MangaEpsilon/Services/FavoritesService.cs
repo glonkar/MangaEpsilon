@@ -213,7 +213,7 @@ namespace MangaEpsilon.Services
 
             //If the manga is subscribed too (favorited), download the latest manga.
             if (FavoritesService.IsMangaFavorited(manga))
-                if (!LibraryService.Contains(chapter) && !DownloadsService.IsDownloading(chapter) && !GetNoAutoDownloadChapters(manga).Contains(chapter.ChapterNumber))
+                if (!LibraryService.Contains(chapter) && !DownloadsService.IsDownloading(chapter) && !GetNoAutoDownloadChapters(manga).Contains(chapter.ChapterNumber) && !LicensorService.IsLicensed(manga))
                     DownloadsService.AddDownload(chapter);
         }
     }

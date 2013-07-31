@@ -169,7 +169,7 @@ namespace MangaEpsilon.ViewModel
                     pd.Close();
                 }
             }, (o) =>
-                o != null && o is ChapterLight);
+                o != null && o is ChapterLight && !LicensorService.IsLicensed(((ChapterLight)o).ParentManga));
 
             PrintChapterCommand = CommandManager.CreateProperCommand((o) =>
             {
@@ -213,7 +213,7 @@ namespace MangaEpsilon.ViewModel
                     printDialog.PrintDocument(document.DocumentPaginator, chapter.Name);
                 }
             }, (o) =>
-                o != null && o is ChapterLight);
+                o != null && o is ChapterLight && !LicensorService.IsLicensed(((ChapterLight)o).ParentManga));
         }
 
         void LibraryService_LibraryItemRemoved(Tuple<ChapterLight, string> tuple)
