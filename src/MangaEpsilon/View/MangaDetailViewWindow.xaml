@@ -451,6 +451,12 @@
                                 </ContentPresenter>
                             </StackPanel>
                         </Border>
+                        <Grid DataContext="{Binding ElementName=thisWindow,Path=DataContext}" Visibility="{Binding IsLicensed, Converter={StaticResource BTV}, UpdateSourceTrigger=PropertyChanged}">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Name="LicensorLabel" Content="{Binding LicensorString, UpdateSourceTrigger=PropertyChanged}" FontSize="19"/>
+                                <Button Content="{i18n:CrystalLocalizedValueMarkup Key='BuyTxt',NullValue='Buy'}" Command="{Binding OpenBuyLinkCommand}"/>
+                            </StackPanel>
+                        </Grid>
                     </StackPanel>
                 </Grid>
             </Grid>

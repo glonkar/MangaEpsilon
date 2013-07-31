@@ -63,6 +63,7 @@ namespace MangaEpsilon
 
             SoundManager.Initialize();
 
+            LicensorService.Initialize();
             LibraryInitializationTask = LibraryService.Initialize();
             FavoritesInitializationTask = FavoritesService.Initialize();
 
@@ -74,6 +75,7 @@ namespace MangaEpsilon
             SaveAvailableManga(false).Wait();
             FavoritesService.Deinitialize();
             LibraryService.Deinitialize(false).Wait();
+            LicensorService.Deinitialize();
             base.PreShutdown();
         }
 

@@ -15,6 +15,7 @@ using System.Collections.ObjectModel;
 using Crystal.Services;
 using Crystal.Localization;
 using System.Windows.Data;
+using System.Diagnostics;
 
 namespace MangaEpsilon.ViewModel
 {
@@ -80,8 +81,11 @@ namespace MangaEpsilon.ViewModel
 
                 var reviews = GetReviews();
                 var related = GetRelatedManga();
+                var licensed = GetLicensor();
+
 
                 //await Task.WhenAll(reviews, related).ConfigureAwait(false);
+                await licensed.ConfigureAwait(false);
                 await reviews.ConfigureAwait(false);
                 await related.ConfigureAwait(false);
             }
@@ -213,6 +217,10 @@ namespace MangaEpsilon.ViewModel
                     win.Focus();
 
             }, (o) => o != null && o is Manga.Base.Manga);
+            OpenBuyLinkCommand = CommandManager.CreateProperCommand((o) =>
+                {
+                    Process.Start(LicensedBuyLink);
+                }, (o) => IsLicensed && LicensedBuyLink != null);
         }
 
         async void DownloadsService_DownloadCompleted(ChapterLight download)
@@ -227,6 +235,29 @@ namespace MangaEpsilon.ViewModel
 
                         SelectedChapterItem = selected; //just to be safe, do this on the dispatcher thread
                     });
+            }
+        }
+
+        private async Task GetLicensor()
+        {
+            try
+            {
+                IsLicensed = false;
+
+                string licensor = await LicensorService.GetLicensor(Manga);
+
+                if (licensor != null)
+                {
+                    IsLicensed = true;
+                    Licensor = licensor;
+
+                    LicensorString = string.Format(LocalizationManager.GetLocalizedValue("LicensorTxt"), LicensorService.GetLicensorFriendlyName(Licensor));
+
+                    LicensedBuyLink = await LicensorService.GetLicensorBuyLink(Manga);
+                }
+            }
+            catch (Exception)
+            {
             }
         }
 
@@ -437,6 +468,32 @@ namespace MangaEpsilon.ViewModel
         {
             get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.MangaRemoveFavoriteCommand); }
             set { SetProperty<CrystalProperCommand>(x => this.MangaRemoveFavoriteCommand, value); }
+        }
+
+        public bool IsLicensed
+        {
+            get { return GetPropertyOrDefaultType<bool>(x => this.IsLicensed); }
+            set { SetProperty(x => this.IsLicensed, value); }
+        }
+        public string Licensor
+        {
+            get { return GetPropertyOrDefaultType<string>(x => this.Licensor); }
+            set { SetProperty(x => this.Licensor, value); }
+        }
+        public string LicensedBuyLink
+        {
+            get { return GetPropertyOrDefaultType<string>(x => this.LicensedBuyLink); }
+            set { SetProperty(x => this.LicensedBuyLink, value); }
+        }
+        public string LicensorString
+        {
+            get { return GetPropertyOrDefaultType<string>(x => this.LicensorString); }
+            set { SetProperty(x => this.LicensorString, value); }
+        }
+        public CrystalProperCommand OpenBuyLinkCommand
+        {
+            get { return GetPropertyOrDefaultType<CrystalProperCommand>(x => this.OpenBuyLinkCommand); }
+            set { SetProperty<CrystalProperCommand>(x => this.OpenBuyLinkCommand, value); }
         }
     }
 }
