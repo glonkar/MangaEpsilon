@@ -362,7 +362,7 @@
                    FontSize="14" HorizontalAlignment="Center"/>
 
             <TextBox  HorizontalAlignment="Right" metro:TextboxHelper.Watermark="Search..." metro:TextboxHelper.ClearTextButton="True" 
-                             metro:TextboxHelper.SelectAllOnFocus="True" Width="200" x:Name="UnifiedSearchBox" Margin="0 0 100 0" Height="16" IsEnabled="False"
+                             metro:TextboxHelper.SelectAllOnFocus="True" Width="200" x:Name="UnifiedSearchBox" Margin="0 0 105 0" Height="16" IsEnabled="False"
                       Style="{DynamicResource SearchMetroTextBox}" BorderThickness="0.7" VerticalContentAlignment="Center"/>
         </Grid>
 
