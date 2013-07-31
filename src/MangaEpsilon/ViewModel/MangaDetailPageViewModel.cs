@@ -67,6 +67,15 @@ namespace MangaEpsilon.ViewModel
 
             MangaIsFavorited = await FavoritesService.IsMangaFavoritedAsync(Manga);
 
+            try
+            {
+                var licensed = GetLicensor();
+                await licensed.ConfigureAwait(false);
+            }
+            catch (Exception)
+            {
+            }
+
             InitializeCommands();
 
             IsBusy = false;
@@ -89,9 +98,6 @@ namespace MangaEpsilon.ViewModel
                 //await Task.WhenAll(reviews, related).ConfigureAwait(false);
                 await reviews.ConfigureAwait(false);
                 await related.ConfigureAwait(false);
-
-                var licensed = GetLicensor();
-                await licensed.ConfigureAwait(false);
             }
 
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -166,7 +167,7 @@ namespace MangaEpsilon.Services
 
         internal static bool IsLicensed(Manga.Base.Manga Manga)
         {
-            return Licensors.Any(x => x.Item1 == Manga.MangaName) || providers.Any(x => x.IsMangaLicensedFromProvider(Manga));
+            return providers.Any(x => x.IsMangaLicensedFromProvider(Manga) && x.LicenseRegion == RegionInfo.CurrentRegion) || Licensors.Any(x => x.Item1 == Manga.MangaName);
         }
 
         internal static async Task<string> GetLicensedTitleName(Manga.Base.Manga Manga)

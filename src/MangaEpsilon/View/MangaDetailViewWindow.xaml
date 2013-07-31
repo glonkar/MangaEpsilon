@@ -51,7 +51,8 @@
             </DataTemplate>
 
             <DataTemplate x:Key="DownloadedChapterTemplate">
-                <Grid Background="{DynamicResource AccentColorBrush}" x:Name="SelfGrid" Width="50" Height="50" Margin="0 1 0 1" Cursor="Hand" ToolTip="{Binding Subtitle}">
+                <Grid Background="{DynamicResource AccentColorBrush}" x:Name="SelfGrid" Width="50" Height="50" Margin="0 1 0 1" Cursor="Hand" 
+                      ToolTip="{Binding Subtitle}">
                     <TextBlock Text="{Binding ChapterNumber}" x:Name="InnerText" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <TextBlock.Foreground>
                             <SolidColorBrush Color="{StaticResource WhiteColor}" />
@@ -72,7 +73,8 @@
             </DataTemplate>
 
             <selectors:MangaDetailViewChapterTemplateSelector 
-                DefaultTemplate="{StaticResource DefaultChapterTemplate}" DownloadedTemplate="{StaticResource DownloadedChapterTemplate}" x:Key="ChapterTemplateSelector"/>
+                DefaultTemplate="{StaticResource DefaultChapterTemplate}" DownloadedTemplate="{StaticResource DownloadedChapterTemplate}" 
+                x:Key="ChapterTemplateSelector"/>
         </ResourceDictionary>
     </metro:MetroWindow.Resources>
     <i:Interaction.Behaviors>
@@ -87,7 +89,7 @@
 			Content="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type metro:MetroWindow}}}" FontSize="14"/>
 
         <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="40" Height="40" 
-                                                IsActive="{Binding IsBusy, UpdateSourceTrigger=PropertyChanged}" Visibility="Visible"></metro:ProgressRing>
+                                                IsActive="{Binding IsBusy, UpdateSourceTrigger=PropertyChanged}" Visibility="Visible"/>
 
         <Grid Margin="0 27 0 0">
 
@@ -104,7 +106,8 @@
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0">
                         <StackPanel DataContext="{Binding Manga, UpdateSourceTrigger=PropertyChanged}">
-                            <TextBlock Text="{Binding MangaName, UpdateSourceTrigger=PropertyChanged}" FontSize="29" VerticalAlignment="Center" HorizontalAlignment="Stretch" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding MangaName, UpdateSourceTrigger=PropertyChanged}" FontSize="29" VerticalAlignment="Center" 
+                                       HorizontalAlignment="Stretch" TextAlignment="Center"/>
                             <Separator/>
                         </StackPanel>
                     </Grid>
@@ -121,6 +124,14 @@
                             <StackPanel>
                                 <TextBlock Text="{i18n:CrystalLocalizedValueMarkup Key='ChaptersSection',NullValue='chapters'}" FontSize="26" 
                                                    HorizontalAlignment="Center" Foreground="{DynamicResource AccentColorBrush}"/>
+                                <Grid DataContext="{Binding ElementName=thisWindow,Path=DataContext}" 
+                                      Visibility="{Binding IsLicensed, Converter={StaticResource BTV}, UpdateSourceTrigger=PropertyChanged}"
+                                      Width="Auto" VerticalAlignment="Stretch">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="{i18n:CrystalLocalizedValueMarkup Key='LicensedTxt', NullValue='This manga is licensed.'}" 
+                                               Foreground="{StaticResource AccentColorBrush}" FontSize="19"/>
+                                    </StackPanel>
+                                </Grid>
                                 <ListBox ItemsSource="{Binding Path=MangaChapters, UpdateSourceTrigger=PropertyChanged, Delay=1000}" 
                                          Margin="20 20 0 0" Visibility="Visible" HorizontalAlignment="Stretch" 
 									        x:Name="chaptersGridView" VerticalAlignment="Stretch" 
@@ -144,7 +155,8 @@
                                     </i:Interaction.Triggers>
                                     <ListBox.ContextMenu>
                                         <ContextMenu HasDropShadow="True" PlacementTarget="{Binding ElementName=chaptersGridView}">
-                                            <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='DownloadChapterMenuItem',NullValue='Download chapter(s).'}" Command="{Binding MangaDownloadCommand}" 
+                                            <MenuItem Header="{i18n:CrystalLocalizedValueMarkup Key='DownloadChapterMenuItem',NullValue='Download chapter(s).'}" 
+                                                      Command="{Binding MangaDownloadCommand}" 
                                                       CommandParameter="{Binding SelectedChapterItem}"/>
                                         </ContextMenu>
                                     </ListBox.ContextMenu>
@@ -204,7 +216,8 @@
 
                             <Grid x:Name="MangaReviewsGrid" Width="Auto" DataContext="{Binding ElementName=thisWindow,Path=DataContext, Delay=1000}">
                                 <StackPanel>
-                                    <TextBlock Text="{i18n:CrystalLocalizedValueMarkup Key='ReviewSection',NullValue='reviews'}" FontSize="26" Foreground="{DynamicResource AccentColorBrush}" 
+                                    <TextBlock Text="{i18n:CrystalLocalizedValueMarkup Key='ReviewSection',NullValue='reviews'}" FontSize="26" 
+                                               Foreground="{DynamicResource AccentColorBrush}" 
                                                HorizontalAlignment="Center"/>
                                     <Grid>
                                         <metro:ProgressRing Panel.ZIndex="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="40" Height="40" 
@@ -220,7 +233,8 @@
                                             </ListBox.ItemContainerStyle>
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
-                                                    <!--Modified version of: http://limitless-thoughts.blogspot.com/2011/12/building-twitter-search-client-using.html | http://www.jarloo.com/tweetsearch/ -->
+                                                    <!--Modified version of: http://limitless-thoughts.blogspot.com/2011/12/building-twitter-search-client-using.html | 
+                                                    http://www.jarloo.com/tweetsearch/ -->
                                                     <Grid VerticalAlignment="Top" Cursor="Hand" Margin="0 0 -150 0"
                                                               MaxWidth="{Binding (FrameworkElement.ActualWidth), RelativeSource={RelativeSource AncestorType=ListBox}}">
                                                         <Grid.Effect>
@@ -231,8 +245,10 @@
                                                             <RowDefinition Height="14"/>
                                                         </Grid.RowDefinitions>
                                                         <Rectangle Fill="White" Stroke="#FF2CBBF0" RadiusX="10" RadiusY="10"/>
-                                                        <Path Stretch="Fill" Stroke="{DynamicResource NormalForegroundBrush}" HorizontalAlignment="Left" Margin="30,-5.597,0,0" Width="25" Grid.Row="1" 
-                                                              Data="M22.166642,154.45381 L29.999666,187.66699 40.791059,154.54395" Height="19.6" VerticalAlignment="Top" RenderTransformOrigin="-0.685,0.49">
+                                                        <Path Stretch="Fill" Stroke="{DynamicResource NormalForegroundBrush}" HorizontalAlignment="Left" 
+                                                              Margin="30,-5.597,0,0" Width="25" Grid.Row="1" 
+                                                              Data="M22.166642,154.45381 L29.999666,187.66699 40.791059,154.54395" Height="19.6" VerticalAlignment="Top" 
+                                                              RenderTransformOrigin="-0.685,0.49">
                                                             <Path.Fill>
                                                                 <SolidColorBrush Color="{DynamicResource WhiteColor}"/>
                                                             </Path.Fill>
@@ -247,7 +263,8 @@
                                                             <Image Source="{Binding ReviewAuthorAvatar}" Height="50" Width="50" DockPanel.Dock="Left" VerticalAlignment="Top"/>
                                                             <StackPanel Margin="5 0 0 0">
                                                                 <Label Content="{Binding ReviewAuthor}" FontWeight="Bold" FontSize="17"/>
-                                                                <TextBlock Text="{Binding Overall_Rating}" Foreground="{DynamicResource AccentColorBrush}" FontSize="18" Margin="5 0 0 5"/>
+                                                                <TextBlock Text="{Binding Overall_Rating}" Foreground="{DynamicResource AccentColorBrush}" 
+                                                                           FontSize="18" Margin="5 0 0 5"/>
                                                                 <TextBlock Panel.ZIndex="2" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" Width="Auto" Margin="0 0 25 0"
                                                                                Height="200" Text="{Binding ReviewText}">
                                                                     <TextBlock.Foreground>
