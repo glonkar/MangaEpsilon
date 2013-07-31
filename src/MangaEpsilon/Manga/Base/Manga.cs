@@ -46,6 +46,8 @@ namespace MangaEpsilon.Manga.Base
         public string SourceName { get; internal set; }
         [DataMember]
         public string LanguageByIetfTag { get; internal set; }
+        [DataMember]
+        public List<string> AlternateNames { get; internal set; }
     }
 
     public enum MangaStatus

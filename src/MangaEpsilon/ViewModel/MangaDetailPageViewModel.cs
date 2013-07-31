@@ -322,6 +322,7 @@ namespace MangaEpsilon.ViewModel
             Manga.Author = newManga.Author;
             Manga.Status = newManga.Status;
             Manga.Categories = newManga.Categories;
+            Manga.AlternateNames = newManga.AlternateNames;
 
             UIDispatcher.BeginInvoke(new EmptyDelegate(() =>
             {

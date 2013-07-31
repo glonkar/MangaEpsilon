@@ -37,11 +37,10 @@ namespace MangaEpsilon.Services.Licensing
 
         public string GetShopLink(Manga.Base.Manga Manga)
         {
-            //educated guess.
+            if (IsMangaLicensedFromProvider(Manga))
+                return "http://www.vizmanga.com" + GetMangaShopLink(Manga).Item2;
 
-            if (licensedTitles.Any(x => x.Item1 == Manga.MangaName))
-                return "http://www.vizmanga.com" + licensedTitles.First(x => x.Item1 == Manga.MangaName).Item2;
-
+                        //educated guess.
             return "http://www.vizmanga.com/" + Manga.MangaName.ToLower().Replace(" ", "-").Replace("&", "and").Replace("!", "").Replace(".", "").Replace(":", "");
         }
 
@@ -103,7 +102,34 @@ namespace MangaEpsilon.Services.Licensing
 
         public bool IsMangaLicensedFromProvider(Manga.Base.Manga Manga)
         {
-            return licensedTitles.Any(x => x.Item1.ToLower() == Manga.MangaName.ToLower());
+            return licensedTitles.Any(x =>
+            {
+                if (x.Item1.ToLower() == Manga.MangaName.ToLower())
+                    return true;
+
+                if (Manga.AlternateNames != null && Manga.AlternateNames.Count > 0)
+                    foreach (string altName in Manga.AlternateNames)
+                        if (altName.ToLower() == x.Item1.ToLower())
+                            return true;
+
+                return false;
+            });
+        }
+
+        private Tuple<string,string> GetMangaShopLink(Manga.Base.Manga Manga)
+        {
+            return licensedTitles.First(x =>
+            {
+                if (x.Item1.ToLower() == Manga.MangaName.ToLower())
+                    return true;
+
+                if (Manga.AlternateNames != null && Manga.AlternateNames.Count > 0)
+                    foreach (string altName in Manga.AlternateNames)
+                        if (altName.ToLower() == x.Item1.ToLower())
+                            return true;
+
+                return false;
+            });
         }
     }
 }

@@ -137,6 +137,9 @@ namespace MangaEpsilon.Manga.Sources.MangaEden
                     {
                     }
 
+                    if (data.ContainsKey("aka"))
+                        manga.AlternateNames = new List<string>(((JArray)data["aka"]).Values().Select(x => x.ToObject<string>()));
+
                     switch (int.Parse(data["status"].ToString()))
                     {
                         case 1: manga.Status = MangaStatus.Running;
