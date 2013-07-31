@@ -12,7 +12,7 @@
         xmlns:selectors="clr-namespace:MangaEpsilon.Selectors"
         xmlns:local="clr-namespace:MangaEpsilon.View" x:Class="MangaEpsilon.View.MangaDetailViewWindow"
         ShowTitleBar="False" x:Name="thisWindow" Loaded="thisWindow_Loaded"
-        SaveWindowPosition="True" Height="658" Width="1284" ResizeMode="CanResize" ShowActivated="True" 
+        SaveWindowPosition="True" Height="658" Width="1284" ResizeMode="CanResize" ShowActivated="True" MinWidth="400"
         Title="{Binding ViewTitle, UpdateSourceTrigger=PropertyChanged}" crystal:WindowViewModelHelper.AutoBindingClear="True">
     <metro:MetroWindow.Resources>
         <ResourceDictionary>
