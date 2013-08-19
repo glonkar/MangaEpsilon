@@ -99,10 +99,16 @@ namespace MangaEpsilon.ViewModel
 
                 RaisePropertyChanged(x => this.Downloads);
 
-                await Dispatcher.InvokeAsync(() =>
+                try
                 {
-                    downloadsCollectionView.Refresh();
-                });
+                    await UIDispatcher.InvokeAsync(() =>
+                    {
+                        downloadsCollectionView.Refresh();
+                    });
+                }
+                catch (Exception)
+                {
+                }
 
                 if (!App.DownloadsRunning)
                     DownloadAllQueuedChapters();
