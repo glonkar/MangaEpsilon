@@ -28,7 +28,7 @@
                          ProgressValue="{Binding MainWindowProgressValue, UpdateSourceTrigger=PropertyChanged}"/>
     </Window.TaskbarItemInfo>
     <i:Interaction.Behaviors>
-        <Behaviours:BorderlessWindowBehavior ResizeWithGrip="True" EnableDWMDropShadow="True" />
+        <Behaviours:BorderlessWindowBehavior ResizeWithGrip="True" EnableDWMDropShadow="True" AllowsTransparency="False" />
         <Behaviours:WindowsSettingBehaviour/>
     </i:Interaction.Behaviors>
     <metro:MetroWindow.Resources>
@@ -854,49 +854,51 @@
         </Button>
     </Grid>
     <metro:MetroWindow.Flyouts>
-        <metro:Flyout Header="{i18n:CrystalLocalizedValueMarkup Key='SettingsFlyoutHeader',NullValue='settings'}" x:Name="SettingsFlyout" 
+        <metro:FlyoutsControl>
+            <metro:Flyout Header="{i18n:CrystalLocalizedValueMarkup Key='SettingsFlyoutHeader',NullValue='settings'}" x:Name="SettingsFlyout" 
                       IsOpen="{Binding ElementName=thisWindow,Path=DataContext.SettingsFlyoutOpen, UpdateSourceTrigger=PropertyChanged}">
-            <metro:Flyout.DataContext>
-                <vm:MainWindowSettingsViewModel />
-            </metro:Flyout.DataContext>
-            <metro:Flyout.Resources>
-                <ObjectDataProvider MethodName="GetValues"
+                <metro:Flyout.DataContext>
+                    <vm:MainWindowSettingsViewModel />
+                </metro:Flyout.DataContext>
+                <metro:Flyout.Resources>
+                    <ObjectDataProvider MethodName="GetValues"
                         ObjectType="{x:Type metro2:Theme}"
                         x:Key="ThemeValues">
-                    <ObjectDataProvider.MethodParameters>
-                        <x:Type TypeName="metro2:Theme" />
-                    </ObjectDataProvider.MethodParameters>
-                </ObjectDataProvider>
-            </metro:Flyout.Resources>
-            <StackPanel>
-                <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='GeneralSettingsHeader',NullValue='General'}" Height="Auto">
-                    <metro:ToggleSwitch IsChecked="{Binding CanMinimizeToTray, UpdateSourceTrigger=PropertyChanged}" 
+                        <ObjectDataProvider.MethodParameters>
+                            <x:Type TypeName="metro2:Theme" />
+                        </ObjectDataProvider.MethodParameters>
+                    </ObjectDataProvider>
+                </metro:Flyout.Resources>
+                <StackPanel>
+                    <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='GeneralSettingsHeader',NullValue='General'}" Height="Auto">
+                        <metro:ToggleSwitch IsChecked="{Binding CanMinimizeToTray, UpdateSourceTrigger=PropertyChanged}" 
                                         Header="{i18n:CrystalLocalizedValueMarkup Key='CanMinimizeToTrayHeader',NullValue='Can Minimize To Tray?'}"/>
-                </GroupBox>
-                <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='ThemeSettingsHeader',NullValue='Theme'}" Height="Auto">
-                    <StackPanel Orientation="Horizontal">
-                        <ComboBox ItemsSource="{Binding AvailableAccents, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedAccent, UpdateSourceTrigger=PropertyChanged}" 
+                    </GroupBox>
+                    <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='ThemeSettingsHeader',NullValue='Theme'}" Height="Auto">
+                        <StackPanel Orientation="Horizontal">
+                            <ComboBox ItemsSource="{Binding AvailableAccents, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedAccent, UpdateSourceTrigger=PropertyChanged}" 
                                   Height="20" DisplayMemberPath="Name"/>
-                        <ComboBox ItemsSource="{Binding Source={StaticResource
+                            <ComboBox ItemsSource="{Binding Source={StaticResource
                                              ThemeValues}}" SelectedItem="{Binding SelectedTheme, UpdateSourceTrigger=PropertyChanged}" Height="20">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <!-- This combobox doesn't like the flyout very well so I am forcing it to use the color I want.-->
-                                    <TextBlock Text="{Binding .}">
-                                        <TextBlock.Foreground>
-                                            <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
-                                        </TextBlock.Foreground>
-                                    </TextBlock>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                    </StackPanel>
-                </GroupBox>
-                <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='NotificationsSettingsHeader',NullValue='Notifications'}" Height="Auto">
-                    <metro:ToggleSwitch IsChecked="{Binding EnableNotificationsSounds, UpdateSourceTrigger=PropertyChanged}" 
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <!-- This combobox doesn't like the flyout very well so I am forcing it to use the color I want.-->
+                                        <TextBlock Text="{Binding .}">
+                                            <TextBlock.Foreground>
+                                                <SolidColorBrush Color="{DynamicResource NormalForegroundColor}"/>
+                                            </TextBlock.Foreground>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox Header="{i18n:CrystalLocalizedValueMarkup Key='NotificationsSettingsHeader',NullValue='Notifications'}" Height="Auto">
+                        <metro:ToggleSwitch IsChecked="{Binding EnableNotificationsSounds, UpdateSourceTrigger=PropertyChanged}" 
                                         Header="{i18n:CrystalLocalizedValueMarkup Key='EnableNotificationsSoundsHeader',NullValue='Enable Notifications Sounds?'}"/>
-                </GroupBox>
-            </StackPanel>
-        </metro:Flyout>
+                    </GroupBox>
+                </StackPanel>
+            </metro:Flyout>
+        </metro:FlyoutsControl>
     </metro:MetroWindow.Flyouts>
 </metro:MetroWindow>
